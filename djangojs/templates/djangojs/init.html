@@ -1,0 +1,7 @@
+<!-- Django JS initialization -->
+{% load js %}
+{% jquery_js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/djangojs/django.js"></script>
+<script>
+    Django.init('{% url django_js_json %}');
+</script>

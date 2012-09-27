@@ -1,0 +1,19 @@
+{% load js %}
+<html>
+
+<head>
+{% django_js %}
+</head>
+
+<body>
+<script type="text/javascript">
+    $(function(){
+        var testDj = function() {
+            console.log(Django.url('django_js_json'));
+        };
+        setTimeout(testDj, 1000);
+    });
+</script>
+</body>
+
+</html>
