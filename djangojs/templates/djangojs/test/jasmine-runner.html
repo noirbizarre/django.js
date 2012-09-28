@@ -2,18 +2,18 @@
   "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Django.js Spec Runner</title>
+  <title>Django.js Specs Runner</title>
 
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}js/test/lib/jasmine.css">
-  <script type="text/javascript" src="{{STATIC_URL}}js/test/lib/jasmine.js"></script>
-  <script type="text/javascript" src="{{STATIC_URL}}js/test/lib/jasmine-html.js"></script>
-  <script type="text/javascript" src="{{STATIC_URL}}js/test/lib/jasmine-jquery.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}test/js/libs/jasmine.css">
+  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine-html.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine-jquery.js"></script>
 
   {% load js %}
-  {% django_js_init %}
+  {% django_js %}
 
   <!-- include source files here... -->
-  <script type="text/javascript" src="{{STATIC_URL}}js/test/spec/djangojs-specs.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}test/js/specs/django.specs.js"></script>
 
   <script type="text/javascript">
     (function() {

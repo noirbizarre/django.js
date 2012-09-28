@@ -18,7 +18,7 @@
         },
 
         /**
-         * Equivalent to reverse in Python code and url template tag.
+         * Equivalent to ``reverse`` function and ``url`` template tag.
          */
         url: function(name, args) {
             var pattern = this.urls[name] || false,
