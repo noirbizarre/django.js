@@ -1,12 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
 from setuptools import setup, find_packages
+
+
+def rst(filename):
+    '''
+    Load rst file and sanitize it for PyPI.
+    Remove unsupported github tags:
+     - code-block directive
+    '''
+    content = open(filename).read()
+    return re.sub(r'\.\.\s? code-block::\s*(\w|\+)+', '::', content)
 
 setup(
     name='django.js',
     version=__import__('djangojs').__version__,
     description=__import__('djangojs').__description__,
-    long_description=open('README.rst').read(),
+    long_description=rst('README.rst'),
     url='https://github.com/noirbizarre/django.js',
     download_url='http://pypi.python.org/pypi/django.js',
     author='Axel Haustant',
