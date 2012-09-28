@@ -1,4 +1,4 @@
-(function(window, $){
+(function(window, $, gettext){
 
     "use strict";
 
@@ -55,7 +55,7 @@
          * Equivalent to trans template tag
          */
         trans: function(string) {
-            throw('Not implemented');
+            return gettext(string);
         }
     };
 
@@ -101,4 +101,4 @@
         }
     });
 
-}(window, window.jQuery));
+}(window, window.jQuery, window.gettext));
