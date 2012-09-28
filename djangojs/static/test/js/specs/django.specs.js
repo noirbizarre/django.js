@@ -8,7 +8,6 @@ describe("Django.js", function(){
             var callback = jasmine.createSpy();
             $(Django).on('ready', callback);
 
-            console.debug(django_js_json);
             Django.init(django_js_json);
 
             waitsFor(function() {
@@ -41,9 +40,20 @@ describe("Django.js", function(){
             expect(Django.url('second_test', {test: 41})).toBe('/tests/2nd/41');
         });
 
+        it('should throw if URL does not exists', function(){
+            var notFoundUrl = function() {
+                Django.url('unknown');
+            };
+
+            expect(notFoundUrl).toThrow();
+        });
+
     });
 
-
-
+    describe('Internationalization', function(){
+        it('gettext object should be present', function(){
+            expect(gettext).not.toBeUndefined();
+        });
+    });
 
 });
