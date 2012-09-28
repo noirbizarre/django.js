@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Django.js Spec Runner</title>
+
+  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}js/test/lib/jasmine.css">
+  <script type="text/javascript" src="{{STATIC_URL}}js/test/lib/jasmine.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}js/test/lib/jasmine-html.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}js/test/lib/jasmine-jquery.js"></script>
+
+  {% load js %}
+  {% django_js_init %}
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/test/spec/djangojs-specs.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>

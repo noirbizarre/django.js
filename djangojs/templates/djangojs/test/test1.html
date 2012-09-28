@@ -8,10 +8,11 @@
 <body>
 <script type="text/javascript">
     $(function(){
-        var testDj = function() {
+        $(Django).on('ready', function() {
             console.log(Django.url('django_js_json'));
-        };
-        setTimeout(testDj, 1000);
+            console.log(Django.url('first_test', 'a'));
+            console.log(Django.url('second_test', {'test': 'a'}));
+        });
     });
 </script>
 </body>

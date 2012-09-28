@@ -4,7 +4,6 @@
 
     var Django = {
         urls: {},
-        ready: false,
         token_regex: /<\w*>/g,
 
         /**
@@ -13,9 +12,7 @@
         init: function(url) {
             var that = this;
             $.getJSON(url, function(urls){
-                console.log(this, that);
                 that.urls = urls;
-                that.ready = true;
                 $(that).trigger($.Event("ready"));
             });
         },
