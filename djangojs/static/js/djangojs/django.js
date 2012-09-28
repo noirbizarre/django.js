@@ -6,6 +6,7 @@
         urls: {},
         token_regex: /<\w*>/g,
 
+
         /**
          * Initialize the module loading the URLs
          */
@@ -22,32 +23,61 @@
          */
         url: function(name, args) {
             var pattern = this.urls[name] || false,
-                url = pattern, key, regex, token, parts;
+                url = pattern,
+                key, regex, token, parts;
 
             if (!url) {
                 throw('URL for view "' + name + '" not found');
             }
 
-            if ($.isPlainObject(args)) {
-                for (key in args) {
-                    token = '<' + key + '>';
-                    if (!url.match(token)) {
-                        throw('Key "' + key + '" not found in pattern "' + pattern +'"');
-                    }
-                    url = url.replace(token, args[key]);
-                }
-            } else if ($.isArray(args)) {
-                if (url.match(this.token_regex).length != args.length) {
-                    throw('Wrong number of argument for url "' + name + '"');
-                }
-                parts = url.split(this.token_regex);
-                url = parts[0];
-                for (key=0; key < args.length; key++) {
-                    url += args[key] + parts[key + 1];
-                }
-            } else {
-                url = url.replace(this.token_regex, args);
+            if (!args) {
+                return url;
             }
+
+            if ($.isArray(args)) {
+                return this._url_from_array(name, pattern, args);
+            }
+            else if ($.isPlainObject(args)) {
+                return this._url_from_object(name, pattern, args);
+            }
+            else {
+                var argsArray = Array.prototype.slice.apply(arguments, [1, arguments.length]);
+                return this._url_from_array(name, pattern, argsArray);
+            }
+            return url;
+        },
+
+        _url_from_array: function(name, pattern, array) {
+            if (pattern.match(this.token_regex).length != array.length) {
+                throw('Wrong number of argument for pattern "' + name + '"');
+            }
+
+            var parts = pattern.split(this.token_regex),
+                url = parts[0];
+
+            for (var idx=0; idx < array.length; idx++) {
+                url += array[idx] + parts[idx + 1];
+            }
+
+            return url;
+        },
+
+        _url_from_object: function(name, pattern, object) {
+            var url = pattern,
+                tokens = pattern.match(this.token_regex);
+
+            for (var idx=0; idx < tokens.length; idx++) {
+                var token = tokens[idx],
+                    prop = token.slice(1, -1),
+                    value = object[prop];
+
+                if (!value) {
+                    throw('Property "' + prop + '" not found');
+                }
+
+                url = url.replace(token, value);
+            }
+
             return url;
         },
 
