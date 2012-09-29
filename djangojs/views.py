@@ -4,12 +4,13 @@ import logging
 import re
 import sys
 
-from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.http import HttpResponse
 from django.utils.datastructures import SortedDict
 from django.views.generic import View
+
+from djangojs.conf import settings
 
 logger = logging.getLogger(__name__)
 

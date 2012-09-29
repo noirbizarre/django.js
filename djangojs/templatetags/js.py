@@ -8,7 +8,8 @@ Inspired by:
  - Miguel Araujo: https://gist.github.com/893408
 '''
 from django import template
-from django.conf import settings
+
+from djangojs.conf import settings
 
 register = template.Library()
 

@@ -5,6 +5,7 @@
     var Django = {
         urls: {},
         token_regex: /<\w*>/g,
+        named_token_regex: /<(\w+)>/g,
 
 
         /**

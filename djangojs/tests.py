@@ -1,3 +1,5 @@
+import json
+
 from os.path import join, dirname
 from subprocess import call
 
@@ -25,7 +27,7 @@ class JsTestCase(LiveServerTestCase):
 class JasmineTests(JsTestCase):
 
     def test_jasmine_suite(self):
-        '''Run its own test suite'''
+        '''It shoudl run its its own Jasmine test suite'''
         jasmine_runner_url = ''.join([self.live_server_url, reverse('jasmine_runner')])
         phantomjs_jasmine_runner = join(dirname(__file__), 'phantomjs', 'run-jasmine.js')
 
@@ -37,6 +39,7 @@ class JasmineTests(JsTestCase):
 class DjangoJsJsonTest(TestCase):
 
     def test_should_render(self):
+        '''It should render a JSON URLs descriptor'''
         response = self.client.get(reverse('django_js_json'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')

@@ -20,7 +20,7 @@ describe("Django.js", function(){
 
     });
 
-    describe('Resolve Django URLs', function(){
+    describe('Resolve reverse URLs', function(){
 
         it('should throw if URL name does not exists', function(){
             var notFoundUrl = function() {
@@ -114,6 +114,14 @@ describe("Django.js", function(){
                 expect(Django.url('test_named_multi', {str: 'value', num:41})).toBe('/tests/named/value/41');
             });
 
+            it('should throw if there is an anonymous token', function(){
+                var anonymous = function() {
+                    Django.url('test_arg', {str: 'value'});
+                };
+
+                expect(anonymous).toThrow();
+            });
+
             it('should throw if a token is missing', function(){
                 var missing = function() {
                     Django.url('test_named_multi', {str: 'value'});
@@ -137,6 +145,10 @@ describe("Django.js", function(){
         it('gettext object should be present', function(){
             expect(gettext).not.toBeUndefined();
         });
+    });
+
+    describe('jQuery Ajax CRSF Fix', function(){
+
     });
 
 });
