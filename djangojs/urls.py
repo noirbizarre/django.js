@@ -25,9 +25,13 @@ urlpatterns = patterns('',
 
 if settings.DEBUG or settings.TESTING:
     urlpatterns += patterns('',
+        url(r'^tests/jasmine$', TemplateView.as_view(template_name='djangojs/test/jasmine-runner.html'), name='jasmine_runner'),
         url(r'^tests/arg/(\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg'),
         url(r'^tests/arg/(\d+)/(\w)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg_multi'),
         url(r'^tests/named/(?P<test>\w+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_named'),
         url(r'^tests/named/(?P<str>\w+)/(?P<num>\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_named_multi'),
-        url(r'^tests/jasmine$', TemplateView.as_view(template_name='djangojs/test/jasmine-runner.html'), name='jasmine_runner'),
+        url(r'^tests/optionnals?$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name="opt"),
+        url(r'^tests/many?/optionnals?$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name="opt_multi"),
+        url(r'^tests/optionnal/(?:capturing)?group$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name="opt_grp"),
+        url(r'^tests/anonymous$', TemplateView.as_view(template_name='djangojs/test/test1.html')),
     )

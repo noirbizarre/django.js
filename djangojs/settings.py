@@ -1,6 +1,8 @@
 # Django settings for Django JS project.
+import sys
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

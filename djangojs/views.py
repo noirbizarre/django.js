@@ -21,6 +21,8 @@ __all__ = (
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing named parameters in urls
 RE_ARG = re.compile(r"(\(.*?\))")  # Pattern for recognizing unnamed url parameters
+RE_OPT = re.compile(r"\w\?")  # Pattern for recognizing optionnal character
+RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
 
 
 class DjangoJsJsonView(View):
@@ -49,6 +51,16 @@ class DjangoJsJsonView(View):
                     full_url = prefix + pattern.regex.pattern
                     for chr in ['^', '$']:
                         full_url = full_url.replace(chr, '')
+                    # remove optionnal non capturing groups
+                    opt_grp_matches = RE_OPT_GRP.findall(full_url)
+                    if opt_grp_matches:
+                        for match in opt_grp_matches:
+                            full_url = full_url.replace(match, '')
+                    # remove optionnal characters
+                    opt_matches = RE_OPT.findall(full_url)
+                    if opt_matches:
+                        for match in opt_matches:
+                            full_url = full_url.replace(match, '')
                     # handle kwargs, args
                     kwarg_matches = RE_KWARG.findall(full_url)
                     if kwarg_matches:
