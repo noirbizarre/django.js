@@ -3,8 +3,9 @@ import json
 from os.path import join, dirname
 from subprocess import call
 
-from django.test import LiveServerTestCase, TestCase
 from django.core.urlresolvers import reverse
+from django.template import Context, Template
+from django.test import LiveServerTestCase, TestCase
 
 
 class JsTestCase(LiveServerTestCase):
@@ -103,8 +104,89 @@ class DjangoJsJsonTest(TestCase):
 
 
 class VerbatimTagTest(TestCase):
-    urls = 'djangojs.urls'
+    def test_rendering(self):
+        '''Should escape {{ and }}'''
+        t = Template('''
+            {% load js %}
+            {% verbatim %}
+                <p>{{name}}</p>
+                {{{rawname}}}
+            {% endverbatim %}
+            ''')
+        rendered = t.render(Context())
+
+        self.failUnless('{{name}}' in rendered)
+        self.failUnless('{{{rawname}}}' in rendered)
+        # HTML should not be escaped
+        self.failUnless('<p>' in rendered)
+        self.failUnless('</p>' in rendered)
+
+    def test_rendering_with_tags(self):
+        '''Should process django template tags'''
+        t = Template('''
+            {% load i18n js %}
+
+            {% verbatim %}
+                {% trans "with translation" %}
+                {{name}}
+                <p>{{{rawname}}}</p>
+                {# works with comments too #}
+            {% endverbatim %}
+            ''')
+        rendered = t.render(Context())
+
+        self.failUnless('{{name}}' in rendered)
+        self.failUnless('{{{rawname}}}' in rendered)
+        self.failUnless('with translation' in rendered)
+        # Those should not be rendered :
+        self.failUnless('{% trans %}' not in rendered)
+        self.failUnless('comments' not in rendered)
+        # HTML should not be escaped
+        self.failUnless('<p>' in rendered)
+        self.failUnless('</p>' in rendered)
 
 
 class DjangoJsTagTest(TestCase):
     urls = 'djangojs.urls'
+
+    def test_js_lib(self):
+        '''Should include js libraries'''
+        t = Template('''
+            {% load js %}
+            {% js_lib "my-lib.js" %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="/static/js/libs/my-lib.js">' in rendered)
+
+    def test_jquery_js(self):
+        '''Should include jQuery library'''
+        t = Template('''
+            {% load js %}
+            {% jquery_js %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
+
+    def test_django_js(self):
+        '''Should include Django JS'''
+        t = Template('''
+            {% load js %}
+            {% django_js %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
+        self.failIf('Django.init(' in rendered)
+
+    def test_django_js_init(self):
+        '''Should include Django JS'''
+        t = Template('''
+            {% load js %}
+            {% django_js_init %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
+        self.failUnless('Django.init(' in rendered)

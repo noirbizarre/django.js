@@ -98,7 +98,7 @@ def verbatim(parser, token):
     return VerbatimNode(text_and_nodes)
 
 
-# @register.simple_tag
+@register.simple_tag
 def js_lib(filename):
     return '<script type="text/javascript" src="%sjs/libs/%s"></script>' % (settings.STATIC_URL, filename)
 
