@@ -126,7 +126,7 @@ jquery_js
 
 The ``{% jquery_js %}`` tag only load the jQuery (1.8.2) library.
 
-The ``django_js`` tag automatically load jQuery so no need to manually load it.
+The ``django_js`` and ``django_js_init`` tags automatically load jQuery so no need to manually load it.
 
 
 js_lib
@@ -136,7 +136,7 @@ The ``js_lib`` tag is a quick helper to include javascript files from ``{{STATIC
 
 .. code-block:: html+django
 
-    {% js_lib my-lib.js %}
+    {% js_lib "my-lib.js" %}
 
 is equivalent to:
 

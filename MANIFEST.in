@@ -1,2 +1,2 @@
 include README.rst LICENSE MANIFEST.in
-recursive-include  djangojs *.html *.js
+recursive-include  djangojs *.html *.js *.css
