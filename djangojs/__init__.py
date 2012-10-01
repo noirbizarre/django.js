@@ -1,2 +1,2 @@
-__version__ = '0.1.dev'
+__version__ = '0.1'
 __description__ = "Django JS Tools"
