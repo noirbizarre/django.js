@@ -1,5 +1,27 @@
 <!-- Django JS initialization -->
+{% load i18n %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language as LANGUAGE_CODE %}
+{% if LANGUAGE_CODE == 'en-us' %} {# Dirty hack to fix non included default#}
+{% get_language_info for 'en' as language %}
+{% else %}
+{% get_language_info for LANGUAGE_CODE as language %}
+{% endif %}
+<script type="text/javascript" src="{% url js_catalog %}"></script>
+<script>
+    window.DJANGO_LANGUAGE_INFO = {
+        LANGUAGES: {
+            {% for lang in LANGUAGES %}
+            '{{lang.0}}': '{{lang.1}}'{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        },
+        LANGUAGE_CODE: '{{ LANGUAGE_CODE }}',
+        LANGUAGE_NAME: '{{ language.name }}',
+        LANGUAGE_NAME_LOCAL: '{{ language.name_local }}',
+        LANGUAGE_BIDI: '{{ language.bidi }}'
+    };
+</script>
+
 {% load js %}
 {% jquery_js %}
-<script type="text/javascript" src="{% url js_catalog %}"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/djangojs/django.js"></script>

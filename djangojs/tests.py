@@ -6,6 +6,7 @@ from subprocess import call
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import LiveServerTestCase, TestCase
+from django.test.utils import override_settings
 
 
 class JsTestCase(LiveServerTestCase):
@@ -28,6 +29,7 @@ class JsTestCase(LiveServerTestCase):
 class JasmineTests(JsTestCase):
     urls = 'djangojs.urls'
 
+    # @override_settings(USE_I18N=True, LANGUAGE_CODE='fr')
     def test_jasmine_suite(self):
         '''It should run its its own Jasmine test suite'''
         jasmine_runner_url = ''.join([self.live_server_url, reverse('jasmine_runner')])
@@ -167,6 +169,7 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
 
+    @override_settings(USE_I18N=False)
     def test_django_js(self):
         '''Should include Django JS'''
         t = Template('''
@@ -176,9 +179,9 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
         self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
-        self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
         self.failIf('Django.init(' in rendered)
 
+    @override_settings(USE_I18N=False)
     def test_django_js_init(self):
         '''Should include Django JS'''
         t = Template('''
@@ -188,5 +191,17 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
         self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
-        self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
         self.failUnless('Django.init(' in rendered)
+
+    @override_settings(USE_I18N=True)
+    def test_django_js_i18n(self):
+        '''Should include Django JS'''
+        t = Template('''
+            {% load js %}
+            {% django_js %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
+        self.failUnless('window.DJANGO_LANGUAGE_INFO' in rendered)

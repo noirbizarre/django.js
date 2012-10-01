@@ -112,6 +112,7 @@ def jquery_js():
 def django_js():
     return {
         'STATIC_URL': settings.STATIC_URL,
+        'USE_I18N': settings.USE_I18N,
     }
 
 
@@ -119,4 +120,5 @@ def django_js():
 def django_js_init():
     return {
         'STATIC_URL': settings.STATIC_URL,
+        'USE_I18N': settings.USE_I18N,
     }

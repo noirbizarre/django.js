@@ -8,6 +8,7 @@
 *.sqlite
 *.sublime-*
 *.egg-info
+*.mo
 build/
 dist/
 

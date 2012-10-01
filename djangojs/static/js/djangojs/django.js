@@ -1,94 +1,110 @@
-(function(window, $, gettext){
+(function(window, $){
 
     "use strict";
 
-    var Django = {
-        urls: {},
-        token_regex: /<\w*>/g,
-        named_token_regex: /<(\w+)>/g,
+    var gettext = window.gettext,
+        ngettext = window.ngettext,
+        Django = {
+
+            _use_i18n: window.DJANGO_LANGUAGE_INFO !== undefined,
+
+            urls: {},
+            token_regex: /<\w*>/g,
+            named_token_regex: /<(\w+)>/g,
 
 
-        /**
-         * Initialize the module loading the URLs
-         */
-        init: function(url) {
-            var that = this;
-            $.getJSON(url, function(urls){
-                that.urls = urls;
-                $(that).trigger($.Event("ready"));
-            });
-        },
+            /**
+             * Initialize the module loading the URLs
+             */
+            init: function(url) {
+                var that = this;
 
-        /**
-         * Equivalent to ``reverse`` function and ``url`` template tag.
-         */
-        url: function(name, args) {
-            var pattern = this.urls[name] || false,
-                url = pattern,
-                key, regex, token, parts;
+                $.getJSON(url, function(urls){
+                    that.urls = urls;
+                    $(that).trigger($.Event("ready"));
+                });
 
-            if (!url) {
-                throw('URL for view "' + name + '" not found');
-            }
+                if (this._use_i18n) {
+                    for (var key in window.DJANGO_LANGUAGE_INFO) {
+                        this[key] = window.DJANGO_LANGUAGE_INFO[key];
+                    }
+                }
+            },
 
-            if (!args) {
-                return url;
-            }
+            /**
+             * Equivalent to ``reverse`` function and ``url`` template tag.
+             */
+            url: function(name, args) {
+                var pattern = this.urls[name] || false,
+                    url = pattern,
+                    key, regex, token, parts;
 
-            if ($.isArray(args)) {
-                return this._url_from_array(name, pattern, args);
-            }
-            else if ($.isPlainObject(args)) {
-                return this._url_from_object(name, pattern, args);
-            }
-            else {
-                var argsArray = Array.prototype.slice.apply(arguments, [1, arguments.length]);
-                return this._url_from_array(name, pattern, argsArray);
-            }
-            return url;
-        },
-
-        _url_from_array: function(name, pattern, array) {
-            if (pattern.match(this.token_regex).length != array.length) {
-                throw('Wrong number of argument for pattern "' + name + '"');
-            }
-
-            var parts = pattern.split(this.token_regex),
-                url = parts[0];
-
-            for (var idx=0; idx < array.length; idx++) {
-                url += array[idx] + parts[idx + 1];
-            }
-
-            return url;
-        },
-
-        _url_from_object: function(name, pattern, object) {
-            var url = pattern,
-                tokens = pattern.match(this.token_regex);
-
-            for (var idx=0; idx < tokens.length; idx++) {
-                var token = tokens[idx],
-                    prop = token.slice(1, -1),
-                    value = object[prop];
-
-                if (!value) {
-                    throw('Property "' + prop + '" not found');
+                if (!url) {
+                    throw('URL for view "' + name + '" not found');
                 }
 
-                url = url.replace(token, value);
+                if (!args) {
+                    return url;
+                }
+
+                if ($.isArray(args)) {
+                    return this._url_from_array(name, pattern, args);
+                }
+                else if ($.isPlainObject(args)) {
+                    return this._url_from_object(name, pattern, args);
+                }
+                else {
+                    var argsArray = Array.prototype.slice.apply(arguments, [1, arguments.length]);
+                    return this._url_from_array(name, pattern, argsArray);
+                }
+                return url;
+            },
+
+            _url_from_array: function(name, pattern, array) {
+                if (pattern.match(this.token_regex).length != array.length) {
+                    throw('Wrong number of argument for pattern "' + name + '"');
+                }
+
+                var parts = pattern.split(this.token_regex),
+                    url = parts[0];
+
+                for (var idx=0; idx < array.length; idx++) {
+                    url += array[idx] + parts[idx + 1];
+                }
+
+                return url;
+            },
+
+            _url_from_object: function(name, pattern, object) {
+                var url = pattern,
+                    tokens = pattern.match(this.token_regex);
+
+                for (var idx=0; idx < tokens.length; idx++) {
+                    var token = tokens[idx],
+                        prop = token.slice(1, -1),
+                        value = object[prop];
+
+                    if (!value) {
+                        throw('Property "' + prop + '" not found');
+                    }
+
+                    url = url.replace(token, value);
+                }
+
+                return url;
+            },
+
+            /**
+             * Equivalent to trans template tag
+             */
+            trans: function(string) {
+                if (this._use_i18n) {
+                    return gettext(string);
+                } else {
+                    return string;
+                }
             }
-
-            return url;
-        },
-
-        /**
-         * Equivalent to trans template tag
-         */
-        trans: function(string) {
-            return gettext(string);
-        }
-    };
+        };
 
     window.Django = Django;
 

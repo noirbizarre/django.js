@@ -80,7 +80,7 @@ describe("Django.js", function(){
                 expect(Django.url('test_arg_multi', ['test', 41])).toBe('/tests/arg/test/41');
             });
 
-            it("should resolve an URL with a named argument", function(){
+            it("should resolve an URL with a named token", function(){
                 expect(Django.url('test_named', ['test'])).toBe('/tests/named/test');
             });
 
@@ -142,9 +142,54 @@ describe("Django.js", function(){
     });
 
     describe('Internationalization', function(){
-        it('gettext object should be present', function(){
-            expect(gettext).not.toBeUndefined();
+
+        describe("Automatically include Django provided functions", function(){
+            it('gettext function should be present', function(){
+                expect(gettext).not.toBeUndefined();
+            });
+
+            it('ngettext function should be present', function(){
+                expect(ngettext).not.toBeUndefined();
+            });
+
+            it('interpolate function should be present', function(){
+                expect(interpolate).not.toBeUndefined();
+            });
         });
+
+        describe("Trans methods wraps Django provided functions", function(){
+            it('should translate strings using gettext', function(){
+                expect(Django.trans('Love Django.js')).toBe(gettext('Love Django.js'));
+            });
+        });
+
+        describe('Stores the languages infos', function(){
+            it('should store available LANGUAGES', function(){
+                expect(Django.LANGUAGES).toBeDefined();
+                expect(Django.LANGUAGES).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGES);
+            });
+
+            it('should store LANGUAGE_CODE', function(){
+                expect(Django.LANGUAGE_CODE).toBeDefined();
+                expect(Django.LANGUAGE_CODE).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_CODE);
+            });
+
+            it('should store LANGUAGE_BIDI', function(){
+                expect(Django.LANGUAGE_BIDI).toBeDefined();
+                expect(Django.LANGUAGE_BIDI).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_BIDI);
+            });
+
+            it('should store LANGUAGE_NAME', function(){
+                expect(Django.LANGUAGE_NAME).toBeDefined();
+                expect(Django.LANGUAGE_NAME).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_NAME);
+            });
+
+            it('should store LANGUAGE_NAME_LOCAL', function(){
+                expect(Django.LANGUAGE_NAME_LOCAL).toBeDefined();
+                expect(Django.LANGUAGE_NAME_LOCAL).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_NAME_LOCAL);
+            });
+        });
+
     });
 
     describe('jQuery Ajax CRSF Fix', function(){
