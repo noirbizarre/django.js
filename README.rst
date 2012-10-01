@@ -118,7 +118,7 @@ If you don't want to manually trigger initialization, you can use the ``{% djang
         });
     </script>
 
-``django_js`` tag also configure ``jQuery.ajax`` to handle CRSF tokens.
+``django_js`` tag also configure ``jQuery.ajax`` to handle CSRF tokens.
 
 
 jquery_js

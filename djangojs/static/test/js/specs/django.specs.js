@@ -192,7 +192,25 @@ describe("Django.js", function(){
 
     });
 
-    describe('jQuery Ajax CRSF Fix', function(){
+    describe('jQuery Ajax CSRF Helper', function(){
+
+        it("should allow to post Django forms with jQuery Ajax", function(){
+            var callback = jasmine.createSpy(),
+                $form = $('#test-form'),
+                data = {};
+
+            $form.find("input, select").each(function(i, el) {
+                data[el.name] = 'test';
+            });
+            $.post($form.attr('action'), data, callback);
+
+            waitsFor(function() {
+                return callback.callCount > 0;
+            });
+            runs(function() {
+                expect(callback).toHaveBeenCalled();
+            });
+        });
 
     });
 

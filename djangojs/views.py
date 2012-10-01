@@ -5,12 +5,14 @@ import re
 import sys
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
+from django.core.urlresolvers import RegexURLPattern, RegexURLResolver, reverse
 from django.http import HttpResponse
 from django.utils.datastructures import SortedDict
-from django.views.generic import View
+from django.views.generic import View, TemplateView
+from django.views.generic.edit import BaseFormView
 
 from djangojs.conf import settings
+from djangojs.forms import TestForm
 
 logger = logging.getLogger(__name__)
 
@@ -77,3 +79,19 @@ class DjangoJsJsonView(View):
                 if pattern.urlconf_name:
                     urls.update(self.get_urls(pattern.urlconf_name, pattern.regex.pattern))
         return urls
+
+
+class TestFormView(BaseFormView):
+    form_class = TestForm
+
+    def get_success_url(self):
+        return reverse('opt')
+
+
+class JasmineRunner(TemplateView):
+    template_name = 'djangojs/test/jasmine-runner.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(JasmineRunner, self).get_context_data(**kwargs)
+        context['form'] = TestForm()
+        return context

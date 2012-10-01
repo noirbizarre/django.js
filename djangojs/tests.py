@@ -1,4 +1,5 @@
 import json
+from tempfile import NamedTemporaryFile
 
 from os.path import join, dirname
 from subprocess import call
@@ -16,12 +17,16 @@ class JsTestCase(LiveServerTestCase):
         separator = '=' * LINE_SIZE
         title = kwargs['title'] if 'title' in kwargs else 'phantomjs output'
         nb_spaces = (LINE_SIZE - len(title)) / 2
+
         print ''
         print separator
         print ' ' * nb_spaces + title
         print separator
-        cmd = ('phantomjs',) + args
-        result = call(cmd)
+
+        with NamedTemporaryFile(delete=True) as cookies_file:
+            cmd = ('phantomjs', '--cookies-file=%s' % cookies_file.name) + args
+            result = call(cmd)
+
         print separator
         return result
 
@@ -29,7 +34,6 @@ class JsTestCase(LiveServerTestCase):
 class JasmineTests(JsTestCase):
     urls = 'djangojs.urls'
 
-    # @override_settings(USE_I18N=True, LANGUAGE_CODE='fr')
     def test_jasmine_suite(self):
         '''It should run its its own Jasmine test suite'''
         jasmine_runner_url = ''.join([self.live_server_url, reverse('jasmine_runner')])
@@ -183,7 +187,7 @@ class DjangoJsTagTest(TestCase):
 
     @override_settings(USE_I18N=False)
     def test_django_js_init(self):
-        '''Should include Django JS'''
+        '''Should include and initialize Django JS'''
         t = Template('''
             {% load js %}
             {% django_js_init %}
@@ -195,7 +199,7 @@ class DjangoJsTagTest(TestCase):
 
     @override_settings(USE_I18N=True)
     def test_django_js_i18n(self):
-        '''Should include Django JS'''
+        '''Should include Django JS with i18n support'''
         t = Template('''
             {% load js %}
             {% django_js %}

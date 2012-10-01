@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Django settings for Django JS project.
 import sys
 

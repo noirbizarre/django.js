@@ -47,5 +47,9 @@
 </head>
 
 <body>
+  <form id="test-form" action="{% url test_form %}" method="POST" style="display: none;">
+    {{csrf_token}}
+    {{form}}
+  </form>
 </body>
 </html>

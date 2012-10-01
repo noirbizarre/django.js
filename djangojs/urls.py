@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 
 from os.path import join, isdir
@@ -6,7 +7,7 @@ from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
 from djangojs.conf import settings
-from djangojs.views import DjangoJsJsonView
+from djangojs.views import DjangoJsJsonView, TestFormView, JasmineRunner
 
 js_info_dict = {
     'packages': [],
@@ -25,7 +26,8 @@ urlpatterns = patterns('',
 
 if settings.DEBUG or settings.TESTING:
     urlpatterns += patterns('',
-        url(r'^tests/jasmine$', TemplateView.as_view(template_name='djangojs/test/jasmine-runner.html'), name='jasmine_runner'),
+        url(r'^tests/jasmine$', JasmineRunner.as_view(), name='jasmine_runner'),
+        url(r'^tests/form$', TestFormView.as_view(), name='test_form'),
         url(r'^tests/arg/(\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg'),
         url(r'^tests/arg/(\d+)/(\w)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg_multi'),
         url(r'^tests/named/(?P<test>\w+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_named'),
