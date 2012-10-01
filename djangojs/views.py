@@ -3,6 +3,7 @@ import json
 import logging
 import re
 import sys
+import types
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver, reverse
@@ -46,12 +47,13 @@ class DjangoJsJsonView(View):
         if isinstance(module, (str, unicode)):
             __import__(module)
             root_urls = sys.modules[module]
-        elif module.__class__.__name__ == 'module':
-            root_urls = module
+            patterns = root_urls.urlpatterns
+        elif isinstance(module, (list, tuple)):
+            patterns = module
+        elif isinstance(module, types.ModuleType):
+            patterns = module.urlpatterns
         else:
             raise TypeError('Unsupported type: %s' % type(module))
-
-        patterns = root_urls.urlpatterns
 
         for pattern in patterns:
             if issubclass(pattern.__class__, RegexURLPattern):
