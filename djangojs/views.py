@@ -43,8 +43,14 @@ class DjangoJsJsonView(View):
 
     def get_urls(self, module, prefix=''):
         urls = SortedDict()
-        __import__(module)
-        root_urls = sys.modules[module]
+        if isinstance(module, (str, unicode)):
+            __import__(module)
+            root_urls = sys.modules[module]
+        elif module.__class__.__name__ == 'module':
+            root_urls = module
+        else:
+            raise TypeError('Unsupported type: %s' % type(module))
+
         patterns = root_urls.urlpatterns
 
         for pattern in patterns:
