@@ -4,7 +4,8 @@ Django.js
 .. image:: https://secure.travis-ci.org/noirbizarre/django.js.png
    :target: http://travis-ci.org/noirbizarre/django.js
 
-Django.js provides tools for JavaScript developpement with Django.
+Django.js provides tools for JavaScript development with Django.
+
 This is currently a work in progress so don't expect it to be perfect.
 
 Django.js is inspired from:
@@ -143,3 +144,62 @@ is equivalent to:
 .. code-block:: html+django
 
     <script type="text/javascript" src="{{STATIC_URL}}js/libs/my-lib.js"></script>
+
+
+Reverse URLs
+------------
+
+The Django.js library expose reverse URLs to javascript.
+You can call the ``Django.url()`` method with:
+
+- an url name without arguments
+
+.. code-block:: javascript
+
+    Django.url('my-view');
+
+- an url name and a variable number of arguments
+
+.. code-block:: javascript
+
+    Django.url('my-view', arg1, arg2);
+
+- an url name and an array of arguments
+
+.. code-block:: javascript
+
+    Django.url('my-view' [arg1, arg2]);
+
+- an url name and an object with named arguments
+
+.. code-block:: javascript
+
+    Django.url('my-view', {arg1: 'value1', arg2: 'value2'});
+
+You can use anonymous forms (variable arguments and array) with named arguments in URLs but you can't use object form with anonymous arguments.
+
+
+Constants
+---------
+
+Django.js wraps some Django constants:
+
+- ``Django.STATIC_URL``
+- ``Django.LANGUAGES``
+- ``Django.LANGUAGE_CODE``
+- ``Django.LANGUAGE_NAME``
+- ``Django.LANGUAGE_NAME_LOCAL``
+- ``Django.LANGUAGE_BIDI``
+
+
+Other features
+--------------
+
+When the ``django_js`` template tag is included in a page, it automatically:
+
+- Patch ``jQuery.ajax()`` to handle CSRF tokens
+- loads the django javascript catalog for all apps supporting it
+- loads the django javascript i18n/l10n tools in the page:
+   - ``gettext()``
+   - ``ngettext()``
+   - ``interpolate()``
