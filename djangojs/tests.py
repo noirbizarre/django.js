@@ -183,6 +183,7 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
         self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('window.DJANGO_INFOS' in rendered)
         self.failIf('Django.init(' in rendered)
 
     @override_settings(USE_I18N=False)
@@ -195,6 +196,7 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
         self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('window.DJANGO_INFOS' in rendered)
         self.failUnless('Django.init(' in rendered)
 
     @override_settings(USE_I18N=True)
@@ -208,4 +210,4 @@ class DjangoJsTagTest(TestCase):
         self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
         self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
         self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
-        self.failUnless('window.DJANGO_LANGUAGE_INFO' in rendered)
+        self.failUnless('window.DJANGO_INFOS' in rendered)

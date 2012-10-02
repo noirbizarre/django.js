@@ -20,6 +20,38 @@ describe("Django.js", function(){
 
     });
 
+    describe('Constants', function(){
+        it('should store STATIC_URL constant', function(){
+            expect(Django.STATIC_URL).toBeDefined();
+            expect(Django.STATIC_URL).toBe(window.DJANGO_INFOS.STATIC_URL);
+        });
+
+        it('should store available LANGUAGES', function(){
+            expect(Django.LANGUAGES).toBeDefined();
+            expect(Django.LANGUAGES).toBe(window.DJANGO_INFOS.LANGUAGES);
+        });
+
+        it('should store LANGUAGE_CODE', function(){
+            expect(Django.LANGUAGE_CODE).toBeDefined();
+            expect(Django.LANGUAGE_CODE).toBe(window.DJANGO_INFOS.LANGUAGE_CODE);
+        });
+
+        it('should store LANGUAGE_BIDI', function(){
+            expect(Django.LANGUAGE_BIDI).toBeDefined();
+            expect(Django.LANGUAGE_BIDI).toBe(window.DJANGO_INFOS.LANGUAGE_BIDI);
+        });
+
+        it('should store LANGUAGE_NAME', function(){
+            expect(Django.LANGUAGE_NAME).toBeDefined();
+            expect(Django.LANGUAGE_NAME).toBe(window.DJANGO_INFOS.LANGUAGE_NAME);
+        });
+
+        it('should store LANGUAGE_NAME_LOCAL', function(){
+            expect(Django.LANGUAGE_NAME_LOCAL).toBeDefined();
+            expect(Django.LANGUAGE_NAME_LOCAL).toBe(window.DJANGO_INFOS.LANGUAGE_NAME_LOCAL);
+        });
+    });
+
     describe('Resolve reverse URLs', function(){
 
         it('should throw if URL name does not exists', function(){
@@ -163,32 +195,6 @@ describe("Django.js", function(){
             });
         });
 
-        describe('Stores the languages infos', function(){
-            it('should store available LANGUAGES', function(){
-                expect(Django.LANGUAGES).toBeDefined();
-                expect(Django.LANGUAGES).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGES);
-            });
-
-            it('should store LANGUAGE_CODE', function(){
-                expect(Django.LANGUAGE_CODE).toBeDefined();
-                expect(Django.LANGUAGE_CODE).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_CODE);
-            });
-
-            it('should store LANGUAGE_BIDI', function(){
-                expect(Django.LANGUAGE_BIDI).toBeDefined();
-                expect(Django.LANGUAGE_BIDI).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_BIDI);
-            });
-
-            it('should store LANGUAGE_NAME', function(){
-                expect(Django.LANGUAGE_NAME).toBeDefined();
-                expect(Django.LANGUAGE_NAME).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_NAME);
-            });
-
-            it('should store LANGUAGE_NAME_LOCAL', function(){
-                expect(Django.LANGUAGE_NAME_LOCAL).toBeDefined();
-                expect(Django.LANGUAGE_NAME_LOCAL).toBe(window.DJANGO_LANGUAGE_INFO.LANGUAGE_NAME_LOCAL);
-            });
-        });
 
     });
 

@@ -6,8 +6,6 @@
         ngettext = window.ngettext,
         Django = {
 
-            _use_i18n: window.DJANGO_LANGUAGE_INFO !== undefined,
-
             urls: {},
             token_regex: /<\w*>/g,
             named_token_regex: /<(\w+)>/g,
@@ -24,10 +22,8 @@
                     $(that).trigger($.Event("ready"));
                 });
 
-                if (this._use_i18n) {
-                    for (var key in window.DJANGO_LANGUAGE_INFO) {
-                        this[key] = window.DJANGO_LANGUAGE_INFO[key];
-                    }
+                for (var key in window.DJANGO_INFOS) {
+                    this[key] = window.DJANGO_INFOS[key];
                 }
 
                 this._jquery_csrf();
@@ -100,11 +96,7 @@
              * Equivalent to trans template tag
              */
             trans: function(string) {
-                if (this._use_i18n) {
-                    return gettext(string);
-                } else {
-                    return string;
-                }
+                return gettext(string);
             },
 
             /**

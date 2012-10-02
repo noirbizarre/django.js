@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = (
     'DjangoJsJsonView',
+    'JasmineRunner',
 )
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing named parameters in urls
