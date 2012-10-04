@@ -147,4 +147,4 @@
 
     window.Django = Django;
 
-}(window, window.jQuery, window.gettext));
+}(window, window.jQuery));
