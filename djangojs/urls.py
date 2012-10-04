@@ -7,6 +7,7 @@ from django.conf.urls import patterns, url, include
 
 from djangojs.conf import settings
 from djangojs.views import DjangoJsJsonView
+from djangojs.views import JasmineView, QUnitView
 
 js_info_dict = {
     'packages': [],
@@ -25,5 +26,7 @@ urlpatterns = patterns('',
 
 if settings.DEBUG or settings.TESTING:
     urlpatterns += patterns('',
+        url(r'^jasmine$', JasmineView.as_view(), name='default_jasmine_runner'),
+        url(r'^qunit$', QUnitView.as_view(), name='default_qunit_runner'),
         url(r'^tests/', include('djangojs.test_urls')),
     )

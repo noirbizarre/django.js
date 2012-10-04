@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 
 __all__ = (
     'DjangoJsJsonView',
-    'JasmineRunner',
+    'JasmineView',
+    'QUnitView',
 )
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing named parameters in urls
@@ -90,6 +91,22 @@ class DjangoJsJsonView(View):
         return urls
 
 
+class JasmineView(TemplateView):
+    '''
+    Render a Jasmine test runner.
+    '''
+    template_name = 'djangojs/jasmine-runner.html'
+
+
+class QUnitView(TemplateView):
+    '''
+    Render a QUnit test runner
+    '''
+    template_name = 'djangojs/qunit-runner.html'
+
+
+# Django.js test views
+
 class TestFormView(BaseFormView):
     form_class = TestForm
 
@@ -97,10 +114,21 @@ class TestFormView(BaseFormView):
         return reverse('opt')
 
 
-class JasmineRunner(TemplateView):
+class JasmineTestView(JasmineView):
+
     template_name = 'djangojs/test/jasmine-runner.html'
 
     def get_context_data(self, **kwargs):
-        context = super(JasmineRunner, self).get_context_data(**kwargs)
+        context = super(JasmineTestView, self).get_context_data(**kwargs)
+        context['form'] = TestForm()
+        return context
+
+
+class QUnitTestView(QUnitView):
+
+    template_name = 'djangojs/test/qunit-runner.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(QUnitTestView, self).get_context_data(**kwargs)
         context['form'] = TestForm()
         return context
