@@ -8,16 +8,22 @@ from django.test.utils import override_settings
 from djangojs.runners import JsTestCase
 
 
-class JasmineTests(JsTestCase):
-    urls = 'djangojs.urls'
+class JsTests(JsTestCase):
+    urls = 'djangojs.test_urls'
 
     def test_jasmine_suite(self):
         '''It should run its its own Jasmine test suite'''
-        self.run_jasmine_suite('djangojs_jasmine_runner')
+        exit_code = self.run_jasmine_suite('djangojs_jasmine', title='Jasmine Test Suite')
+        self.assertEqual(0, exit_code)
+
+    def test_qunit_suite(self):
+        '''It should run its its own QUnit test suite'''
+        exit_code = self.run_qunit_suite('djangojs_qunit', title='QUnit Test Suite')
+        self.assertEqual(0, exit_code)
 
 
 class DjangoJsJsonTest(TestCase):
-    urls = 'djangojs.urls'
+    urls = 'djangojs.test_urls'
 
     def setUp(self):
         self.response = self.client.get(reverse('django_js_json'))
@@ -33,52 +39,52 @@ class DjangoJsJsonTest(TestCase):
     def test_simple_url(self):
         '''It should serialize a simple URL without parameters'''
         self.assertTrue('django_js_json' in self.json)
-        self.assertEqual(self.json['django_js_json'], '/urls')
+        self.assertEqual(self.json['django_js_json'], '/djangojs/urls')
 
     def test_url_an_arg(self):
         '''It should serialize an URL with a single anonymous parameter'''
         self.assertTrue('test_arg' in self.json)
-        self.assertEqual(self.json['test_arg'], '/tests/arg/<>')
+        self.assertEqual(self.json['test_arg'], '/test/arg/<>')
 
     def test_url_many_args(self):
         '''It should serialize an URL with many anonymous parameters'''
         self.assertTrue('test_arg_multi' in self.json)
-        self.assertEqual(self.json['test_arg_multi'], '/tests/arg/<>/<>')
+        self.assertEqual(self.json['test_arg_multi'], '/test/arg/<>/<>')
 
     def test_url_a_kwarg(self):
         '''It should serialize an URL with a single named parameter'''
         self.assertTrue('test_named' in self.json)
-        self.assertEqual(self.json['test_named'], '/tests/named/<test>')
+        self.assertEqual(self.json['test_named'], '/test/named/<test>')
 
     def test_url_many_kwargs(self):
         '''It should serialize an URL with many named parameters'''
         self.assertTrue('test_named_multi' in self.json)
-        self.assertEqual(self.json['test_named_multi'], '/tests/named/<str>/<num>')
+        self.assertEqual(self.json['test_named_multi'], '/test/named/<str>/<num>')
 
     def test_unnamed_url(self):
         '''It should not serialize unnamed URLs'''
         self.assertFalse('' in self.json)
         for key, value in self.json.iteritems():
-            self.assertNotEqual(value, '/tests/anonymous')
+            self.assertNotEqual(value, '/test/anonymous')
 
     def test_optionnal_chars(self):
         '''It should not serialize optionnal characters (take the shortest)'''
         self.assertTrue('opt' in self.json)
         url = self.json['opt']
         self.assertFalse('?' in url)
-        self.assertEqual(url, '/tests/optionnal')
+        self.assertEqual(url, '/test/optionnal')
 
         self.assertTrue('opt_multi' in self.json)
         url = self.json['opt_multi']
         self.assertFalse('?' in url)
-        self.assertEqual(url, '/tests/man/optionnal')
+        self.assertEqual(url, '/test/man/optionnal')
 
     def test_optionnal_groups(self):
         '''It should not serialize optionnal non capturing groups'''
         self.assertTrue('opt_grp' in self.json)
         url = self.json['opt_grp']
         self.assertFalse('?' in url)
-        self.assertEqual(url, '/tests/optionnal/group')
+        self.assertEqual(url, '/test/optionnal/group')
 
 
 class VerbatimTagTest(TestCase):

@@ -1,6 +1,6 @@
 describe("Django.js", function(){
 
-    var django_js_json = '/urls';
+    var django_js_json = window.DJANGO_JS_JSON;
 
     describe('Initialization', function(){
 
@@ -64,23 +64,23 @@ describe("Django.js", function(){
 
         describe("from arguments", function(){
             it("should resolve an URL without parameter", function(){
-                expect(Django.url('django_js_json')).toBe('/urls');
+                expect(Django.url('test_form')).toBe('/test/form');
             });
 
             it("should resolve an URL with an anonymous token ", function(){
-                expect(Django.url('test_arg', 41)).toBe('/tests/arg/41');
+                expect(Django.url('test_arg', 41)).toBe('/test/arg/41');
             });
 
             it("should resolve an URL with many anonymous token", function(){
-                expect(Django.url('test_arg_multi', 41, 'test')).toBe('/tests/arg/41/test');
+                expect(Django.url('test_arg_multi', 41, 'test')).toBe('/test/arg/41/test');
             });
 
             it("should resolve an URL with a named argument", function(){
-                expect(Django.url('test_named', 'test')).toBe('/tests/named/test');
+                expect(Django.url('test_named', 'test')).toBe('/test/named/test');
             });
 
             it("should resolve an URL with many named token", function(){
-                expect(Django.url('test_named_multi', 'value', 41)).toBe('/tests/named/value/41');
+                expect(Django.url('test_named_multi', 'value', 41)).toBe('/test/named/value/41');
             });
 
             it('should throw if number of parameters mismatch', function(){
@@ -100,25 +100,25 @@ describe("Django.js", function(){
 
         describe("from array", function(){
             it("should resolve an URL without parameter", function(){
-                expect(Django.url('django_js_json'), []).toBe('/urls');
+                expect(Django.url('test_form', [])).toBe('/test/form');
             });
 
             it("should resolve an URL with an anonymous token ", function(){
-                expect(Django.url('test_arg', [41])).toBe('/tests/arg/41');
+                expect(Django.url('test_arg', [41])).toBe('/test/arg/41');
             });
 
             it("should resolve an URL with many anonymous token", function(){
-                expect(Django.url('test_arg_multi', [41, 'test'])).toBe('/tests/arg/41/test');
-                expect(Django.url('test_arg_multi', ['test', 41])).toBe('/tests/arg/test/41');
+                expect(Django.url('test_arg_multi', [41, 'test'])).toBe('/test/arg/41/test');
+                expect(Django.url('test_arg_multi', ['test', 41])).toBe('/test/arg/test/41');
             });
 
             it("should resolve an URL with a named token", function(){
-                expect(Django.url('test_named', ['test'])).toBe('/tests/named/test');
+                expect(Django.url('test_named', ['test'])).toBe('/test/named/test');
             });
 
             it("should resolve an URL with many named token", function(){
-                expect(Django.url('test_named_multi', [41, 'test'])).toBe('/tests/named/41/test');
-                expect(Django.url('test_named_multi', ['test', 41])).toBe('/tests/named/test/41');
+                expect(Django.url('test_named_multi', [41, 'test'])).toBe('/test/named/41/test');
+                expect(Django.url('test_named_multi', ['test', 41])).toBe('/test/named/test/41');
             });
 
             it('should throw if number of parameters mismatch', function(){
@@ -138,12 +138,12 @@ describe("Django.js", function(){
 
         describe("from object", function(){
             it("should resolve an URL without parameter", function(){
-                expect(Django.url('django_js_json'), {}).toBe('/urls');
+                expect(Django.url('test_form', {})).toBe('/test/form');
             });
 
             it("should resolve an URL with named parameters", function(){
-                expect(Django.url('test_named', {test: 'value'})).toBe('/tests/named/value');
-                expect(Django.url('test_named_multi', {str: 'value', num:41})).toBe('/tests/named/value/41');
+                expect(Django.url('test_named', {test: 'value'})).toBe('/test/named/value');
+                expect(Django.url('test_named_multi', {str: 'value', num:41})).toBe('/test/named/value/41');
             });
 
             it('should throw if there is an anonymous token', function(){
@@ -177,15 +177,15 @@ describe("Django.js", function(){
 
         describe("Automatically include Django provided functions", function(){
             it('gettext function should be present', function(){
-                expect(gettext).not.toBeUndefined();
+                expect(gettext).toBeDefined();
             });
 
             it('ngettext function should be present', function(){
-                expect(ngettext).not.toBeUndefined();
+                expect(ngettext).toBeDefined();
             });
 
             it('interpolate function should be present', function(){
-                expect(interpolate).not.toBeUndefined();
+                expect(interpolate).toBeDefined();
             });
         });
 

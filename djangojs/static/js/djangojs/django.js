@@ -2,9 +2,7 @@
 
     "use strict";
 
-    var gettext = window.gettext,
-        ngettext = window.ngettext,
-        Django = {
+    var Django = {
 
             urls: {},
             token_regex: /<\w*>/g,
@@ -59,12 +57,18 @@
             },
 
             _url_from_array: function(name, pattern, array) {
-                if (pattern.match(this.token_regex).length != array.length) {
+                var matches = pattern.match(this.token_regex),
+                    parts = pattern.split(this.token_regex),
+                    url = parts[0];
+
+                if (!matches && array.length === 0) {
+                    return url;
+                }
+
+                if (matches && matches.length != array.length) {
                     throw('Wrong number of argument for pattern "' + name + '"');
                 }
 
-                var parts = pattern.split(this.token_regex),
-                    url = parts[0];
 
                 for (var idx=0; idx < array.length; idx++) {
                     url += array[idx] + parts[idx + 1];
@@ -76,6 +80,10 @@
             _url_from_object: function(name, pattern, object) {
                 var url = pattern,
                     tokens = pattern.match(this.token_regex);
+
+                if (!tokens) {
+                    return url;
+                }
 
                 for (var idx=0; idx < tokens.length; idx++) {
                     var token = tokens[idx],
@@ -96,7 +104,7 @@
              * Equivalent to trans template tag
              */
             trans: function(string) {
-                return gettext(string);
+                return window.gettext(string);
             },
 
             /**

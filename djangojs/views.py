@@ -6,14 +6,12 @@ import sys
 import types
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver, reverse
+from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.http import HttpResponse
 from django.utils.datastructures import SortedDict
 from django.views.generic import View, TemplateView
-from django.views.generic.edit import BaseFormView
 
 from djangojs.conf import settings
-from djangojs.forms import TestForm
 
 logger = logging.getLogger(__name__)
 
@@ -103,32 +101,3 @@ class QUnitView(TemplateView):
     Render a QUnit test runner
     '''
     template_name = 'djangojs/qunit-runner.html'
-
-
-# Django.js test views
-
-class TestFormView(BaseFormView):
-    form_class = TestForm
-
-    def get_success_url(self):
-        return reverse('opt')
-
-
-class JasmineTestView(JasmineView):
-
-    template_name = 'djangojs/test/jasmine-runner.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(JasmineTestView, self).get_context_data(**kwargs)
-        context['form'] = TestForm()
-        return context
-
-
-class QUnitTestView(QUnitView):
-
-    template_name = 'djangojs/test/qunit-runner.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(QUnitTestView, self).get_context_data(**kwargs)
-        context['form'] = TestForm()
-        return context

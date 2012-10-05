@@ -1,4 +1,4 @@
-{% extends "djangojs/jasmine-runner.html" %}
+{% extends "djangojs/qunit-runner.html" %}
 
 {% block js_content %}
 {% load js %}
@@ -8,7 +8,7 @@
     window.DJANGO_JS_JSON = '{% url django_js_json %}';
 </script>
 
-<script type="text/javascript" src="{{STATIC_URL}}test/js/specs/django.specs.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}test/js/tests/django.tests.js"></script>
 {% endblock %}
 
 {% block body_content %}

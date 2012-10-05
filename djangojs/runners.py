@@ -31,14 +31,10 @@ class JsTestCase(LiveServerTestCase):
         jasmine_runner_url = ''.join([self.live_server_url, reverse(runner_url_name)])
         phantomjs_jasmine_runner = join(dirname(__file__), 'phantomjs', 'run-jasmine.js')
 
-        result = self.phantomjs(phantomjs_jasmine_runner, jasmine_runner_url, title=title)
-
-        self.assertEqual(0, result)
+        return self.phantomjs(phantomjs_jasmine_runner, jasmine_runner_url, title=title)
 
     def run_qunit_suite(self, runner_url_name, title='Qunit test suite'):
         qunit_runner_url = ''.join([self.live_server_url, reverse(runner_url_name)])
         phantomjs_qunit_runner = join(dirname(__file__), 'phantomjs', 'run-qunit.js')
 
-        result = self.phantomjs(phantomjs_qunit_runner, qunit_runner_url, title=title)
-
-        self.assertEqual(0, result)
+        return self.phantomjs(phantomjs_qunit_runner, qunit_runner_url, title=title)
