@@ -14,13 +14,11 @@ class JsTests(JsTestCase):
 
     def test_jasmine_suite(self):
         '''It should run its its own Jasmine test suite'''
-        exit_code = self.run_jasmine_suite('djangojs_jasmine', title='Jasmine Test Suite')
-        self.assertEqual(0, exit_code)
+        self.run_jasmine('djangojs_jasmine', title='Jasmine Test Suite')
 
     def test_qunit_suite(self):
         '''It should run its its own QUnit test suite'''
-        exit_code = self.run_qunit_suite('djangojs_qunit', title='QUnit Test Suite')
-        self.assertEqual(0, exit_code)
+        self.run_qunit('djangojs_qunit', title='QUnit Test Suite')
 
 
 class DjangoJsJsonTest(TestCase):

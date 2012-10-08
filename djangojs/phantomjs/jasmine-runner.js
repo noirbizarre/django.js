@@ -27,13 +27,13 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     phantom.exit(1);
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
-                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
+                    // console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                 }
             }
         }, 100); //< repeat check every 100ms
-};
+}
 
 
 if (system.args.length !== 2) {
@@ -41,11 +41,25 @@ if (system.args.length !== 2) {
     phantom.exit(1);
 }
 
-var page = require('webpage').create();
+var page = require('webpage').create(),
+    end_regex = /(\d+) specs?, (\d+) failures? in (.+)s./,
+    ended = false,
+    failures = 0,
+    specs = 0,
+    elapsed = 0;
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
 page.onConsoleMessage = function(msg) {
-    console.log(msg);
+    if (end_regex.test(msg)) {
+        var result = end_regex.exec(msg);
+
+        ended = true;
+        specs = result[1];
+        failures = result[2];
+        elapsed = result[3];
+    } else {
+        console.log(msg);
+    }
 };
 
 page.open(system.args[1], function(status){
@@ -54,33 +68,9 @@ page.open(system.args[1], function(status){
         phantom.exit();
     } else {
         waitFor(function(){
-            return page.evaluate(function(){
-                return document.body.querySelector('.symbolSummary .pending') === null
-            });
+            return ended;
         }, function(){
-            var exitCode = page.evaluate(function(){
-                console.log('');
-                console.log(document.body.querySelector('.description').innerText);
-                var list = document.body.querySelectorAll('.results > #details > .specDetail.failed');
-                if (list && list.length > 0) {
-                  console.log('');
-                  console.log(list.length + ' test(s) FAILED:');
-                  for (i = 0; i < list.length; ++i) {
-                      var el = list[i],
-                          desc = el.querySelector('.description'),
-                          msg = el.querySelector('.resultMessage.fail');
-                      console.log('');
-                      console.log(desc.innerText);
-                      console.log(msg.innerText);
-                      console.log('');
-                  }
-                  return 1;
-                } else {
-                  console.log(document.body.querySelector('.alert > .passingAlert.bar').innerText);
-                  return 0;
-                }
-            });
-            phantom.exit(exitCode);
+            phantom.exit(failures);
         });
     }
 });

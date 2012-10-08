@@ -14,6 +14,17 @@
     <div id="qunit-fixture"></div>
 
     <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/qunit.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/qunit-tap.js"></script>
+    <script type="text/javascript">
+        if (navigator.userAgent.indexOf('PhantomJS') != -1) {
+            var logger = function() { console.log.apply(console, arguments); };
+            qunitTap(QUnit, logger, {
+              noPlan: false,
+              showTestNameOnFailure: false,
+              showModuleNameOnFailure:false
+            });
+        }
+    </script>
     {% block js_content %}{% endblock %}
 </body>
 </html>
