@@ -2,11 +2,7 @@
 
 {% block js_content %}
 {% load js %}
-{% django_js %}
-
-<script>
-    window.DJANGO_JS_JSON = '{% url django_js_json %}';
-</script>
+{% django_js init=false %}
 
 <script type="text/javascript" src="{{STATIC_URL}}test/js/specs/django.specs.js"></script>
 {% endblock %}

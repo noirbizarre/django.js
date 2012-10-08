@@ -104,20 +104,23 @@ After loading, you can use the Django module to resolve URLs and Translations:
                 Django.trans('my string')
             );
         });
-        Django.init({% django_urls_json %});
     </script>
 
 
-If you don't want to manually trigger initialization, you can use the ``{% django_js_init %}`` tag:
+If you want to manually trigger initialization, you can set the ``init`` keyword to false:
 
 .. code-block:: html+django
 
-    {% django_js_init %}
+    {% django_js init=false %}
     <script>
         $(Django).on('ready', function() {
-            console.log(Django.url('my-view'));
+            console.log(
+                Django.url('my-view'),
+            );
         });
+        Django.init();
     </script>
+
 
 ``django_js`` tag also configure ``jQuery.ajax`` to handle CSRF tokens.
 

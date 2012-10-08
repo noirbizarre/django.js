@@ -12,17 +12,17 @@
             /**
              * Initialize the module loading the URLs
              */
-            init: function(url) {
+            init: function() {
                 var that = this;
-
-                $.getJSON(url, function(urls){
-                    that.urls = urls;
-                    $(that).trigger($.Event("ready"));
-                });
 
                 for (var key in window.DJANGO_INFOS) {
                     this[key] = window.DJANGO_INFOS[key];
                 }
+
+                $.getJSON(this.DJANGO_JS_JSON, function(urls){
+                    that.urls = urls;
+                    $(that).trigger($.Event("ready"));
+                });
 
                 this._jquery_csrf();
             },

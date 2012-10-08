@@ -108,17 +108,10 @@ def jquery_js():
     return js_lib('jquery-1.8.2.min.js')
 
 
-@register.inclusion_tag('djangojs/include.html')
-def django_js():
+@register.inclusion_tag('djangojs/django_js_tag.html')
+def django_js(init=True):
     return {
         'STATIC_URL': settings.STATIC_URL,
         'USE_I18N': settings.USE_I18N,
-    }
-
-
-@register.inclusion_tag('djangojs/init.html')
-def django_js_init():
-    return {
-        'STATIC_URL': settings.STATIC_URL,
-        'USE_I18N': settings.USE_I18N,
+        'init': init,
     }
