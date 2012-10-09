@@ -54,7 +54,7 @@ You can either:
 
     {% load js %}
 
-- load the template tag lib by adding to your ``setting.py``:
+- load the template tag lib by adding to your ``views.py``:
 
 .. code-block:: python
 
