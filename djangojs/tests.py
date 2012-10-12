@@ -5,6 +5,7 @@ from django.template import Context, Template
 from django.test import TestCase
 from django.test.utils import override_settings
 
+from djangojs.conf import settings
 from djangojs.runners import JsTestCase
 
 
@@ -140,7 +141,7 @@ class DjangoJsTagTest(TestCase):
             {% js_lib "my-lib.js" %}
             ''')
         rendered = t.render(Context())
-        self.failUnless('<script type="text/javascript" src="/static/js/libs/my-lib.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/libs/my-lib.js">' % settings.STATIC_URL in rendered)
 
     def test_jquery_js(self):
         '''Should include jQuery library'''
@@ -149,7 +150,7 @@ class DjangoJsTagTest(TestCase):
             {% jquery_js %}
             ''')
         rendered = t.render(Context())
-        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
 
     @override_settings(USE_I18N=False)
     def test_django_js(self):
@@ -159,8 +160,8 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = t.render(Context())
-        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
-        self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
         self.failUnless('window.DJANGO_INFOS' in rendered)
         self.failUnless('Django.init();' in rendered)
 
@@ -172,8 +173,8 @@ class DjangoJsTagTest(TestCase):
             {% django_js init=false %}
             ''')
         rendered = t.render(Context())
-        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
-        self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
         self.failUnless('window.DJANGO_INFOS' in rendered)
         self.failIf('Django.init();' in rendered)
 
@@ -185,7 +186,7 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = t.render(Context())
-        self.failUnless('<script type="text/javascript" src="/static/js/libs/jquery-1.8.2.min.js">' in rendered)
-        self.failUnless('<script type="text/javascript" src="/static/js/djangojs/django.js">' in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
         self.failUnless('window.DJANGO_INFOS' in rendered)
