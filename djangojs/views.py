@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+import os
 import re
 import sys
 import types
 
+from django.contrib.staticfiles import finders
+from django.contrib.staticfiles.utils import matches_patterns
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.http import HttpResponse
@@ -18,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = (
     'DjangoJsJsonView',
+    'JsTestView',
     'JasmineView',
     'QUnitView',
 )
@@ -89,14 +93,51 @@ class DjangoJsJsonView(View):
         return urls
 
 
-class JasmineView(TemplateView):
+class JsTestView(TemplateView):
+    '''
+    Base class for JS tests views
+    '''
+    js_files = None
+
+    def get_context_data(self, **kwargs):
+        context = super(JsTestView, self).get_context_data(**kwargs)
+
+        context['js_test_files'] = self.get_js_files()
+
+        return context
+
+    def get_js_files(self):
+        if self.js_files:
+            if isinstance(self.js_files, str):
+                matches = lambda path: matches_patterns(path, [self.js_files])
+            elif isinstance(self.js_files, (list, tuple)):
+                matches = lambda path: matches_patterns(path, self.js_files)
+            return [path for path in self.get_static_files() if matches(path)]
+        return []
+
+    def get_static_files(self):
+        files = []
+        for finder in finders.get_finders():
+            for path, storage in finder.list(None):
+                # Prefix the relative path if the source storage contains it
+                if getattr(storage, 'prefix', None):
+                    prefixed_path = os.path.join(storage.prefix, path)
+                else:
+                    prefixed_path = path
+
+                if prefixed_path not in files:
+                    files.append(prefixed_path)
+        return files
+
+
+class JasmineView(JsTestView):
     '''
     Render a Jasmine test runner.
     '''
     template_name = 'djangojs/jasmine-runner.html'
 
 
-class QUnitView(TemplateView):
+class QUnitView(JsTestView):
     '''
     Render a QUnit test runner
     '''

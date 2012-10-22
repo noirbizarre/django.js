@@ -28,6 +28,11 @@
             });
         }
     </script>
+
+    {% for file in js_test_files %}
+    {% js file %}
+    {% endfor %}
+
     {% block js_content %}{% endblock %}
 </body>
 </html>

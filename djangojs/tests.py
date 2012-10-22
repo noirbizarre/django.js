@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from djangojs.conf import settings
 from djangojs.runners import JsTestCase
+from djangojs.views import JsTestView
 
 
 class JsTests(JsTestCase):
@@ -233,3 +234,44 @@ class DjangoJsTagTest(TestCase):
         self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
         self.failUnless('window.DJANGO_INFOS' in rendered)
+
+
+class JsTestViewTest(TestCase):
+
+    def test_no_js_file(self):
+        view = JsTestView()
+        self.assertEqual(view.get_js_files(), [])
+
+    def test_single_js_file(self):
+        view = JsTestView(js_files='test/js/libs/jasmine-djangojs.js')
+        self.assertEqual(view.get_js_files(), ['test/js/libs/jasmine-djangojs.js'])
+
+    def test_multi_js_file(self):
+        view = JsTestView(js_files=['test/js/libs/jasmine-djangojs.js', 'test/js/libs/jasmine.js'])
+
+        files = view.get_js_files()
+
+        self.assertIn('test/js/libs/jasmine-djangojs.js', files)
+        self.assertIn('test/js/libs/jasmine.js', files)
+
+    def test_single_glob_expression(self):
+        view = JsTestView(js_files='test/js/libs/jasmine-*.js')
+
+        files = view.get_js_files()
+
+        self.assertIn('test/js/libs/jasmine-djangojs.js', files)
+        self.assertIn('test/js/libs/jasmine-html.js', files)
+        self.assertIn('test/js/libs/jasmine-jquery.js', files)
+        self.assertNotIn('test/js/libs/jasmine.js', files)
+
+    def test_multi_glob_expression(self):
+        view = JsTestView(js_files=['test/js/libs/jasmine-*.js', 'test/js/libs/qunit-*.js'])
+
+        files = view.get_js_files()
+
+        self.assertIn('test/js/libs/jasmine-djangojs.js', files)
+        self.assertIn('test/js/libs/jasmine-html.js', files)
+        self.assertIn('test/js/libs/jasmine-jquery.js', files)
+        self.assertIn('test/js/libs/qunit-tap.js', files)
+        self.assertNotIn('test/js/libs/jasmine.js', files)
+        self.assertNotIn('test/js/libs/qunit.js', files)

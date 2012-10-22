@@ -12,6 +12,10 @@
   {% js "test/js/libs/jasmine-djangojs.js" %}
   {% js "test/js/libs/jasmine-jquery.js" %}
 
+  {% for file in js_test_files %}
+  {% js file %}
+  {% endfor %}
+
   {% block js_content %}{% endblock %}
 
   <script type="text/javascript">
