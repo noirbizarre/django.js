@@ -3,7 +3,6 @@ import json
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import TestCase
-from django.test.utils import override_settings
 
 from djangojs.conf import settings
 from djangojs.runners import JsTestCase
@@ -177,9 +176,8 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
 
-    @override_settings(USE_I18N=False)
     def test_django_js(self):
-        '''Should include Django JS'''
+        '''Should include and initialize django.js'''
         t = Template('''
             {% load js %}
             {% django_js %}
@@ -190,9 +188,8 @@ class DjangoJsTagTest(TestCase):
         self.failUnless('window.DJANGO_INFOS' in rendered)
         self.failUnless('Django.init();' in rendered)
 
-    @override_settings(USE_I18N=False)
     def test_django_js_init_false(self):
-        '''Should include and initialize Django JS'''
+        '''Should include and not initialize django.js'''
         t = Template('''
             {% load js %}
             {% django_js init=false %}
@@ -204,7 +201,7 @@ class DjangoJsTagTest(TestCase):
         self.failIf('Django.init();' in rendered)
 
     def test_django_js_jquery_false(self):
-        '''Should include and initialize Django JS'''
+        '''Should include django.js without jQuery'''
         t = Template('''
             {% load js %}
             {% django_js jquery=false %}
@@ -213,9 +210,20 @@ class DjangoJsTagTest(TestCase):
         self.failIf('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
 
-    @override_settings(USE_I18N=True)
+    def test_django_js_init_jquery_false(self):
+        '''Should include unintialized initialize django.js without jQuery'''
+        t = Template('''
+            {% load js %}
+            {% django_js init=false jquery=false %}
+            ''')
+        rendered = t.render(Context())
+        self.failIf('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('window.DJANGO_INFOS' in rendered)
+        self.failIf('Django.init();' in rendered)
+
     def test_django_js_i18n(self):
-        '''Should include Django JS with i18n support'''
+        '''Should include django.js with i18n support'''
         t = Template('''
             {% load js %}
             {% django_js %}
