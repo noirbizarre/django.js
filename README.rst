@@ -133,6 +133,39 @@ The ``{% jquery_js %}`` tag only load the jQuery (1.8.2) library.
 The ``django_js`` and ``django_js_init`` tags automatically load jQuery so no need to manually load it.
 
 
+javascript/js
+~~~~~~~~~~~~~
+
+The ``js`` tag is a quick helper to include javascript files from ``{{STATIC_URL}}``:
+
+.. code-block:: html+django
+
+    {% javascript "js/my.js" %}
+    {% js "js/my.js" %}
+
+is equivalent to:
+
+.. code-block:: html+django
+
+    <script type="text/javascript" src="{% static "js/my.js" %}"></script>
+
+
+css
+~~~
+
+The ``css`` tag is a quick helper to include css files from ``{{STATIC_URL}}``:
+
+.. code-block:: html+django
+
+    {% css "css/my.css" %}
+
+is equivalent to:
+
+.. code-block:: html+django
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/my.css" %}" />
+
+
 js_lib
 ~~~~~~
 
@@ -206,3 +239,15 @@ When the ``django_js`` template tag is included in a page, it automatically:
    - ``gettext()``
    - ``ngettext()``
    - ``interpolate()``
+
+
+Jasmine/QUnit test runners
+--------------------------
+
+Django.js provide tools for easy JS testing.
+
+Jasmine/QUnit views
+*******************
+Django.js provides base views for testing.
+Instead of writing a full view each time you need a Jasmine or a QUnit test view, simply use the provided ``JasmineView`` and ``QUnitView``.
+You can customize the template by extending them.
