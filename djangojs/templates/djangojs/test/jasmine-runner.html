@@ -1,10 +1,12 @@
 {% extends "djangojs/jasmine-runner.html" %}
 
-{% block js_content %}
 {% load js %}
+{% load staticfiles %}
+
+{% block js_content %}
 {% django_js init=false %}
 
-<script type="text/javascript" src="{{STATIC_URL}}test/js/specs/django.specs.js"></script>
+<script type="text/javascript" src="{% static "test/js/specs/django.specs.js" %}"></script>
 {% endblock %}
 
 {% block body_content %}

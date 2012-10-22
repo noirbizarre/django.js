@@ -1,4 +1,7 @@
 {% load i18n %}
+{% load js %}
+{% load staticfiles %}
+
 {% get_available_languages as LANGUAGES %}
 {% get_current_language as LANGUAGE_CODE %}
 {% if LANGUAGE_CODE == 'en-us' %} {# Dirty hack to fix non included default#}
@@ -23,9 +26,8 @@
     };
 </script>
 
-{% load js %}
 {% jquery_js %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/djangojs/django.js"></script>
+<script type="text/javascript" src="{% static "js/djangojs/django.js" %}"></script>
 
 {% if init %}
 <script>

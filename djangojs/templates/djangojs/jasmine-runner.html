@@ -4,11 +4,13 @@
 <head>
   <title>{% block title %}Jasmine Test Runner{% endblock %}</title>
 
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}test/js/libs/jasmine.css">
-  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine.js"></script>
-  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine-html.js"></script>
-  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine-djangojs.js"></script>
-  <script type="text/javascript" src="{{STATIC_URL}}test/js/libs/jasmine-jquery.js"></script>
+  {% load staticfiles %}
+
+  <link rel="stylesheet" type="text/css" href="{% static "test/js/libs/jasmine.css" %}">
+  <script type="text/javascript" src="{% static "test/js/libs/jasmine.js" %}"></script>
+  <script type="text/javascript" src="{% static "test/js/libs/jasmine-html.js" %}"></script>
+  <script type="text/javascript" src="{% static "test/js/libs/jasmine-djangojs.js" %}"></script>
+  <script type="text/javascript" src="{% static "test/js/libs/jasmine-jquery.js" %}"></script>
 
   {% block js_content %}{% endblock %}
 
