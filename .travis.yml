@@ -5,4 +5,4 @@ python:
 install:
   - pip install . --use-mirrors
 # command to run tests
-script: python manage.py test
+script: python manage.py test djangojs
