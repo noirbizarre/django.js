@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load js %}
+{% load staticfiles %}
 
 {% get_available_languages as LANGUAGES %}
 {% get_current_language as LANGUAGE_CODE %}
@@ -12,7 +13,7 @@
 <script type="text/javascript" src="{% url js_catalog %}"></script>
 <script>
     window.DJANGO_INFOS = {
-        STATIC_URL: '{{ STATIC_URL }}',
+        STATIC_URL: '{% static "" %}',
         DJANGO_JS_JSON: '{% url django_js_json %}',
         LANGUAGES: {
             {% for lang in LANGUAGES %}
