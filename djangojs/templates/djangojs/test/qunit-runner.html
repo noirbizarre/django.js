@@ -1,12 +1,10 @@
 {% extends "djangojs/qunit-runner.html" %}
 
 {% load js %}
-{% load staticfiles %}
 
 {% block js_content %}
 {% django_js init=false %}
-
-<script type="text/javascript" src="{% static "test/js/tests/django.tests.js" %}"></script>
+{% js "test/js/tests/django.tests.js" %}
 {% endblock %}
 
 {% block body_content %}

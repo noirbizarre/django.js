@@ -8,6 +8,7 @@ Inspired by:
  - Miguel Araujo: https://gist.github.com/893408
 '''
 from django import template
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from djangojs.conf import settings
 
@@ -101,6 +102,21 @@ def verbatim(parser, token):
 @register.simple_tag
 def js_lib(filename):
     return '<script type="text/javascript" src="%sjs/libs/%s"></script>' % (settings.STATIC_URL, filename)
+
+
+@register.simple_tag
+def javascript(filename):
+    return '<script type="text/javascript" src="%s"></script>' % static(filename)
+
+
+@register.simple_tag
+def js(filename):
+    return javascript(filename)
+
+
+@register.simple_tag
+def css(filename):
+    return '<link rel="stylesheet" type="text/css" href="%s" />' % static(filename)
 
 
 @register.simple_tag

@@ -132,6 +132,33 @@ class VerbatimTagTest(TestCase):
 class DjangoJsTagTest(TestCase):
     urls = 'djangojs.urls'
 
+    def test_js(self):
+        '''Should include static js files'''
+        t = Template('''
+            {% load js %}
+            {% js "js/my.js" %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="%sjs/my.js">' % settings.STATIC_URL in rendered)
+
+    def test_javascript(self):
+        '''Should include static javascript files'''
+        t = Template('''
+            {% load js %}
+            {% javascript "js/my.js" %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<script type="text/javascript" src="%sjs/my.js">' % settings.STATIC_URL in rendered)
+
+    def test_css(self):
+        '''Should include static css files'''
+        t = Template('''
+            {% load js %}
+            {% css "css/my.css" %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('<link rel="stylesheet" type="text/css" href="%scss/my.css" />' % settings.STATIC_URL in rendered)
+
     def test_js_lib(self):
         '''Should include js libraries'''
         t = Template('''
