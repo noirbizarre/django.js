@@ -125,9 +125,8 @@ def jquery_js():
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html')
-def django_js(init=True):
+def django_js(init=True, jquery=True):
     return {
-        'STATIC_URL': settings.STATIC_URL,
-        'USE_I18N': settings.USE_I18N,
-        'init': init,
+        'djangojs_init': init,
+        'djangojs_jquery': jquery,
     }

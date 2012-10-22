@@ -1,6 +1,5 @@
 {% load i18n %}
 {% load js %}
-{% load staticfiles %}
 
 {% get_available_languages as LANGUAGES %}
 {% get_current_language as LANGUAGE_CODE %}
@@ -9,6 +8,7 @@
 {% else %}
 {% get_language_info for LANGUAGE_CODE as language %}
 {% endif %}
+
 <script type="text/javascript" src="{% url js_catalog %}"></script>
 <script>
     window.DJANGO_INFOS = {
@@ -26,10 +26,10 @@
     };
 </script>
 
-{% jquery_js %}
-<script type="text/javascript" src="{% static "js/djangojs/django.js" %}"></script>
+{% if djangojs_jquery %}{% jquery_js %}{% endif %}
+{% js "js/djangojs/django.js" %}
 
-{% if init %}
+{% if djangojs_init %}
 <script>
     Django.init();
 </script>

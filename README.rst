@@ -122,6 +122,14 @@ If you want to manually trigger initialization, you can set the ``init`` keyword
     </script>
 
 
+The jQuery libary is automatically loaded.
+If you want to manually load the jquery, you can set the ``jquery`` keyword to false:
+
+.. code-block:: html+django
+
+    {% django_js jquery=false %}
+
+
 ``django_js`` tag also configure ``jQuery.ajax`` to handle CSRF tokens.
 
 
