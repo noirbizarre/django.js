@@ -1,14 +1,12 @@
 describe("Django.js", function(){
 
-    var django_js_json = window.DJANGO_JS_JSON;
-
     describe('Initialization', function(){
 
         it("should fire 'ready' event on initilization", function(){
             var callback = jasmine.createSpy();
             $(Django).on('ready', callback);
 
-            Django.init(django_js_json);
+            Django.init();
 
             waitsFor(function() {
                 return callback.callCount > 0;
@@ -171,6 +169,12 @@ describe("Django.js", function(){
             });
         });
 
+    });
+
+    describe('Resolve static', function(){
+        it("should resolve a static URL", function(){
+            expect(Django.file('my.json')).toBe(window.DJANGO_INFOS.STATIC_URL + 'my.json');
+        });
     });
 
     describe('Internationalization', function(){

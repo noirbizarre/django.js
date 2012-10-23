@@ -100,6 +100,10 @@
                 return url;
             },
 
+            file: function(filename) {
+                return this.STATIC_URL + filename;
+            },
+
             /**
              * Equivalent to trans template tag
              */

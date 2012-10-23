@@ -1,5 +1,4 @@
-var django_js_json = window.DJANGO_JS_JSON,
-    DJANGO_INFOS = window.DJANGO_INFOS;
+var DJANGO_INFOS = window.DJANGO_INFOS;
 
 QUnit.config.reorder = false;
 
@@ -11,7 +10,7 @@ asyncTest('should fire "ready" event on initilization', 1, function() {
         start();
     });
 
-    Django.init(django_js_json);
+    Django.init();
 });
 
 
@@ -146,6 +145,11 @@ test('should throw if a token is missing', function(){
 
 test('should not throw for unused key', function(){
     ok(Django.url('test_named', {test: 'value', num:41}));
+});
+
+module('Resolve static files');
+test("should resolve a static URL", function(){
+    equal(Django.file('my.json'), window.DJANGO_INFOS.STATIC_URL + 'my.json');
 });
 
 
