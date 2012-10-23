@@ -1,3 +1,4 @@
+=========
 Django.js
 =========
 
@@ -12,8 +13,9 @@ Django.js is inspired from:
  - `Miguel Araujo's verbatim snippet <https://gist.github.com/893408>`_.
  - `Dimitri Gnidash's django-js-utils <https://github.com/Dimitri-Gnidash/django-js-utils>`_.
 
+
 Installation
-------------
+============
 
 You can install Django.JS with pip:
 
@@ -40,6 +42,9 @@ Add ``djangojs.urls`` to your root ``URL_CONF``:
         ...
     )
 
+
+Documentation
+=============
 
 Template tags
 -------------

@@ -13,11 +13,18 @@ def rst(filename):
     content = open(filename).read()
     return re.sub(r'\.\.\s? code-block::\s*(\w|\+)+', '::', content)
 
+
+long_description = '\n'.join((
+    rst('README.rst'),
+    rst('CHANGELOG.rst'),
+    ''
+))
+
 setup(
     name='django.js',
     version=__import__('djangojs').__version__,
     description=__import__('djangojs').__description__,
-    long_description=rst('README.rst'),
+    long_description=long_description,
     url='https://github.com/noirbizarre/django.js',
     download_url='http://pypi.python.org/pypi/django.js',
     author='Axel Haustant',
