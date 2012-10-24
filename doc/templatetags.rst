@@ -40,7 +40,7 @@ After loading, you can use the Django module to resolve URLs and Translations:
                 Django.url('my-view', 'arg1'),
                 Django.url('my-view', ['arg1']),
                 Django.url('my-view', {key: 'test'}),
-                Django.trans('my string')
+                Django.file('test.json')
             );
         });
     </script>
@@ -54,7 +54,7 @@ If you want to manually trigger initialization, you can set the ``init`` keyword
     <script>
         $(Django).on('ready', function() {
             console.log(
-                Django.url('my-view'),
+                Django.url('my-view')
             );
         });
         Django.init();

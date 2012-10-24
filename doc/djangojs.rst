@@ -33,6 +33,21 @@ You can call the ``Django.url()`` method with:
 
 You can use anonymous forms (variable arguments and array) with named arguments in URLs but you can't use object form with anonymous arguments.
 
+ready event
+***********
+
+Django.js need to load a JSON containing all URLs before doing any reverse matching.
+It emit a ``ready`` event when fetch is done.
+If you need to have reverse url as soon as possible, you can listen to this event:
+
+.. code-block:: javascript
+
+    $(Django).on('ready', function() {
+        console.log(
+            Django.url('my-view')
+        );
+    });
+
 
 Static URLs
 -----------
