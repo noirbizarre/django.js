@@ -12,4 +12,6 @@
 build/
 dist/
 
+doc/_build
+
 .codeintel/

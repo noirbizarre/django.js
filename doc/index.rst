@@ -1,9 +1,10 @@
-=========
-Django.js
-=========
+.. django.js documentation master file, created by
+   sphinx-quickstart on Fri Oct  5 09:50:20 2012.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-.. image:: https://secure.travis-ci.org/noirbizarre/django.js.png
-   :target: http://travis-ci.org/noirbizarre/django.js
+Welcome to django.js documentation!
+===================================
 
 Django.js provides tools for JavaScript development with Django.
 
@@ -12,7 +13,8 @@ Django.js is inspired from:
 - `Miguel Araujo's verbatim snippet <https://gist.github.com/893408>`_.
 - `Dimitri Gnidash's django-js-utils <https://github.com/Dimitri-Gnidash/django-js-utils>`_.
 
-This is currently a work in progress so don't expect it to be perfect but please `submit an issue <https://github.com/noirbizarre/django.js/issues>`_ for any bug you find or any feature you want.
+.. note::
+    This is currently a work in progress so don't expect it to be perfect but please `submit an issue <https://github.com/noirbizarre/django.js/issues>`_ for any bug you find or any feature you want.
 
 
 Installation
@@ -47,4 +49,19 @@ Add ``djangojs.urls`` to your root ``URL_CONF``:
 Documentation
 =============
 
-The documentation is hosted `on Read the Docs <http://djangojs.readthedocs.org/en/latest/>`_
+.. toctree::
+   :maxdepth: 2
+
+   templatetags
+   djangojs
+   test
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
