@@ -3,6 +3,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import TestCase
+from django.utils import translation
 
 from djangojs.conf import settings
 from djangojs.runners import JsTestCase
@@ -21,11 +22,11 @@ class JsTests(JsTestCase):
         self.run_qunit('djangojs_qunit', title='QUnit Test Suite')
 
 
-class DjangoJsJsonTest(TestCase):
+class UrlsJsonViewTest(TestCase):
     urls = 'djangojs.test_urls'
 
     def setUp(self):
-        self.response = self.client.get(reverse('django_js_json'))
+        self.response = self.client.get(reverse('django_js_urls'))
         self.json = json.loads(self.response.content)
 
     def test_render(self):
@@ -37,8 +38,8 @@ class DjangoJsJsonTest(TestCase):
 
     def test_simple_url(self):
         '''It should serialize a simple URL without parameters'''
-        self.assertTrue('django_js_json' in self.json)
-        self.assertEqual(self.json['django_js_json'], '/djangojs/urls')
+        self.assertTrue('django_js_urls' in self.json)
+        self.assertEqual(self.json['django_js_urls'], '/djangojs/urls')
 
     def test_url_an_arg(self):
         '''It should serialize an URL with a single anonymous parameter'''
@@ -84,6 +85,49 @@ class DjangoJsJsonTest(TestCase):
         url = self.json['opt_grp']
         self.assertFalse('?' in url)
         self.assertEqual(url, '/test/optionnal/group')
+
+
+class ContextJsonViewTest(TestCase):
+    urls = 'djangojs.test_urls'
+
+    def setUp(self):
+        self.response = self.client.get(reverse('django_js_context'))
+        self.json = json.loads(self.response.content)
+
+    def test_render(self):
+        '''It should render a JSON Context descriptor'''
+        self.assertIsNotNone(self.response)
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(self.response['Content-Type'], 'application/json')
+        self.assertIsNotNone(self.json)
+
+    def test_static_url(self):
+        '''STATIC_URL should be in context'''
+        self.assertTrue('STATIC_URL' in self.json)
+        self.assertEqual(self.json['STATIC_URL'], settings.STATIC_URL)
+
+    def test_media_url(self):
+        '''MEDIA_URL should be in context'''
+        self.assertTrue('MEDIA_URL' in self.json)
+        self.assertEqual(self.json['MEDIA_URL'], settings.MEDIA_URL)
+
+    def test_language_code(self):
+        '''LANGUAGE_CODE should be in context'''
+        self.assertTrue('LANGUAGE_CODE' in self.json)
+        self.assertEqual(self.json['LANGUAGE_CODE'], translation.get_language())
+
+    def test_language_bidi(self):
+        '''LANGUAGE_BIDI should be in context'''
+        self.assertTrue('LANGUAGE_BIDI' in self.json)
+        self.assertEqual(self.json['LANGUAGE_BIDI'], translation.get_language_bidi())
+
+    def test_languages(self):
+        '''LANGUAGE_BIDI should be in context'''
+        self.assertTrue('LANGUAGES' in self.json)
+        languages = self.json['LANGUAGES']
+        self.assertTrue(isinstance(languages, dict))
+        for code, name in settings.LANGUAGES:
+            self.assertEqual(languages[code], name)
 
 
 class VerbatimTagTest(TestCase):

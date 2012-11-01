@@ -13,6 +13,7 @@ from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.http import HttpResponse
 from django.utils.datastructures import SortedDict
 from django.views.generic import View, TemplateView
+from django.template.context import RequestContext
 
 from djangojs.conf import settings
 
@@ -20,7 +21,8 @@ logger = logging.getLogger(__name__)
 
 
 __all__ = (
-    'DjangoJsJsonView',
+    'UrlsJsonView',
+    'ContextJsonView',
     'JsTestView',
     'JasmineView',
     'QUnitView',
@@ -32,19 +34,27 @@ RE_OPT = re.compile(r"\w\?")  # Pattern for recognizing optionnal character
 RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
 
 
-class DjangoJsJsonView(View):
+class JsonView(View):
     '''
     List all registered URLs as a JSON object.
     '''
     def get(self, request, *args, **kwargs):
+        data = self.get_context_data(request, *args, **kwargs)
+        return HttpResponse(
+            json.dumps(data, cls=DjangoJSONEncoder),
+            mimetype="application/json"
+        )
+
+
+class UrlsJsonView(JsonView):
+    '''
+    List all registered URLs as a JSON object.
+    '''
+    def get_context_data(self, request, *args, **kwargs):
         if not hasattr(settings, 'ROOT_URLCONF'):
             raise Exception
         module = settings.ROOT_URLCONF
-        urls = self.get_urls(module)
-        return HttpResponse(
-            json.dumps(urls, cls=DjangoJSONEncoder),
-            mimetype="application/json"
-        )
+        return self.get_urls(module)
 
     def get_urls(self, module, prefix=''):
         urls = SortedDict()
@@ -91,6 +101,34 @@ class DjangoJsJsonView(View):
                 if pattern.urlconf_name:
                     urls.update(self.get_urls(pattern.urlconf_name, pattern.regex.pattern))
         return urls
+
+
+class ContextJsonView(JsonView):
+
+    SERIALIZERS = {
+        'LANGUAGES': 'serialize_languages',
+        # 'perms': 'serialize_perms',
+    }
+
+    def get_context_data(self, request, *args, **kwargs):
+        data = {}
+        for context in RequestContext(request):
+            for key, value in context.iteritems():
+                # print key, value
+                if key in self.SERIALIZERS:
+                    serializer_name = self.SERIALIZERS[key]
+                    if hasattr(self, serializer_name):
+                        serializer = getattr(self, serializer_name)
+                        data[key] = serializer(value)
+                elif isinstance(value, (str, tuple, list, dict, int, bool)):
+                    data[key] = value
+        return data
+
+    def serialize_perms(self, perms):
+        return None
+
+    def serialize_languages(self, languages):
+        return dict(languages)
 
 
 class JsTestView(TemplateView):

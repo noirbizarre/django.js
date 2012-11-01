@@ -14,7 +14,7 @@
 <script>
     window.DJANGO_INFOS = {
         STATIC_URL: '{% static "" %}',
-        DJANGO_JS_JSON: '{% url django_js_json %}',
+        DJANGO_JS_JSON: '{% url django_js_urls %}',
         LANGUAGES: {
             {% for lang in LANGUAGES %}
             '{{lang.0}}': '{{lang.1}}'{% if not forloop.last %},{% endif %}

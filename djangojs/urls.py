@@ -6,7 +6,7 @@ from os.path import join, isdir
 from django.conf.urls import patterns, url
 
 from djangojs.conf import settings
-from djangojs.views import DjangoJsJsonView
+from djangojs.views import UrlsJsonView, ContextJsonView
 from djangojs.views import JasmineView, QUnitView
 
 js_info_dict = {
@@ -20,7 +20,8 @@ for app in settings.INSTALLED_APPS:
             js_info_dict['packages'].append(app)
 
 urlpatterns = patterns('',
-    url(r'^urls$', DjangoJsJsonView.as_view(), name='django_js_json'),
+    url(r'^urls$', UrlsJsonView.as_view(), name='django_js_urls'),
+    url(r'^context$', ContextJsonView.as_view(), name='django_js_context'),
     url(r'^trans$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_catalog'),
 )
 
