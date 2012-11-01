@@ -14,36 +14,53 @@ asyncTest('should fire "ready" event on initilization', 1, function() {
 });
 
 
-module('Constants');
+module('Context');
+
+test('should have a context attribute', function(){
+    ok(Django.context !== undefined);
+});
 
 test('should store STATIC_URL constant', function(){
-    ok(Django.STATIC_URL !== undefined);
-    equal(Django.STATIC_URL, DJANGO_INFOS.STATIC_URL);
+    ok(Django.context.STATIC_URL !== undefined);
+    equal(Django.context.STATIC_URL, DJANGO_INFOS.STATIC_URL);
+});
+
+test('should store MEDIA_URL constant', function(){
+    ok(Django.context.MEDIA_URL !== undefined);
+    equal(Django.context.MEDIA_URL, DJANGO_INFOS.MEDIA_URL);
 });
 
 test('should store available LANGUAGES', function(){
-    ok(Django.LANGUAGES !== undefined);
-    equal(Django.LANGUAGES, DJANGO_INFOS.LANGUAGES);
+    ok(Django.context.LANGUAGES !== undefined);
+    for (var code in DJANGO_INFOS.LANGUAGES) {
+        ok(Django.context.LANGUAGES[code] !== undefined);
+        equal(Django.context.LANGUAGES[code], DJANGO_INFOS.LANGUAGES[code]);
+    }
 });
 
 test('should store LANGUAGE_CODE', function(){
-    ok(Django.LANGUAGE_CODE);
-    equal(Django.LANGUAGE_CODE, DJANGO_INFOS.LANGUAGE_CODE);
+    ok(Django.context.LANGUAGE_CODE);
+    equal(Django.context.LANGUAGE_CODE, DJANGO_INFOS.LANGUAGE_CODE);
 });
 
 test('should store LANGUAGE_BIDI', function(){
-    ok(Django.LANGUAGE_BIDI);
-    equal(Django.LANGUAGE_BIDI, DJANGO_INFOS.LANGUAGE_BIDI);
+    ok(Django.context.LANGUAGE_BIDI !== undefined);
+    equal(Django.context.LANGUAGE_BIDI, DJANGO_INFOS.LANGUAGE_BIDI === 'True');
 });
 
 test('should store LANGUAGE_NAME', function(){
-    ok(Django.LANGUAGE_NAME);
-    equal(Django.LANGUAGE_NAME, DJANGO_INFOS.LANGUAGE_NAME);
+    ok(Django.context.LANGUAGE_NAME);
+    equal(Django.context.LANGUAGE_NAME, DJANGO_INFOS.LANGUAGE_NAME);
 });
 
 test('should store LANGUAGE_NAME_LOCAL', function(){
-    ok(Django.LANGUAGE_NAME_LOCAL);
-    equal(Django.LANGUAGE_NAME_LOCAL, DJANGO_INFOS.LANGUAGE_NAME_LOCAL);
+    ok(Django.context.LANGUAGE_NAME_LOCAL);
+    equal(Django.context.LANGUAGE_NAME_LOCAL, DJANGO_INFOS.LANGUAGE_NAME_LOCAL);
+});
+
+test('should store any custom context value', function(){
+    ok(Django.context.CUSTOM);
+    equal(Django.context.CUSTOM, 'CUSTOM_VALUE');
 });
 
 

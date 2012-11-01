@@ -3,6 +3,8 @@ import json
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.conf import global_settings
 from django.utils import translation
 
 from djangojs.conf import settings
@@ -10,6 +12,15 @@ from djangojs.runners import JsTestCase
 from djangojs.views import JsTestView
 
 
+def custom_processor(request):
+    return {'CUSTOM': 'CUSTOM_VALUE'}
+
+
+@override_settings(
+    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+        'djangojs.tests.custom_processor',
+    )
+)
 class JsTests(JsTestCase):
     urls = 'djangojs.test_urls'
 
@@ -87,6 +98,11 @@ class UrlsJsonViewTest(TestCase):
         self.assertEqual(url, '/test/optionnal/group')
 
 
+@override_settings(
+    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+        'djangojs.tests.custom_processor',
+    )
+)
 class ContextJsonViewTest(TestCase):
     urls = 'djangojs.test_urls'
 
@@ -121,6 +137,22 @@ class ContextJsonViewTest(TestCase):
         self.assertTrue('LANGUAGE_BIDI' in self.json)
         self.assertEqual(self.json['LANGUAGE_BIDI'], translation.get_language_bidi())
 
+    def test_language_name(self):
+        '''LANGUAGE_NAME should be in context'''
+        self.assertTrue('LANGUAGE_NAME' in self.json)
+        code = translation.get_language()
+        code = 'en' if code == 'en-us' else code
+        language = translation.get_language_info(code)
+        self.assertEqual(self.json['LANGUAGE_NAME'], language['name'])
+
+    def test_language_name_local(self):
+        '''LANGUAGE_NAME_LOCAL should be in context'''
+        self.assertTrue('LANGUAGE_NAME_LOCAL' in self.json)
+        code = translation.get_language()
+        code = 'en' if code == 'en-us' else code
+        language = translation.get_language_info(code)
+        self.assertEqual(self.json['LANGUAGE_NAME_LOCAL'], language['name_local'])
+
     def test_languages(self):
         '''LANGUAGE_BIDI should be in context'''
         self.assertTrue('LANGUAGES' in self.json)
@@ -128,6 +160,11 @@ class ContextJsonViewTest(TestCase):
         self.assertTrue(isinstance(languages, dict))
         for code, name in settings.LANGUAGES:
             self.assertEqual(languages[code], name)
+
+    def test_any_custom_context_processor(self):
+        '''Any custom context processor should be in context'''
+        self.assertTrue('CUSTOM' in self.json)
+        self.assertEqual(self.json['CUSTOM'], 'CUSTOM_VALUE')
 
 
 class VerbatimTagTest(TestCase):
@@ -230,7 +267,7 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
-        self.failUnless('window.DJANGO_INFOS' in rendered)
+        self.failUnless('window.DJANGO_JS' in rendered)
         self.failUnless('Django.init();' in rendered)
 
     def test_django_js_init_false(self):
@@ -242,7 +279,7 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
-        self.failUnless('window.DJANGO_INFOS' in rendered)
+        self.failUnless('window.DJANGO_JS' in rendered)
         self.failIf('Django.init();' in rendered)
 
     def test_django_js_jquery_false(self):
@@ -264,7 +301,7 @@ class DjangoJsTagTest(TestCase):
         rendered = t.render(Context())
         self.failIf('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
-        self.failUnless('window.DJANGO_INFOS' in rendered)
+        self.failUnless('window.DJANGO_JS' in rendered)
         self.failIf('Django.init();' in rendered)
 
     def test_django_js_i18n(self):
@@ -277,7 +314,7 @@ class DjangoJsTagTest(TestCase):
         self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
         self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
-        self.failUnless('window.DJANGO_INFOS' in rendered)
+        self.failUnless('window.DJANGO_JS' in rendered)
 
 
 class JsTestViewTest(TestCase):

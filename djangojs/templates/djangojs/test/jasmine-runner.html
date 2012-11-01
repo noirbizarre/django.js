@@ -3,6 +3,7 @@
 {% load js %}
 
 {% block js_content %}
+{% include "djangojs/test/test-data.html" %}
 {% django_js init=false %}
 {% js "test/js/specs/django.specs.js" %}
 {% endblock %}

@@ -1,0 +1,23 @@
+{% load i18n staticfiles %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language as LANGUAGE_CODE %}
+{% if LANGUAGE_CODE == 'en-us' %} {# Dirty hack to fix non included default#}
+{% get_language_info for 'en' as language %}
+{% else %}
+{% get_language_info for LANGUAGE_CODE as language %}
+{% endif %}
+<script>
+    window.DJANGO_INFOS = {
+        STATIC_URL: '{{ STATIC_URL }}',
+        MEDIA_URL: '{{ MEDIA_URL }}',
+        LANGUAGES: {
+            {% for lang in LANGUAGES %}
+            '{{lang.0}}': '{{lang.1}}'{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        },
+        LANGUAGE_CODE: '{{ LANGUAGE_CODE }}',
+        LANGUAGE_NAME: '{{ language.name }}',
+        LANGUAGE_NAME_LOCAL: '{{ language.name_local }}',
+        LANGUAGE_BIDI: '{{ language.bidi }}'
+    };
+</script>

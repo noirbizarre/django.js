@@ -4,7 +4,8 @@
 
     var Django = {
 
-            urls: {},
+            urls: undefined,
+            context: undefined,
             token_regex: /<\w*>/g,
             named_token_regex: /<(\w+)>/g,
 
@@ -13,18 +14,24 @@
              * Initialize the module loading the URLs
              */
             init: function() {
-                var that = this;
 
-                for (var key in window.DJANGO_INFOS) {
-                    this[key] = window.DJANGO_INFOS[key];
-                }
+                $.getJSON(window.DJANGO_JS['URLS_JSON'], function(urls){
+                    Django.urls = urls;
+                    Django._ready();
+                });
 
-                $.getJSON(this.DJANGO_JS_JSON, function(urls){
-                    that.urls = urls;
-                    $(that).trigger($.Event("ready"));
+                $.getJSON(window.DJANGO_JS['CONTEXT_JSON'], function(context){
+                    Django.context = context;
+                    Django._ready();
                 });
 
                 this._jquery_csrf();
+            },
+
+            _ready: function() {
+                if (this.urls && this.context) {
+                    $(this).trigger($.Event("ready"));
+                }
             },
 
             /**
@@ -101,7 +108,7 @@
             },
 
             file: function(filename) {
-                return this.STATIC_URL + filename;
+                return this.context.STATIC_URL + filename;
             },
 
             /**

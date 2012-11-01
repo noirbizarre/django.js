@@ -1,4 +1,5 @@
 describe("Django.js", function(){
+    var DJANGO_INFOS = window.DJANGO_INFOS;
 
     describe('Initialization', function(){
 
@@ -18,35 +19,52 @@ describe("Django.js", function(){
 
     });
 
-    describe('Constants', function(){
+    describe('Context', function(){
+        it('should have a context attribute', function(){
+            expect(Django.context).toBeDefined();
+        });
+
         it('should store STATIC_URL constant', function(){
-            expect(Django.STATIC_URL).toBeDefined();
-            expect(Django.STATIC_URL).toBe(window.DJANGO_INFOS.STATIC_URL);
+            expect(Django.context.STATIC_URL).toBeDefined();
+            expect(Django.context.STATIC_URL).toBe(DJANGO_INFOS.STATIC_URL);
+        });
+
+        it('should store MEDIA_URL constant', function(){
+            expect(Django.context.MEDIA_URL).toBeDefined();
+            expect(Django.context.MEDIA_URL).toBe(DJANGO_INFOS.MEDIA_URL);
         });
 
         it('should store available LANGUAGES', function(){
-            expect(Django.LANGUAGES).toBeDefined();
-            expect(Django.LANGUAGES).toBe(window.DJANGO_INFOS.LANGUAGES);
+            expect(Django.context.LANGUAGES).toBeDefined();
+            for (var code in DJANGO_INFOS.LANGUAGES) {
+                expect(Django.context.LANGUAGES[code]).toBeDefined();
+                expect(Django.context.LANGUAGES[code]).toBe(DJANGO_INFOS.LANGUAGES[code]);
+            }
         });
 
         it('should store LANGUAGE_CODE', function(){
-            expect(Django.LANGUAGE_CODE).toBeDefined();
-            expect(Django.LANGUAGE_CODE).toBe(window.DJANGO_INFOS.LANGUAGE_CODE);
+            expect(Django.context.LANGUAGE_CODE).toBeDefined();
+            expect(Django.context.LANGUAGE_CODE).toBe(DJANGO_INFOS.LANGUAGE_CODE);
         });
 
         it('should store LANGUAGE_BIDI', function(){
-            expect(Django.LANGUAGE_BIDI).toBeDefined();
-            expect(Django.LANGUAGE_BIDI).toBe(window.DJANGO_INFOS.LANGUAGE_BIDI);
+            expect(Django.context.LANGUAGE_BIDI).toBeDefined();
+            expect(Django.context.LANGUAGE_BIDI).toBe(DJANGO_INFOS.LANGUAGE_BIDI === 'True');
         });
 
         it('should store LANGUAGE_NAME', function(){
-            expect(Django.LANGUAGE_NAME).toBeDefined();
-            expect(Django.LANGUAGE_NAME).toBe(window.DJANGO_INFOS.LANGUAGE_NAME);
+            expect(Django.context.LANGUAGE_NAME).toBeDefined();
+            expect(Django.context.LANGUAGE_NAME).toBe(DJANGO_INFOS.LANGUAGE_NAME);
         });
 
         it('should store LANGUAGE_NAME_LOCAL', function(){
-            expect(Django.LANGUAGE_NAME_LOCAL).toBeDefined();
-            expect(Django.LANGUAGE_NAME_LOCAL).toBe(window.DJANGO_INFOS.LANGUAGE_NAME_LOCAL);
+            expect(Django.context.LANGUAGE_NAME_LOCAL).toBeDefined();
+            expect(Django.context.LANGUAGE_NAME_LOCAL).toBe(DJANGO_INFOS.LANGUAGE_NAME_LOCAL);
+        });
+
+        it('should store any custom context value', function(){
+            expect(Django.context.CUSTOM).toBeDefined();
+            expect(Django.context.CUSTOM).toBe('CUSTOM_VALUE');
         });
     });
 
@@ -173,7 +191,7 @@ describe("Django.js", function(){
 
     describe('Resolve static', function(){
         it("should resolve a static URL", function(){
-            expect(Django.file('my.json')).toBe(window.DJANGO_INFOS.STATIC_URL + 'my.json');
+            expect(Django.file('my.json')).toBe(DJANGO_INFOS.STATIC_URL + 'my.json');
         });
     });
 

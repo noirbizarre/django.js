@@ -11,9 +11,10 @@ from django.contrib.staticfiles.utils import matches_patterns
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.http import HttpResponse
+from django.template.context import RequestContext
+from django.utils import translation
 from django.utils.datastructures import SortedDict
 from django.views.generic import View, TemplateView
-from django.template.context import RequestContext
 
 from djangojs.conf import settings
 
@@ -122,6 +123,12 @@ class ContextJsonView(JsonView):
                         data[key] = serializer(value)
                 elif isinstance(value, (str, tuple, list, dict, int, bool)):
                     data[key] = value
+        if 'LANGUAGE_CODE' in data:
+            # Dirty hack to fix non included default
+            language_code = 'en' if data['LANGUAGE_CODE'] == 'en-us' else data['LANGUAGE_CODE']
+            language = translation.get_language_info(language_code)
+            data['LANGUAGE_NAME'] = language['name']
+            data['LANGUAGE_NAME_LOCAL'] = language['name_local']
         return data
 
     def serialize_perms(self, perms):
