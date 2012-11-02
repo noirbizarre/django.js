@@ -1,8 +1,17 @@
 Changelog
 =========
 
+Current
+-------
+
+- Improved ready event handling
+- Removed runners from urls.py
+- Added documentation
+- Added ContextJsonView and Django.context fetched from json..
+
+
 0.2 (2012-10-23)
-------------------
+----------------
 
 - Refactor template tag initialization
 - Provides Jasmine and QUnit test views with test discovery (globbing)
