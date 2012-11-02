@@ -4,10 +4,12 @@ Changelog
 Current
 -------
 
-- Improved ready event handling
-- Removed runners from urls.py
+- Improved ``ready`` event handling
+- Removed runners from ``urls.py``
 - Added documentation
-- Added ContextJsonView and Django.context fetched from json..
+- Added ``ContextJsonView`` and ``Django.context`` fetched from json.
+- Improved error handling
+- Added ``DjangoJsError`` custom error type
 
 
 0.2 (2012-10-23)
