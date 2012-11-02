@@ -7,7 +7,6 @@ from django.conf.urls import patterns, url
 
 from djangojs.conf import settings
 from djangojs.views import UrlsJsonView, ContextJsonView
-from djangojs.views import JasmineView, QUnitView
 
 js_info_dict = {
     'packages': [],
