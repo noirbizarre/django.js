@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.3 (2012-11-02)
+----------------
 
 - Improved ``ready`` event handling
 - Removed runners from ``urls.py``
