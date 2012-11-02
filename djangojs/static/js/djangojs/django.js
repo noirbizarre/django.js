@@ -16,6 +16,8 @@
         token_regex: /<\w*>/g,
         named_token_regex: /<(\w+)>/g,
 
+        _ready: false,
+
 
         /**
          * Initialize the module loading the URLs
@@ -25,21 +27,33 @@
 
             $.getJSON(window.DJANGO_JS['URLS_JSON'], function(urls){
                 Django.urls = urls;
-                Django._ready();
+                Django._check_ready();
             }).error(function() {
                 throw new DjangoJsError("Unable to fetch urls JSON file");
             });
 
             $.getJSON(window.DJANGO_JS['CONTEXT_JSON'], function(context){
                 Django.context = context;
-                Django._ready();
+                Django._check_ready();
             }).error(function() {
                 throw new DjangoJsError("Unable to fetch context JSON file");
             });
         },
 
-        _ready: function() {
+        /**
+         * Execute callback when urls and context are ready.
+         */
+        onReady: function(callback) {
+            if (this._ready) {
+                callback();
+            } else {
+                $(this).one('ready', callback);
+            }
+        },
+
+        _check_ready: function() {
             if (this.urls && this.context) {
+                this._ready = true;
                 $(this).trigger($.Event("ready"));
             }
         },

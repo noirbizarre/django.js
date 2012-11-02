@@ -3,9 +3,9 @@ describe("Django.js", function(){
 
     describe('Initialization', function(){
 
-        it("should fire 'ready' event on initilization", function(){
+        it("should fire 'ready' event on initialization", function(){
             var callback = jasmine.createSpy();
-            $(Django).on('ready', callback);
+            Django.onReady(callback);
 
             Django.init();
 

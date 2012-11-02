@@ -42,11 +42,12 @@ Django.js needs to load 2 JSON files before being ready:
 - another one containing all context data like ``STATIC_URL`` or ``LANGUAGE``.
 
 It emits a ``ready`` event when fetch is done.
-If you need to have use the ``Django`` module as soon as possible, you can listen to this event:
+
+If you need early access to the ``Django`` module, you can listen to this event using the ``onReady`` helper:
 
 .. code-block:: javascript
 
-    $(Django).on('ready', function() {
+    Django.onReady(function() {
         console.log(
             Django.url('my-view')
         );
