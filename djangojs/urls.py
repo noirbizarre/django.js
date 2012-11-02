@@ -24,9 +24,3 @@ urlpatterns = patterns('',
     url(r'^context$', ContextJsonView.as_view(), name='django_js_context'),
     url(r'^trans$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_catalog'),
 )
-
-if settings.DEBUG or settings.TESTING:
-    urlpatterns += patterns('',
-        url(r'^jasmine$', JasmineView.as_view(), name='default_jasmine_runner'),
-        url(r'^qunit$', QUnitView.as_view(), name='default_qunit_runner'),
-    )
