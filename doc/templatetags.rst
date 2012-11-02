@@ -36,11 +36,9 @@ After loading, you can use the Django module to resolve URLs and Translations:
     <script>
         $(Django).on('ready', function() {
             console.log(
-                Django.url('my-view'),
-                Django.url('my-view', 'arg1'),
-                Django.url('my-view', ['arg1']),
                 Django.url('my-view', {key: 'test'}),
-                Django.file('test.json')
+                Django.file('test.json'),
+                Django.context.STATIC_URL
             );
         });
     </script>

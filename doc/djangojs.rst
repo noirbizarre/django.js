@@ -4,7 +4,7 @@ Django javascript module
 Reverse URLs
 ------------
 
-The Django.js library expose reverse URLs to javascript.
+The Django.js library expose reverse urls to javascript.
 You can call the ``Django.url()`` method with:
 
 - an url name without arguments
@@ -31,14 +31,18 @@ You can call the ``Django.url()`` method with:
 
     Django.url('my-view', {arg1: 'value1', arg2: 'value2'});
 
-You can use anonymous forms (variable arguments and array) with named arguments in URLs but you can't use object form with anonymous arguments.
+You can use anonymous forms (variable arguments and array) with named arguments in urls but you can't use object form with anonymous arguments.
 
 ready event
 ***********
 
-Django.js need to load a JSON containing all URLs before doing any reverse matching.
-It emit a ``ready`` event when fetch is done.
-If you need to have reverse url as soon as possible, you can listen to this event:
+Django.js needs to load 2 JSON files before being ready:
+
+- one containing every urls needed for reverse matching.
+- another one containing all context data like ``STATIC_URL`` or ``LANGUAGE``.
+
+It emits a ``ready`` event when fetch is done.
+If you need to have use the ``Django`` module as soon as possible, you can listen to this event:
 
 .. code-block:: javascript
 
@@ -60,14 +64,17 @@ You can obtain a static file url with:
     Django.file('another/data.pdf');
 
 
-Constants
----------
+Context
+-------
 
-Django.js wraps some Django constants:
+Django.js wraps some Django values normally accessible in the template context:
 
-- ``Django.STATIC_URL``
-- ``Django.LANGUAGES``
-- ``Django.LANGUAGE_CODE``
-- ``Django.LANGUAGE_NAME``
-- ``Django.LANGUAGE_NAME_LOCAL``
-- ``Django.LANGUAGE_BIDI``
+- ``Django.context.STATIC_URL``
+- ``Django.context.MEDIA_URL``
+- ``Django.context.LANGUAGES``
+- ``Django.context.LANGUAGE_CODE``
+- ``Django.context.LANGUAGE_NAME``
+- ``Django.context.LANGUAGE_NAME_LOCAL``
+- ``Django.context.LANGUAGE_BIDI``
+
+In fact, any value contributed by a context processor and serializable will be accessible from ``Django.context``.
