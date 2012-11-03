@@ -23,7 +23,7 @@ rm -rf *egg-info build dist
 sed -i "s/$CURRENT/$RELEASE/" $VERSION_FILE
 sed -i "1!N; s/$CHANGELOG_CURRENT/$CHANGELOG_VERSION\n$SEP/" $CHANGELOG_FILE
 sed -i "s/$READ_THE_DOC\/latest/$READ_THE_DOC\/$RELEASE/" $README_FILE
-git commit $VERSION_FILE $CHANGELOG_FILE -m "Bump version $RELEASE"
+git commit $VERSION_FILE $CHANGELOG_FILE $README_FILE -m "Bump version $RELEASE"
 git tag $RELEASE
 python setup.py register sdist upload
 
@@ -33,7 +33,7 @@ read NEXT
 sed -i "s/$RELEASE/$NEXT/" $VERSION_FILE
 sed -i "s/$READ_THE_DOC\/$RELEASE/$READ_THE_DOC\/latest/" $README_FILE
 sed -i "1!N; s/$CHANGELOG_VERSION/$CHANGELOG_CURRENT\n\n- nothing yet\n\n\n$CHANGELOG_VERSION/" $CHANGELOG_FILE
-git commit $VERSION_FILE $CHANGELOG_FILE -m "Updated to version $NEXT for next development cycle"
+git commit $VERSION_FILE $CHANGELOG_FILE $README_FILE -m "Updated to version $NEXT for next development cycle"
 
 echo "--------------------------------------------------------------"
 echo "Released version $RELEASE and prepare $NEXT development cycle."
