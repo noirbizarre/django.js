@@ -6,7 +6,14 @@
 
   {% load js %}
 
-  {% css "test/js/libs/qunit.css" %}
+  {% block js_init %}
+    {% css "test/js/libs/qunit.css" %}
+
+    {% if use_django_js %}
+    {% django_js %}
+    {% endif %}
+  {% endblock %}
+
 
 </head>
 <body>

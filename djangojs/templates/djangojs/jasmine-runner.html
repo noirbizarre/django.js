@@ -6,11 +6,17 @@
 
   {% load js %}
 
-  {% css "test/js/libs/jasmine.css" %}
-  {% js "test/js/libs/jasmine.js" %}
-  {% js "test/js/libs/jasmine-html.js" %}
-  {% js "test/js/libs/jasmine-djangojs.js" %}
-  {% js "test/js/libs/jasmine-jquery.js" %}
+  {% block js_init %}
+    {% if use_django_js %}
+    {% django_js %}
+    {% endif %}
+
+    {% css "test/js/libs/jasmine.css" %}
+    {% js "test/js/libs/jasmine.js" %}
+    {% js "test/js/libs/jasmine-html.js" %}
+    {% js "test/js/libs/jasmine-djangojs.js" %}
+    {% js "test/js/libs/jasmine-jquery.js" %}
+  {% endblock js_init %}
 
   {% for file in js_test_files %}
   {% js file %}

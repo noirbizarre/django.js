@@ -143,11 +143,13 @@ class JsTestView(TemplateView):
     Base class for JS tests views
     '''
     js_files = None
+    django_js = False
 
     def get_context_data(self, **kwargs):
         context = super(JsTestView, self).get_context_data(**kwargs)
 
         context['js_test_files'] = self.get_js_files()
+        context['use_django_js'] = self.django_js
 
         return context
 
