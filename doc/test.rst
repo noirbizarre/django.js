@@ -20,17 +20,36 @@ Instead of writing a full view each time you need a Jasmine or a QUnit test view
         url(r'^qunit$', QUnitView.as_view(js_files='js/tests/*.tests.js'), name='my_qunit_view'),
     )
 
-These views extends the Django TemplateView so you can add extra context entries and you can customize the template by extending them.
+Both view have a js_files attribute which can be a string or and array of strings.
+Each string can be a static js file path to include or a glob pattern:
 
 .. code-block:: python
 
-    from django.conf.urls import patterns, url, include
-
-    from djangojs.views import JasmineView, QUnitView
-
+    from djangojs.views import JasmineView
 
     class MyJasmineView(JasmineView):
+        js_files = (
+            'js/lib/my-lib.js',
+            'js/test/*.specs.js',
+            'js/other/specs.*.js',
+        )
+
+Django.js can automatically be included into the view by setting the ``django_js`` attribute to ``True``:
+
+.. code-block:: python
+
+    from djangojs.views import JasmineView
+
+    class MyJasmineView(JasmineView):
+        django_js = True
         js_files = 'js/test/*.specs.js'
+
+
+These views extends the Django ``TemplateView`` so you can add extra context entries and you can customize the template by extending them.
+
+.. code-block:: python
+
+    from djangojs.views import QUnitView
 
     class MyQUnitView(QUnitView):
         js_files = 'js/test/*.test.js'
@@ -41,25 +60,26 @@ These views extends the Django TemplateView so you can add extra context entries
             context['form'] = TestForm()
             return context
 
-    urlpatterns = patterns('',
-        url(r'^jasmine$', MyJasmineView.as_view(), name='my_jasmine_view'),
-        url(r'^qunit$', MyQUnitView.as_view(), name='my_qunit_view'),
-    )
 
 Two extensible test runner templates are provided:
 
 - ``djangojs/jasmine-runner.html`` for jasmine tests
 - ``djangojs/qunit-runner.html`` for QUnit tests
 
-Both provides a ``js_content`` block and a ``body_content`` block.
+Both provides a ``js_init`` block, a ``js_content`` block and a ``body_content`` block.
 
 .. code-block:: html+django
 
     {% extends "djangojs/qunit-runner.html" %}
 
+    {% block js_init %}
+        {{ block.super }}
+        {% js "js/init.js" %}
+    {% endblock %}
+
     {% block js_content %}
-    {% load js %}
-    {% js "js/tests/my.tests.js" %}
+        {% load js %}
+        {% js "js/tests/my.tests.js" %}
     {% endblock %}
 
     {% block body_content %}

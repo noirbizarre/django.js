@@ -53,6 +53,8 @@ If you need early access to the ``Django`` module, you can listen to this event 
         );
     });
 
+If Django is already ready, the callback function is called synchronously.
+
 
 Static URLs
 -----------
