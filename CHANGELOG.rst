@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.3.1 (2012-11-03)
+------------------
 
 - Added JsTestView.django_js to optionnaly include django.js
 - Added js_init block to runners to templates.
