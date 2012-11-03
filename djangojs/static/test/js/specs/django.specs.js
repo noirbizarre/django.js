@@ -3,6 +3,11 @@ describe("Django.js", function(){
 
     describe('Initialization', function(){
 
+        it("should not be ready before init", function(){
+            expect(Django).toBeDefined();
+            expect(Django._ready).not.toBeTruthy();
+        });
+
         it("should fire 'ready' event on initialization", function(){
             var callback = jasmine.createSpy();
             Django.onReady(callback);

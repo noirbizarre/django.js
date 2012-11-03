@@ -4,6 +4,11 @@ QUnit.config.reorder = false;
 
 module('Initialization');
 
+test('should not be ready before init', function(){
+    ok(Django);
+    ok(!Django._ready);
+});
+
 asyncTest('should fire "ready" event on initialization', 1, function() {
     Django.onReady(function() {
         ok(true, '"ready" event fired');
