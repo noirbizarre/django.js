@@ -304,6 +304,16 @@ class DjangoJsTagTest(TestCase):
         self.failUnless('window.DJANGO_JS' in rendered)
         self.failIf('Django.init();' in rendered)
 
+    def test_django_js_crsf_false(self):
+        '''Should include django.js without jQuery CRSF patch'''
+        t = Template('''
+            {% load js %}
+            {% django_js crsf=false %}
+            ''')
+        rendered = t.render(Context())
+        self.failUnless('window.DJANGO_JS' in rendered)
+        self.failUnless('CRSF: false' in rendered)
+
     def test_django_js_i18n(self):
         '''Should include django.js with i18n support'''
         t = Template('''
@@ -311,10 +321,16 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = t.render(Context())
-        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-1.8.2.min.js">' % settings.STATIC_URL in rendered)
-        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' % settings.STATIC_URL in rendered)
-        self.failUnless('<script type="text/javascript" src="/trans">' in rendered)
-        self.failUnless('window.DJANGO_JS' in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % reverse('js_catalog') in rendered)
+
+    def test_django_js_i18n_false(self):
+        '''Should include django.js without i18n support'''
+        t = Template('''
+            {% load js %}
+            {% django_js i18n=false %}
+            ''')
+        rendered = t.render(Context())
+        self.failIf('<script type="text/javascript" src="%s">' % reverse('js_catalog') in rendered)
 
 
 class JsTestViewTest(TestCase):

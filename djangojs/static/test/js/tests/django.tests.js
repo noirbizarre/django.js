@@ -190,13 +190,6 @@ test('interpolate function should be present', function(){
 });
 
 
-module("Trans method");
-
-test('should translate strings using gettext', function(){
-    equal(Django.trans('Love Django.js'), gettext('Love Django.js'));
-});
-
-
 module('jQuery CSRF');
 
 asyncTest("should allow to post Django forms with jQuery Ajax", 1, function(){

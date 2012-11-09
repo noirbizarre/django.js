@@ -23,20 +23,22 @@
          * Initialize the module loading the URLs
          */
         init: function() {
-            this._jquery_csrf();
+            if (window.DJANGO_JS['CRSF']) {
+                this._jquery_csrf();
+            }
 
-            $.getJSON(window.DJANGO_JS['URLS_JSON'], function(urls){
+            $.getJSON(window.DJANGO_JS['URLS'], function(urls){
                 Django.urls = urls;
                 Django._check_ready();
             }).error(function() {
-                throw new DjangoJsError("Unable to fetch urls JSON file");
+                throw new DjangoJsError("Unable to fetch urls");
             });
 
-            $.getJSON(window.DJANGO_JS['CONTEXT_JSON'], function(context){
+            $.getJSON(window.DJANGO_JS['CONTEXT'], function(context){
                 Django.context = context;
                 Django._check_ready();
             }).error(function() {
-                throw new DjangoJsError("Unable to fetch context JSON file");
+                throw new DjangoJsError("Unable to fetch context");
             });
         },
 
@@ -133,13 +135,6 @@
 
         file: function(filename) {
             return this.context.STATIC_URL + filename;
-        },
-
-        /**
-         * Equivalent to trans template tag
-         */
-        trans: function(string) {
-            return window.gettext(string);
         },
 
         /**

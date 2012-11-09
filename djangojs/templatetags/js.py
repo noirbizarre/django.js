@@ -125,8 +125,12 @@ def jquery_js():
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html')
-def django_js(init=True, jquery=True):
+def django_js(init=True, jquery=True, i18n=True, crsf=True):
     return {
-        'djangojs_init': init,
-        'djangojs_jquery': jquery,
+        'js': {
+            'init': init,
+            'jquery': jquery,
+            'i18n': i18n,
+            'crsf': crsf,
+        }
     }

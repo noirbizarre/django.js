@@ -216,13 +216,6 @@ describe("Django.js", function(){
             });
         });
 
-        describe("Trans methods wraps Django provided functions", function(){
-            it('should translate strings using gettext', function(){
-                expect(Django.trans('Love Django.js')).toBe(gettext('Love Django.js'));
-            });
-        });
-
-
     });
 
     describe('jQuery Ajax CSRF Helper', function(){

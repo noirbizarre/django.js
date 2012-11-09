@@ -21,5 +21,5 @@ for app in settings.INSTALLED_APPS:
 urlpatterns = patterns('',
     url(r'^urls$', UrlsJsonView.as_view(), name='django_js_urls'),
     url(r'^context$', ContextJsonView.as_view(), name='django_js_context'),
-    url(r'^trans$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_catalog'),
+    url(r'^translation$', 'django.views.i18n.javascript_catalog', js_info_dict, name='js_catalog'),
 )

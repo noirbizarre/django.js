@@ -43,8 +43,19 @@ After loading, you can use the Django module to resolve URLs and Translations:
         });
     </script>
 
+It supports the following keyword parameters (in this order if you want to omit the keyword):
 
-If you want to manually trigger initialization, you can set the ``init`` keyword to false:
+=========== ========= ======================================
+ Parameter   Default                Description
+=========== ========= ======================================
+``init``    ``true``  Initialize Django module (fetch JSON)
+``jquery``  ``true``  Import jQuery library
+``i18n``    ``true``  Bootstrap i18n (load JS catalog)
+``crsf``    ``true``  Patch jQuery.ajax() fot Django CRSF
+=========== ========= ======================================
+
+
+If you want to manually trigger initialization, you can set the ``init`` keyword parameter to false:
 
 .. code-block:: html+django
 
@@ -60,7 +71,7 @@ If you want to manually trigger initialization, you can set the ``init`` keyword
 
 
 The jQuery libary is automatically loaded.
-If you want to manually load the jquery, you can set the ``jquery`` keyword to false:
+If you want to manually load the jquery, you can set the ``jquery`` keyword parameter to false:
 
 .. code-block:: html+django
 
@@ -78,12 +89,14 @@ When the ``{% django_js %}`` template tag is included in a page, it automaticall
    - ``ngettext()``
    - ``interpolate()``
 
+You can disable this feature by setting the ``i18n`` keyword parameter to ``false``.
 
 jQuery Ajax CSRF
 ****************
 
 When the ``django_js`` template tag is ininitialized it automatically patch ``jQuery.ajax()`` to handle CSRF tokens on ajax request.
 
+You can disable this feature by setting the ``crsf`` keyword parameter to ``false``.
 
 verbatim
 ~~~~~~~~
