@@ -14,7 +14,7 @@ Django.js is inspired from:
 - `Dimitri Gnidash's django-js-utils <https://github.com/Dimitri-Gnidash/django-js-utils>`_.
 
 .. note::
-    This is currently a work in progress so don't expect it to be perfect but please `submit an issue <https://github.com/noirbizarre/django.js/issues>`_ for any bug you find or any feature you want.
+    This is currently a work in progress (API wil not be stable before 1.0) so don't expect it to be perfect but please `submit an issue <https://github.com/noirbizarre/django.js/issues>`_ for any bug you find or any feature you want.
 
 
 Installation
@@ -55,6 +55,7 @@ Documentation
    templatetags
    djangojs
    test
+   integration
 
 
 

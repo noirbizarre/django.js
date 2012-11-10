@@ -179,6 +179,20 @@
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                 }
             });
+        },
+
+        absolute: function(name, args) {
+            if (!this.context.hasOwnProperty('ABSOLUTE_ROOT')) {
+                throw new DjangoJsError('django-absolute needed to call absolute()');
+            }
+            return this.context.ABSOLUTE_ROOT + this.url(name, args);
+        },
+
+        site: function(name, args) {
+            if (!this.context.hasOwnProperty('SITE_ROOT')) {
+                throw new DjangoJsError('django-absolute needed to call site()');
+            }
+            return this.context.SITE_ROOT + this.url(name, args);
         }
 
     };

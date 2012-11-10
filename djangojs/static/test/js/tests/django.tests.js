@@ -204,3 +204,34 @@ asyncTest("should allow to post Django forms with jQuery Ajax", 1, function(){
         start();
     });
 });
+
+module('Django absolute support missing');
+test('should throw on absolute() call', function(){
+    throws(function() {
+        Django.absolute('test_arg', 41);
+    });
+});
+
+test('should throw on site() call', function(){
+    throws(function() {
+        Django.site('test_arg', 41);
+    });
+});
+
+module('Django absolute support present', {
+    setup: function() {
+        Django.context.ABSOLUTE_ROOT = 'http://absolute';
+        Django.context.SITE_ROOT = 'http://site';
+    },
+    teardown: function() {
+        delete Django.context.ABSOLUTE_ROOT;
+        delete Django.context.SITE_ROOT;
+    }
+});
+test('should get an absolute url', function(){
+    equal(Django.absolute('test_arg', 41), 'http://absolute/test/arg/41');
+});
+
+test('should throw a site url', function(){
+    equal(Django.site('test_arg', 41), 'http://site/test/arg/41');
+});

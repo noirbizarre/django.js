@@ -240,4 +240,47 @@ describe("Django.js", function(){
 
     });
 
+    describe('Django absolute support', function(){
+
+        describe('when django-absolute is missing', function(){
+
+            it("should throw calling absolute()", function(){
+                var call = function() {
+                    Django.absolute('test_arg', 41);
+                };
+                expect(call).toThrow();
+            });
+
+            it("should throw calling site()", function(){
+                var call = function() {
+                    Django.site('test_arg', 41);
+                };
+                expect(call).toThrow();
+            });
+
+        });
+
+        describe('when django-absolute is present', function(){
+
+            beforeEach(function() {
+                Django.context.ABSOLUTE_ROOT = 'http://absolute';
+                Django.context.SITE_ROOT = 'http://site';
+            });
+
+            afterEach(function() {
+                delete Django.context.ABSOLUTE_ROOT;
+                delete Django.context.SITE_ROOT;
+            });
+
+            it("should get absolute url", function(){
+                expect(Django.absolute('test_arg', 41)).toBe('http://absolute/test/arg/41');
+            });
+
+            it("should get site url", function(){
+                expect(Django.site('test_arg', 41)).toBe('http://site/test/arg/41');
+            });
+
+        });
+    });
+
 });
