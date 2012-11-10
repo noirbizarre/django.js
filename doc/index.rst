@@ -56,7 +56,7 @@ Documentation
    djangojs
    test
    integration
-
+   changelog
 
 
 Indices and tables
