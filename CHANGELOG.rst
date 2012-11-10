@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.3.2 (2012-11-10)
+------------------
 
 - optionnal support for Django Absolute
 

@@ -47,4 +47,4 @@ Add ``djangojs.urls`` to your root ``URL_CONF``:
 Documentation
 =============
 
-The documentation is hosted `on Read the Docs <http://djangojs.readthedocs.org/en/latest/>`_
+The documentation is hosted `on Read the Docs <http://djangojs.readthedocs.org/en/0.3.2/>`_
