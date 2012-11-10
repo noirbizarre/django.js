@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- optionnal support for Django Absolute
 
 
 0.3.1 (2012-11-03)
