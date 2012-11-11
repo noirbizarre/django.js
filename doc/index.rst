@@ -56,6 +56,7 @@ Documentation
    djangojs
    test
    integration
+   api
    changelog
 
 
