@@ -1,27 +1,8 @@
 describe("Django.js", function(){
     var DJANGO_INFOS = window.DJANGO_INFOS;
 
-    describe('Initialization', function(){
-
-        it("should not be ready before init", function(){
-            expect(Django).toBeDefined();
-            expect(Django._ready).not.toBeTruthy();
-        });
-
-        it("should fire 'ready' event on initialization", function(){
-            var callback = jasmine.createSpy();
-            Django.onReady(callback);
-
-            Django.init();
-
-            waitsFor(function() {
-                return callback.callCount > 0;
-            });
-            runs(function() {
-                expect(callback).toHaveBeenCalled();
-            });
-        });
-
+    it("should be defined", function(){
+        expect(Django).toBeDefined();
     });
 
     describe('Context', function(){

@@ -34,13 +34,11 @@ After loading, you can use the Django module to resolve URLs and Translations:
 
     {% django_js %}
     <script>
-        Django.onReady(function() {
-            console.log(
-                Django.url('my-view', {key: 'test'}),
-                Django.file('test.json'),
-                Django.context.STATIC_URL
-            );
-        });
+        console.log(
+            Django.url('my-view', {key: 'test'}),
+            Django.file('test.json'),
+            Django.context.STATIC_URL
+        );
     </script>
 
 It supports the following keyword parameters (in this order if you want to omit the keyword):
@@ -48,26 +46,10 @@ It supports the following keyword parameters (in this order if you want to omit 
 =========== ========= ======================================
  Parameter   Default                Description
 =========== ========= ======================================
-``init``    ``true``  Initialize Django module (fetch JSON)
 ``jquery``  ``true``  Import jQuery library
 ``i18n``    ``true``  Bootstrap i18n (load JS catalog)
 ``crsf``    ``true``  Patch jQuery.ajax() fot Django CRSF
 =========== ========= ======================================
-
-
-If you want to manually trigger initialization, you can set the ``init`` keyword parameter to false:
-
-.. code-block:: html+django
-
-    {% django_js init=false %}
-    <script>
-        Django.onReady(function() {
-            console.log(
-                Django.url('my-view')
-            );
-        });
-        Django.init();
-    </script>
 
 
 The jQuery libary is automatically loaded.
@@ -97,6 +79,12 @@ jQuery Ajax CSRF
 When the ``django_js`` template tag is ininitialized it automatically patch ``jQuery.ajax()`` to handle CSRF tokens on ajax request.
 
 You can disable this feature by setting the ``crsf`` keyword parameter to ``false``.
+You can manually enableit later with:
+
+.. code-block:: javascript
+
+    Django.jquery_crsf();
+
 
 verbatim
 ~~~~~~~~

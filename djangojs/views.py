@@ -10,12 +10,13 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView
 
-from djangojs.utils import urls_as_dict, ContextSerializer
+from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer
 
 logger = logging.getLogger(__name__)
 
 
 __all__ = (
+    'JsInitView',
     'UrlsJsonView',
     'ContextJsonView',
     'JsTestView',
@@ -27,6 +28,23 @@ RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing name
 RE_ARG = re.compile(r"(\(.*?\))")  # Pattern for recognizing unnamed url parameters
 RE_OPT = re.compile(r"\w\?")  # Pattern for recognizing optionnal character
 RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
+
+
+class JsInitView(TemplateView):
+    '''
+    List all registered URLs as a JSON object.
+    '''
+    template_name = 'djangojs/init.js'
+
+    def get_context_data(self, **kwargs):
+        context = super(JsInitView, self).get_context_data(**kwargs)
+        context['urls'] = urls_as_json()
+        context['context'] = ContextSerializer.as_json(self.request)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs['content_type'] = 'application/javascript'
+        return super(JsInitView, self).render_to_response(context, **response_kwargs)
 
 
 class JsonView(View):

@@ -5,6 +5,7 @@ Current
 -------
 
 - Upgraded to jQuery 1.8.3
+- Synchronous URLs and context fetch.
 
 
 0.3.2 (2012-11-10)

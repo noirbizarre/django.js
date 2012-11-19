@@ -12,6 +12,7 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from djangojs import JQUERY_VERSION
 from djangojs.conf import settings
+from djangojs.utils import urls_as_json, ContextSerializer
 
 register = template.Library()
 
@@ -125,13 +126,23 @@ def jquery_js():
     return js_lib('jquery-%s.min.js' % JQUERY_VERSION)
 
 
-@register.inclusion_tag('djangojs/django_js_tag.html')
-def django_js(init=True, jquery=True, i18n=True, crsf=True):
+@register.inclusion_tag('djangojs/django_js_tag.html', takes_context=True)
+def django_js(context, jquery=True, i18n=True, crsf=True):
     return {
         'js': {
-            'init': init,
             'jquery': jquery,
             'i18n': i18n,
             'crsf': crsf,
         }
     }
+
+
+@register.simple_tag
+def js_urls():
+    return urls_as_json()
+
+
+@register.simple_tag(takes_context=True)
+def js_context(context):
+    request = context['request']
+    return ContextSerializer.as_json(request)

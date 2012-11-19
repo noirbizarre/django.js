@@ -1,20 +1,11 @@
 {% load js %}
+<script type="text/javascript" src="{% url django_js_init %}"></script>
 {% if js.i18n %}
 <script type="text/javascript" src="{% url js_catalog %}"></script>
 {% endif %}
 <script>
-    window.DJANGO_JS = {
-        URLS: '{% url django_js_urls %}',
-        CONTEXT: '{% url django_js_context %}',
-        CRSF: {% if js.crsf %}true{% else %}false{% endif %}
-    };
+    window.DJANGO_JS_CRSF = {% if js.crsf %}true{% else %}false{% endif %};
 </script>
 
 {% if js.jquery %} {% jquery_js %} {% endif %}
 {% js "js/djangojs/django.js" %}
-
-{% if js.init %}
-<script>
-    Django.init();
-</script>
-{% endif %}

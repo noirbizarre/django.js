@@ -1,4 +1,4 @@
-(function(window, $){
+(function($){
 
     "use strict";
 
@@ -11,54 +11,10 @@
 
     var Django = window.Django = {
 
-        urls: undefined,
-        context: undefined,
+        urls: window.DJANGO_JS_URLS,
+        context: window.DJANGO_JS_CONTEXT,
         token_regex: /<\w*>/g,
         named_token_regex: /<(\w+)>/g,
-
-        _ready: false,
-
-
-        /**
-         * Initialize the module loading the URLs
-         */
-        init: function() {
-            if (window.DJANGO_JS['CRSF']) {
-                this._jquery_csrf();
-            }
-
-            $.getJSON(window.DJANGO_JS['URLS'], function(urls){
-                Django.urls = urls;
-                Django._check_ready();
-            }).error(function() {
-                throw new DjangoJsError("Unable to fetch urls");
-            });
-
-            $.getJSON(window.DJANGO_JS['CONTEXT'], function(context){
-                Django.context = context;
-                Django._check_ready();
-            }).error(function() {
-                throw new DjangoJsError("Unable to fetch context");
-            });
-        },
-
-        /**
-         * Execute callback when urls and context are ready.
-         */
-        onReady: function(callback) {
-            if (this._ready) {
-                callback();
-            } else {
-                $(this).one('ready', callback);
-            }
-        },
-
-        _check_ready: function() {
-            if (this.urls && this.context) {
-                this._ready = true;
-                $(this).trigger($.Event("ready"));
-            }
-        },
 
         /**
          * Equivalent to ``reverse`` function and ``url`` template tag.
@@ -141,7 +97,7 @@
          *  Fix ajax request with CSRF Django middleware.
          *  cf. https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
          */
-        _jquery_csrf: function() {
+        jquery_csrf: function() {
             $(document).ajaxSend(function(event, xhr, settings) {
                 function getCookie(name) {
                     var cookieValue = null;
@@ -197,4 +153,10 @@
 
     };
 
-}(window, window.jQuery));
+    if (window.DJANGO_JS_CRSF) {
+        Django.jquery_csrf();
+    }
+
+    return Django;
+
+}(window.jQuery));
