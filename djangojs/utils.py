@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 __all__ = (
     'urls_as_dict',
     'urls_as_json',
+    'ContextSerializer',
 )
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing named parameters in urls
@@ -28,6 +29,9 @@ RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal gr
 
 
 def urls_as_dict():
+    '''
+    Get the URLs mapping as a dictionnary
+    '''
     if not hasattr(settings, 'ROOT_URLCONF'):
         raise Exception
     module = settings.ROOT_URLCONF
@@ -35,6 +39,9 @@ def urls_as_dict():
 
 
 def urls_as_json():
+    '''
+    Get the URLs mapping as JSON
+    '''
     return json.dumps(urls_as_dict(), cls=DjangoJSONEncoder)
 
 
@@ -86,6 +93,9 @@ def _get_urls(module, prefix=''):
 
 
 class ContextSerializer(object):
+    '''
+    Serialize the context from requests.
+    '''
     SERIALIZERS = {
         'LANGUAGES': 'serialize_languages',
         # 'perms': 'serialize_perms',
@@ -93,6 +103,9 @@ class ContextSerializer(object):
 
     @classmethod
     def as_dict(cls, request):
+        '''
+        Serialize the context as a dictionnary from a given request.
+        '''
         data = {}
         for context in RequestContext(request):
             for key, value in context.iteritems():
@@ -114,6 +127,9 @@ class ContextSerializer(object):
 
     @classmethod
     def as_json(cls, request):
+        '''
+        Serialize the context as JSON from a given request.
+        '''
         return json.dumps(cls.as_dict(request), cls=DjangoJSONEncoder)
 
     @classmethod

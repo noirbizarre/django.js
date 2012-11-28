@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+This module provide Javascript test runners for Django unittest.
+'''
 import re
 import sys
 
@@ -11,11 +14,12 @@ from django.test import LiveServerTestCase
 
 from djangojs.tap import TapParser
 
-# Output format
+#: Console output line length for separators
 LINE_SIZE = 70
 
 __all__ = (
     'JsTestCase',
+    'JsTestException',
     'JasmineMixin',
     'QUnitMixin',
 )
@@ -36,6 +40,11 @@ VERBOSE = VERBOSITY > 1
 
 
 class JsTestException(Exception):
+    '''
+    An exception raised by Javascript tests.
+
+    It display javascript errors into the exception message.
+    '''
     def __init__(self, message, failures=[]):
         super(JsTestException, self).__init__(message)
         self.failures = failures
@@ -56,13 +65,21 @@ class JsTestException(Exception):
 
 class JsTestCase(LiveServerTestCase):
     '''
-    Test helper to run JS tests with phantomjs
+    Test helper to run JS tests with PhantomJS
     '''
+    #: mandatory path to the PhantomJS javascript runner
+    phantomjs_runner = None
+    #: an optionnal absolute URL to the test runner page
     runner_url = None
+    #: an optionnal named URL that point to the test runner page
     runner_url_name = None
+    #: an optionnal title for verbose console output
     title = 'PhantomJS test suite'
 
     def execute(self, command):
+        '''
+        Execute a subprocess yielding output lines
+        '''
         process = Popen(command, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         while True:
             if process.poll() is not None:
@@ -71,6 +88,16 @@ class JsTestCase(LiveServerTestCase):
             yield process.stdout.readline()
 
     def phantomjs(self, *args, **kwargs):
+        '''
+        Execute PhantomJS by giving ``args`` as command line arguments.
+
+        If test are run in verbose mode (``-v/--verbosity`` = 2), it output:
+          - the title as header (with separators before and after)
+          - modules and test names
+          - assertions results (with ``django.utils.termcolors`` support)
+
+        In case of error, a JsTestException is raised to give details about javascript errors.
+        '''
         separator = '=' * LINE_SIZE
         title = kwargs['title'] if 'title' in kwargs else 'phantomjs output'
         nb_spaces = (LINE_SIZE - len(title)) / 2
@@ -103,6 +130,9 @@ class JsTestCase(LiveServerTestCase):
     def run_suite(self):
         '''
         Run a phantomjs test suite.
+
+         - ``phantomjs_runner`` is mandatory.
+         - Either ``runner_url`` or ``runner_url_name`` needs to be defined.
         '''
         if not self.phantomjs_runner:
             raise JsTestException('phantomjs_runner need to be defined')
@@ -116,7 +146,7 @@ class JsTestCase(LiveServerTestCase):
 
 class JasmineMixin(object):
     '''
-    Run a jasmine test suite.
+    A mixin that runs a jasmine test suite with PhantomJs.
     '''
     title = 'Jasmine test suite'
     phantomjs_runner = join(dirname(__file__), 'phantomjs', 'jasmine-runner.js')
@@ -127,7 +157,7 @@ class JasmineMixin(object):
 
 class QUnitMixin(object):
     '''
-    Run a QUnit test suite.
+    A mixin that runs a QUnit test suite with PhantomJs.
     '''
     title = 'QUnit test suite'
     phantomjs_runner = join(dirname(__file__), 'phantomjs', 'qunit-runner.js')

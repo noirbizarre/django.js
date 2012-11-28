@@ -34,7 +34,7 @@ Each string can be a static js file path to include or a glob pattern:
             'js/other/specs.*.js',
         )
 
-jQueru can automatically be included into the view by setting the ``jquery`` attribute to ``True``:
+jQuery can automatically be included into the view by setting the ``jquery`` attribute to ``True``:
 
 .. code-block:: python
 

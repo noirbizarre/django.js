@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+This module provide helper views for javascript.
+'''
 import json
 import logging
 import os
@@ -17,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = (
     'JsInitView',
+    'JsonView',
     'UrlsJsonView',
     'ContextJsonView',
     'JsTestView',
@@ -35,7 +39,7 @@ JAVASCRIPT_MIMETYPE = 'application/javascript'
 
 class JsInitView(TemplateView):
     '''
-    List all registered URLs as a JSON object.
+    Render a javascript file containing the URLs mapping and the context as JSON.
     '''
     template_name = 'djangojs/init.js'
 
@@ -52,7 +56,7 @@ class JsInitView(TemplateView):
 
 class JsonView(View):
     '''
-    List all registered URLs as a JSON object.
+    A views that render JSON.
     '''
     def get(self, request, *args, **kwargs):
         data = self.get_context_data(request, *args, **kwargs)
@@ -64,14 +68,16 @@ class JsonView(View):
 
 class UrlsJsonView(JsonView):
     '''
-    List all registered URLs as a JSON object.
+    Render the URLs as a JSON object.
     '''
     def get_context_data(self, request, *args, **kwargs):
         return urls_as_dict()
 
 
 class ContextJsonView(JsonView):
-
+    '''
+    Render the context as a JSON object.
+    '''
     def get_context_data(self, request, *args, **kwargs):
         return ContextSerializer.as_dict(request)
 
@@ -80,8 +86,14 @@ class JsTestView(TemplateView):
     '''
     Base class for JS tests views
     '''
+    #: A path or a list of path to javascript files to include into the view.
+    #:
+    #: - Supports glob patterns.
+    #: - Order is kept for rendering.
     js_files = None
+    #: Includes or not Django.js in the test view
     django_js = False
+    #: Includes or not jQuery in the test view.
     jquery = False
 
     def get_context_data(self, **kwargs):

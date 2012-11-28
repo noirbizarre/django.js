@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Django.JS template tags.
-
-Provide helpers to use Ember.js with Django
-
-Inspired by:
- - Miguel Araujo: https://gist.github.com/893408
+Provide template tags to help with Javascript/Django integration.
 '''
 from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
@@ -32,6 +27,9 @@ def verbatim_tags(parser, token, endtagname):
 
     This version of verbatim template tag allows you to use tags
     like url {% url name %}. {% trans "foo" %} or {% csrf_token %} within.
+
+    Inspired by:
+     - Miguel Araujo: https://gist.github.com/893408
     '''
     text_and_nodes = []
     while 1:
@@ -97,6 +95,7 @@ class VerbatimNode(template.Node):
 
 @register.tag
 def verbatim(parser, token):
+    '''Renders verbatim tags'''
     text_and_nodes = verbatim_tags(parser, token, 'endverbatim')
     return VerbatimNode(text_and_nodes)
 
@@ -108,26 +107,31 @@ def js_lib(filename):
 
 @register.simple_tag
 def javascript(filename):
+    '''A simple shortcut to render a ``script`` tag to a static javascript file'''
     return '<script type="text/javascript" src="%s"></script>' % static(filename)
 
 
 @register.simple_tag
 def js(filename):
+    '''A simple shortcut to render a ``script`` tag to a static javascript file'''
     return javascript(filename)
 
 
 @register.simple_tag
 def css(filename):
+    '''A simple shortcut to render a ``link`` tag to a static CSS file'''
     return '<link rel="stylesheet" type="text/css" href="%s" />' % static(filename)
 
 
 @register.simple_tag
 def jquery_js():
+    '''A shortcut to render a ``script`` tag for the packaged jQuery'''
     return js_lib('jquery-%s.min.js' % JQUERY_VERSION)
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html', takes_context=True)
 def django_js(context, jquery=True, i18n=True, crsf=True):
+    '''Include Django.js javascript library in the page'''
     return {
         'js': {
             'jquery': jquery,
@@ -135,14 +139,3 @@ def django_js(context, jquery=True, i18n=True, crsf=True):
             'crsf': crsf,
         }
     }
-
-
-@register.simple_tag
-def js_urls():
-    return urls_as_json()
-
-
-@register.simple_tag(takes_context=True)
-def js_context(context):
-    request = context['request']
-    return ContextSerializer.as_json(request)

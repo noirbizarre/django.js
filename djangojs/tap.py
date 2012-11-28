@@ -187,6 +187,9 @@ def hierarchy(item):
 
 
 class TapParser(object):
+    '''
+    A TAP parser class reading from iterable TAP lines.
+    '''
     def __init__(self, yield_class=TapTest, debug=False):
         if not issubclass(yield_class, TapItem):
             raise ValueError('yield class should extend TapItem')
