@@ -4,13 +4,13 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Upgraded to jQuery 1.8.3
 
 
 0.3.2 (2012-11-10)
 ------------------
 
-- optionnal support for Django Absolute
+- Optionnal support for Django Absolute
 
 
 0.3.1 (2012-11-03)

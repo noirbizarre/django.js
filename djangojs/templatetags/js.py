@@ -10,6 +10,7 @@ Inspired by:
 from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
+from djangojs import JQUERY_VERSION
 from djangojs.conf import settings
 
 register = template.Library()
@@ -121,7 +122,7 @@ def css(filename):
 
 @register.simple_tag
 def jquery_js():
-    return js_lib('jquery-1.8.2.min.js')
+    return js_lib('jquery-%s.min.js' % JQUERY_VERSION)
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html')
