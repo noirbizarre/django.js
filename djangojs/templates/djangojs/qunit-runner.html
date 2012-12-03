@@ -11,6 +11,8 @@
 
     {% if use_django_js %}
     {% django_js %}
+    {% elif use_jquery %}
+    {% jquery_js %}
     {% endif %}
   {% endblock %}
 
@@ -21,7 +23,7 @@
     {% block body_content %}{% endblock %}
 
     <div id="qunit"></div>
-    <div id="qunit-fixture"></div>
+    <div id="qunit-fixture">{% block qunit-fixture %}{% endblock %}</div>
 
     {% js "test/js/libs/qunit.js" %}
     {% js "test/js/libs/qunit-tap.js" %}
@@ -43,4 +45,3 @@
     {% block js_content %}{% endblock %}
 </body>
 </html>
-

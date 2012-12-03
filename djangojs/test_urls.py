@@ -19,28 +19,33 @@ class TestFormView(BaseFormView):
         return reverse('opt')
 
 
-class JasmineTestView(JasmineView):
-    template_name = 'djangojs/test/jasmine-runner.html'
+class DjangoJsTestView(JasmineView):
+    template_name = 'djangojs/test/djangojs-test-runner.html'
+    js_files = 'test/js/specs/django.specs.js'
+    django_js = True
 
     def get_context_data(self, **kwargs):
-        context = super(JasmineTestView, self).get_context_data(**kwargs)
+        context = super(DjangoJsTestView, self).get_context_data(**kwargs)
         context['form'] = TestForm()
         return context
+
+
+class JasmineTestView(JasmineView):
+    js_files = 'test/js/specs/jasmine/*Spec.js'
 
 
 class QUnitTestView(QUnitView):
-    template_name = 'djangojs/test/qunit-runner.html'
+    template_name = 'djangojs/test/qunit-test-runner.html'
+    js_files = 'test/js/tests/qunit-*.js'
 
-    def get_context_data(self, **kwargs):
-        context = super(QUnitTestView, self).get_context_data(**kwargs)
-        context['form'] = TestForm()
-        return context
 
 urlpatterns = patterns('',
     url(r'^djangojs/', include('djangojs.urls')),
 
-    url(r'^jasmine$', JasmineTestView.as_view(), name='djangojs_jasmine'),
-    url(r'^qunit$', QUnitTestView.as_view(), name='djangojs_qunit'),
+    url(r'^tests$', DjangoJsTestView.as_view(), name='djangojs_tests'),
+    url(r'^jasmine$', JasmineTestView.as_view(), name='djangojs_jasmine_tests'),
+    url(r'^qunit$', QUnitTestView.as_view(), name='djangojs_qunit_tests'),
+
 
     url(r'^test/form$', TestFormView.as_view(), name='test_form'),
     url(r'^test/arg/(\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg'),

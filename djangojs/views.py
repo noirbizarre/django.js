@@ -29,6 +29,9 @@ RE_ARG = re.compile(r"(\(.*?\))")  # Pattern for recognizing unnamed url paramet
 RE_OPT = re.compile(r"\w\?")  # Pattern for recognizing optionnal character
 RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
 
+JSON_MIMETYPE = 'application/json'
+JAVASCRIPT_MIMETYPE = 'application/javascript'
+
 
 class JsInitView(TemplateView):
     '''
@@ -43,7 +46,7 @@ class JsInitView(TemplateView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        response_kwargs['content_type'] = 'application/javascript'
+        response_kwargs['content_type'] = JAVASCRIPT_MIMETYPE
         return super(JsInitView, self).render_to_response(context, **response_kwargs)
 
 
@@ -55,7 +58,7 @@ class JsonView(View):
         data = self.get_context_data(request, *args, **kwargs)
         return HttpResponse(
             json.dumps(data, cls=DjangoJSONEncoder),
-            mimetype="application/json"
+            mimetype=JSON_MIMETYPE
         )
 
 
@@ -79,12 +82,14 @@ class JsTestView(TemplateView):
     '''
     js_files = None
     django_js = False
+    jquery = False
 
     def get_context_data(self, **kwargs):
         context = super(JsTestView, self).get_context_data(**kwargs)
 
         context['js_test_files'] = self.get_js_files()
         context['use_django_js'] = self.django_js
+        context['use_query'] = self.jquery
 
         return context
 

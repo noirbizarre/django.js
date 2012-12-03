@@ -3,9 +3,7 @@
 {% load js %}
 
 {% block js_content %}
-{% include "djangojs/test/test-data.html" %}
-{% django_js %}
-{% js "test/js/specs/django.specs.js" %}
+    {% include "djangojs/test/test-data.html" %}
 {% endblock %}
 
 {% block body_content %}

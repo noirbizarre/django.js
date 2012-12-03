@@ -13,6 +13,9 @@ Current
     - Removed ``JsTestCase.run_jasmine()`` and added ``JasmineMixin``
     - Removed ``JsTestCase.run_qunit()`` and added ``QUnitMixin``
     - Extract ``TapParser`` into ``djangojs.tap``
+- Only one Django.js test suite
+- Each framework is tested against its own test suite
+- Make jQuery support optionnal into ``JsTestCase``
 
 
 0.3.2 (2012-11-10)

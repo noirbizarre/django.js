@@ -9,20 +9,24 @@
   {% block js_init %}
     {% if use_django_js %}
     {% django_js %}
+    {% elif use_jquery %}
+    {% jquery_js %}
     {% endif %}
 
     {% css "test/js/libs/jasmine.css" %}
     {% js "test/js/libs/jasmine.js" %}
     {% js "test/js/libs/jasmine-html.js" %}
     {% js "test/js/libs/jasmine-djangojs.js" %}
+    {% if use_django_js or use_jquery %}
     {% js "test/js/libs/jasmine-jquery.js" %}
+    {% endif %}
   {% endblock js_init %}
+
+  {% block js_content %}{% endblock %}
 
   {% for file in js_test_files %}
   {% js file %}
   {% endfor %}
-
-  {% block js_content %}{% endblock %}
 
   <script type="text/javascript">
     (function() {
