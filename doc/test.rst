@@ -34,6 +34,16 @@ Each string can be a static js file path to include or a glob pattern:
             'js/other/specs.*.js',
         )
 
+jQueru can automatically be included into the view by setting the ``jquery`` attribute to ``True``:
+
+.. code-block:: python
+
+    from djangojs.views import JasmineView
+
+    class MyJasmineView(JasmineView):
+        jquery = True
+        js_files = 'js/test/*.specs.js'
+
 Django.js can automatically be included into the view by setting the ``django_js`` attribute to ``True``:
 
 .. code-block:: python
@@ -94,21 +104,22 @@ You can inspect django.js own test suites on github.
 Test cases
 ----------
 
-A Phantom.js test runner is provided with Jasmine/QUnit support.
-To use it with the previously defined views, just call the ``run_jasmine()`` or ``run_qunit()`` methods:
+A Phantom.js test runner parsing TAP is provided
+Jasmine/QUnit support are provided with ``JasmineMixin`` and ``QUnitMixin``.
+
+To use it with the previously defined views, just define either ``runner_url`` or ``runner_url_name`` attribute:
 
 .. code-block:: python
 
-    class JsTests(JsTestCase):
+    from djangojs.runners import JsTestCase, JasmineMixin, QUnitMixin
+
+    class JasminTests(JasmineMixin, JsTestCase):
         urls = 'myapp.test_urls'
+        title = 'My Jasmine suite'
+        runner_url_name = 'my_url_name'
 
-        def test_jasmine_suite(self):
-            '''It should run its its own Jasmine test suite'''
-            self.run_jasmine('my_jasmine_view', title='Jasmine Test Suite')
-
-        def test_qunit_suite(self):
-            '''It should run its its own QUnit test suite'''
-            self.run_qunit('my_qunit_view', title='QUnit Test Suite')
+    class QUnitTests(QunitMixin, JsTestCase):
+        runner_url = 'http://localhost/some-qunit-test-page'
 
 The verbosity is automatically adjusted with the ``-v/--verbosity`` parameter from the ``manage.py test`` command line.
 
