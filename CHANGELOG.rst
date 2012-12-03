@@ -7,6 +7,12 @@ Current
 - Upgraded to jQuery 1.8.3
 - Upgraded to Jasmine 1.3.0
 - Synchronous URLs and context fetch.
+- Use ``django.utils.termcolors``
+- Class based javascript testing tools:
+    - Factorize ``JsTestCase`` common behaviour
+    - Removed ``JsTestCase.run_jasmine()`` and added ``JasmineMixin``
+    - Removed ``JsTestCase.run_qunit()`` and added ``QUnitMixin``
+    - Extract ``TapParser`` into ``djangojs.tap``
 
 
 0.3.2 (2012-11-10)

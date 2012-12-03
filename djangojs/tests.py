@@ -1,4 +1,5 @@
 import json
+import unittest
 
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
@@ -9,9 +10,10 @@ from django.utils import translation
 
 from djangojs import JQUERY_VERSION
 from djangojs.conf import settings
-from djangojs.runners import JsTestCase
-from djangojs.views import JsTestView
+from djangojs.runners import JsTestCase, JasmineMixin, QUnitMixin
+from djangojs.tap import TapParser, TapTest, TapModule, TapAssertion
 from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer
+from djangojs.views import JsTestView
 
 
 def custom_processor(request):
@@ -23,16 +25,21 @@ def custom_processor(request):
         'djangojs.tests.custom_processor',
     )
 )
-class JsTests(JsTestCase):
+class JasmineTests(JasmineMixin, JsTestCase):
     urls = 'djangojs.test_urls'
+    runner_url_name = 'djangojs_jasmine'
 
-    def test_jasmine_suite(self):
-        '''It should run its its own Jasmine test suite'''
-        self.run_jasmine('djangojs_jasmine', title='Jasmine Test Suite')
 
-    def test_qunit_suite(self):
-        '''It should run its its own QUnit test suite'''
-        self.run_qunit('djangojs_qunit', title='QUnit Test Suite')
+@override_settings(
+    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+        'djangojs.tests.custom_processor',
+    )
+)
+class QUnitTests(QUnitMixin, JsTestCase):
+    urls = 'djangojs.test_urls'
+    runner_url_name = 'djangojs_qunit'
+
+
 
 
 class UrlsTestMixin(object):
@@ -389,3 +396,22 @@ class JsTestViewTest(TestCase):
         self.assertIn('test/js/libs/qunit-tap.js', files)
         self.assertNotIn('test/js/libs/jasmine.js', files)
         self.assertNotIn('test/js/libs/qunit.js', files)
+
+
+class TapItemsTest(unittest.TestCase):
+    def test_parse_assertion(self):
+        pass
+
+
+class TapParserTest(unittest.TestCase):
+    def test_single_test(self):
+        '''a single test should output TapAssertion and TapTast'''
+
+        parser = TapParser(TapTest)
+        output = '''
+# test: should be defined
+ok 1
+        '''
+
+        for item in parser.parse(output):
+            print item.display()
