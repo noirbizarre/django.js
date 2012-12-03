@@ -5,6 +5,7 @@ Current
 -------
 
 - Upgraded to jQuery 1.8.3
+- Upgraded to Jasmine 1.3.0
 - Synchronous URLs and context fetch.
 
 
