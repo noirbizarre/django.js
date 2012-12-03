@@ -41,11 +41,17 @@ class JsTestException(Exception):
         self.failures = failures
 
     def __str__(self):
-        output = '\n'.join(
-            [super(JsTestException, self).__str__()] +
-            ['\t%s' % failure.message for failure in self.failures]
-        )
-        return output
+        output = [super(JsTestException, self).__str__()]
+        for failure in self.failures:
+            message = failure.message or "expected: '%(expected)s', got: '%(got)s'" % failure.__dict__
+            output.append(' + %s - %s' % (failure.parent.name, message))
+            for line in failure.stack:
+                # Remove jasmine/qunit entries in stack to produce smaller and more efficient output
+                # TODO: find a cleaner way to improve stack trace output
+                if '/test/js/libs/jasmine.js:' in line or '/test/js/libs/qunit.js:' in line:
+                    continue
+                output.append('\t%s' % line)
+        return '\n'.join(output)
 
 
 class JsTestCase(LiveServerTestCase):
@@ -92,7 +98,7 @@ class JsTestCase(LiveServerTestCase):
 
         failures = parser.suites.get_all_failures()
         if failures:
-            raise JsTestException('%s JS tests failed' % len(failures), failures)
+            raise JsTestException('Failed javascript assertions', failures)
 
     def run_suite(self):
         '''

@@ -14,22 +14,18 @@ red = termcolors.make_style(fg='red', opts=('bold',))
 TAP_MODULE_REGEX = re.compile(r'^(?P<indent>\s*)# module: (?P<name>.*)$')
 TAP_TEST_REGEX = re.compile(r'^(?P<indent>\s*)# test: (?P<name>.*)$')
 TAP_ASSERTION_REGEX = re.compile(r'^(?P<indent>\s*)(?P<type>(?:not )?ok) (?P<num>\d+)(?: - (?P<details>.*))?$')
-TAP_STACK_REGEX = re.compile(r'^(?P<indent>\s*)#(?:\s+)at(?P<stack>.*)$')
+TAP_STACK_REGEX = re.compile(r'^(?P<indent>\s*)#\s+at\s+(?P<stack>.*)$')
 TAP_END_REGEX = re.compile(r'^(?P<indent>\s*)(?P<start>\d+)\.\.(?P<end>\d+)(?: - (?P<details>.*))?$')
-TAP_DETAILS_REGEX = re.compile(r'^(?:expected: (?P<expected>.*), got: (?P<got>.*), )?(?:matcher: (?P<matcher>.*), )?source: at (?P<source>.*)$')
+TAP_DETAILS_REGEX = re.compile(
+    r'''^(?:(?P<message>(?!expected)(?!got)(?!matcher)(?!source).+?)(?:, )?)?'''
+    r'''(?:expected: '(?P<expected>.+)', got: '(?P<got>.+?)'(?:, )?)?'''
+    r'''(?:matcher: '(?P<matcher>.+?)'(?:, )?)?'''
+    r'''(?:source:\s+at\s+(?P<source>.+?))?$''')
+
 
 # Output format
 INDENT = 4
 DEFAULT_ENCODING = 'utf-8'
-COLORS = {
-      "green": 32,
-      "red": 31,
-      "yellow": 33
-}
-
-
-def colorize(text, color):
-    return u'\033[%sm%s\033[0m' % (COLORS[color], text)
 
 
 class TapItem(object):
@@ -163,15 +159,15 @@ class TapAssertion(TapItem):
             )
             if match.group('details'):
                 details_match = TAP_DETAILS_REGEX.match(match.group('details'))
+                if details_match and details_match.group('message'):
+                    assertion.message = details_match.group('message')
                 if details_match and details_match.group('expected'):
                     assertion.expected = details_match.group('expected')
                     assertion.got = details_match.group('got')
                 if details_match and details_match.group('matcher'):
                     assertion.matcher = details_match.group('matcher')
-                if details_match:
+                if details_match and details_match.group('source'):
                     assertion.stack = [details_match.group('source')]
-                else:
-                    assertion.message = match.group('details')
             return assertion
         else:
             return None
