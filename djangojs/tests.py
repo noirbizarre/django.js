@@ -396,9 +396,38 @@ class JsTestViewTest(TestCase):
         self.assertNotIn('test/js/libs/qunit.js', files)
 
 
-class TapItemsTest(unittest.TestCase):
-    def test_parse_assertion(self):
-        pass
+class TapAssertionTest(unittest.TestCase):
+    def test_parse_ok(self):
+        assertion = TapAssertion.parse('ok 1')
+        self.assertIsNotNone(assertion)
+        self.assertEqual(assertion.num, 1)
+        self.assertEqual(assertion.success, True)
+        self.assertEqual(assertion.parsed_indent, '')
+        self.assertEqual(assertion.message, None)
+
+    def test_parse_not_ok(self):
+        assertion = TapAssertion.parse('not ok 2')
+        self.assertIsNotNone(assertion)
+        self.assertEqual(assertion.num, 2)
+        self.assertEqual(assertion.success, False)
+        self.assertEqual(assertion.parsed_indent, '')
+        self.assertEqual(assertion.message, None)
+
+    def test_parse_ok_with_message(self):
+        assertion = TapAssertion.parse('ok 284 - I should be equal to me.')
+        self.assertIsNotNone(assertion)
+        self.assertEqual(assertion.num, 284)
+        self.assertEqual(assertion.success, True)
+        self.assertEqual(assertion.parsed_indent, '')
+        self.assertEqual(assertion.message, 'I should be equal to me.')
+
+    def test_parse_not_ok_with_message(self):
+        assertion = TapAssertion.parse('not ok 284 - I should be equal to me.')
+        self.assertIsNotNone(assertion)
+        self.assertEqual(assertion.num, 284)
+        self.assertEqual(assertion.success, False)
+        self.assertEqual(assertion.parsed_indent, '')
+        self.assertEqual(assertion.message, 'I should be equal to me.')
 
 
 class TapParserTest(unittest.TestCase):

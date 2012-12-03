@@ -67,6 +67,15 @@ class TapGroup(list, TapItem):
             item.parent = self
         super(TapGroup, self).append(item)
 
+    def get_all_failures(self):
+        failures = []
+        for item in self:
+            if isinstance(item, TapGroup):
+                failures.extend(item.get_all_failures())
+            elif isinstance(item, TapAssertion) and not item.success:
+                failures.append(item)
+        return failures
+
 
 class TapModule(TapGroup):
 
@@ -110,15 +119,15 @@ class TapTest(TapGroup):
 
 
 class TapAssertion(TapItem):
-    def __init__(self, num, success=True, msg=None, parsed_indent='', *args, **kwargs):
+    def __init__(self, num, success=True, message=None, parsed_indent='', *args, **kwargs):
         super(TapAssertion, self).__init__()
         self.num = num
         self.success = success
-        self.msg = msg
+        self.message = message
         self.expected = None
         self.got = None
         self.matcher = None
-        self.stack = None
+        self.stack = []
         self.parsed_indent = parsed_indent
 
     def display(self, inline=False):
@@ -130,7 +139,7 @@ class TapAssertion(TapItem):
                 text += green(u'ok %s' % self.num)
             else:
                 text += red(u'not ok %s' % self.num)
-            text = '%s - %s' % (text, self.msg) if self.msg else text
+            text = '%s - %s' % (text, self.message) if self.message else text
             if self.expected is not None and self.got is not None:
                 text = '\n'.join([text, '# expected: %s' % self.expected, '# got: %s' % self.got])
             if self.stack:
@@ -148,7 +157,7 @@ class TapAssertion(TapItem):
         match = TAP_ASSERTION_REGEX.match(line.rstrip())
         if match:
             assertion = TapAssertion(
-                match.group('num'),
+                int(match.group('num')),
                 match.group('type') == 'ok',
                 parsed_indent=match.group('indent')
             )
@@ -162,7 +171,7 @@ class TapAssertion(TapItem):
                 if details_match:
                     assertion.stack = [details_match.group('source')]
                 else:
-                    assertion.msg = match.group('details')
+                    assertion.message = match.group('details')
             return assertion
         else:
             return None

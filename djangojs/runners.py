@@ -35,6 +35,19 @@ VERBOSITY = parse_verbosity()
 VERBOSE = VERBOSITY > 1
 
 
+class JsTestException(Exception):
+    def __init__(self, message, failures=[]):
+        super(JsTestException, self).__init__(message)
+        self.failures = failures
+
+    def __str__(self):
+        output = '\n'.join(
+            [super(JsTestException, self).__str__()] +
+            ['\t%s' % failure.message for failure in self.failures]
+        )
+        return output
+
+
 class JsTestCase(LiveServerTestCase):
     '''
     Test helper to run JS tests with phantomjs
@@ -77,16 +90,18 @@ class JsTestCase(LiveServerTestCase):
             print separator
             sys.stdout.flush()
 
-        self.assertEqual(self.returncode, 0)
+        failures = parser.suites.get_all_failures()
+        if failures:
+            raise JsTestException('%s JS tests failed' % len(failures), failures)
 
     def run_suite(self):
         '''
         Run a phantomjs test suite.
         '''
         if not self.phantomjs_runner:
-            raise Exception('phantomjs_runner need to be defined')
+            raise JsTestException('phantomjs_runner need to be defined')
         if not (self.runner_url or self.runner_url_name):
-            raise Exception('Either runner_url or runner_url_name need to be defined')
+            raise JsTestException('Either runner_url or runner_url_name need to be defined')
 
         runner_url = self.runner_url or ''.join([self.live_server_url, reverse(self.runner_url_name)])
 
