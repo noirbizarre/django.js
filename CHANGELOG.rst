@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.4 (2012-12-04)
+----------------
 
 - Upgraded to jQuery 1.8.3
 - Upgraded to Jasmine 1.3.0
