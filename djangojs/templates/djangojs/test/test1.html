@@ -8,11 +8,9 @@
 <body>
 <script type="text/javascript">
     $(function(){
-        $(Django).on('ready', function() {
-            console.log(Django.url('django_js_json'));
-            console.log(Django.url('first_test', 'a'));
-            console.log(Django.url('second_test', {'test': 'a'}));
-        });
+        console.log(Django.url('django_js_json'));
+        console.log(Django.url('first_test', 'a'));
+        console.log(Django.url('second_test', {'test': 'a'}));
     });
 </script>
 </body>

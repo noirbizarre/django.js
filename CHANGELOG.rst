@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Rename ``test/js`` into ``js/test`` and reorganize test resources
 
 
 0.4 (2012-12-04)

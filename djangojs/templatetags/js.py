@@ -7,7 +7,6 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from djangojs import JQUERY_VERSION
 from djangojs.conf import settings
-from djangojs.utils import urls_as_json, ContextSerializer
 
 register = template.Library()
 

@@ -57,7 +57,7 @@ class JsTestException(Exception):
             for line in failure.stack:
                 # Remove jasmine/qunit entries in stack to produce smaller and more efficient output
                 # TODO: find a cleaner way to improve stack trace output
-                if '/test/js/libs/jasmine.js:' in line or '/test/js/libs/qunit.js:' in line:
+                if '/js/test/libs/jasmine.js:' in line or '/js/test/libs/qunit.js:' in line:
                     continue
                 output.append('\t%s' % line)
         return '\n'.join(output)

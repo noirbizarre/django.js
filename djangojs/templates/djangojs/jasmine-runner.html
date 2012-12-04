@@ -13,12 +13,12 @@
     {% jquery_js %}
     {% endif %}
 
-    {% css "test/js/libs/jasmine.css" %}
-    {% js "test/js/libs/jasmine.js" %}
-    {% js "test/js/libs/jasmine-html.js" %}
-    {% js "test/js/libs/jasmine-djangojs.js" %}
+    {% css "js/test/libs/jasmine.css" %}
+    {% js "js/test/libs/jasmine.js" %}
+    {% js "js/test/libs/jasmine-html.js" %}
+    {% js "js/test/libs/jasmine-djangojs.js" %}
     {% if use_django_js or use_jquery %}
-    {% js "test/js/libs/jasmine-jquery.js" %}
+    {% js "js/test/libs/jasmine-jquery.js" %}
     {% endif %}
   {% endblock js_init %}
 

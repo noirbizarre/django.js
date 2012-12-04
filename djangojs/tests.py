@@ -364,41 +364,41 @@ class JsTestViewTest(TestCase):
 
     def test_single_js_file(self):
         '''Should handle a single js file name as string'''
-        view = JsTestView(js_files='test/js/libs/jasmine-djangojs.js')
-        self.assertEqual(view.get_js_files(), ['test/js/libs/jasmine-djangojs.js'])
+        view = JsTestView(js_files='js/test/libs/jasmine-djangojs.js')
+        self.assertEqual(view.get_js_files(), ['js/test/libs/jasmine-djangojs.js'])
 
     def test_multi_js_file(self):
         '''Should handle an array of js file names'''
-        view = JsTestView(js_files=['test/js/libs/jasmine-djangojs.js', 'test/js/libs/jasmine.js'])
+        view = JsTestView(js_files=['js/test/libs/jasmine-djangojs.js', 'js/test/libs/jasmine.js'])
 
         files = view.get_js_files()
 
-        self.assertIn('test/js/libs/jasmine-djangojs.js', files)
-        self.assertIn('test/js/libs/jasmine.js', files)
+        self.assertIn('js/test/libs/jasmine-djangojs.js', files)
+        self.assertIn('js/test/libs/jasmine.js', files)
 
     def test_single_glob_expression(self):
         '''Should handle a single glob pattern as js file list'''
-        view = JsTestView(js_files='test/js/libs/jasmine-*.js')
+        view = JsTestView(js_files='js/test/libs/jasmine-*.js')
 
         files = view.get_js_files()
 
-        self.assertIn('test/js/libs/jasmine-djangojs.js', files)
-        self.assertIn('test/js/libs/jasmine-html.js', files)
-        self.assertIn('test/js/libs/jasmine-jquery.js', files)
-        self.assertNotIn('test/js/libs/jasmine.js', files)
+        self.assertIn('js/test/libs/jasmine-djangojs.js', files)
+        self.assertIn('js/test/libs/jasmine-html.js', files)
+        self.assertIn('js/test/libs/jasmine-jquery.js', files)
+        self.assertNotIn('js/test/libs/jasmine.js', files)
 
     def test_multi_glob_expression(self):
         '''Should handle a glob pattern list as js file list'''
-        view = JsTestView(js_files=['test/js/libs/jasmine-*.js', 'test/js/libs/qunit-*.js'])
+        view = JsTestView(js_files=['js/test/libs/jasmine-*.js', 'js/test/libs/qunit-*.js'])
 
         files = view.get_js_files()
 
-        self.assertIn('test/js/libs/jasmine-djangojs.js', files)
-        self.assertIn('test/js/libs/jasmine-html.js', files)
-        self.assertIn('test/js/libs/jasmine-jquery.js', files)
-        self.assertIn('test/js/libs/qunit-tap.js', files)
-        self.assertNotIn('test/js/libs/jasmine.js', files)
-        self.assertNotIn('test/js/libs/qunit.js', files)
+        self.assertIn('js/test/libs/jasmine-djangojs.js', files)
+        self.assertIn('js/test/libs/jasmine-html.js', files)
+        self.assertIn('js/test/libs/jasmine-jquery.js', files)
+        self.assertIn('js/test/libs/qunit-tap.js', files)
+        self.assertNotIn('js/test/libs/jasmine.js', files)
+        self.assertNotIn('js/test/libs/qunit.js', files)
 
 
 class TapAssertionTest(unittest.TestCase):
@@ -452,7 +452,7 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_source(self):
         '''Should parse a NOT OK assertion with message and source'''
-        input = 'not ok 298 - reset should not modify test status, source: at http://localhost:8000/static/test/js/libs/qunit.js:435'
+        input = 'not ok 298 - reset should not modify test status, source: at http://localhost:8000/static/js/test/libs/qunit.js:435'
 
         assertion = TapAssertion.parse(input)
 
@@ -463,7 +463,7 @@ class TapAssertionTest(unittest.TestCase):
         self.assertEqual(assertion.message, 'reset should not modify test status')
         self.assertEqual(assertion.expected, None)
         self.assertEqual(assertion.got, None)
-        self.assertListEqual(assertion.stack, ['http://localhost:8000/static/test/js/libs/qunit.js:435'])
+        self.assertListEqual(assertion.stack, ['http://localhost:8000/static/js/test/libs/qunit.js:435'])
 
     def test_parse_not_ok_with_expectations(self):
         '''Should parse a NOT OK assertion with expectations'''
@@ -482,7 +482,7 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_all(self):
         '''Should parse a NOT OK assertion with all extras'''
-        input = "not ok 42 - reset should not modify test status, expected: 'something', got: 'something else', source: at http://localhost:8000/static/test/js/libs/qunit.js:435"
+        input = "not ok 42 - reset should not modify test status, expected: 'something', got: 'something else', source: at http://localhost:8000/static/js/test/libs/qunit.js:435"
 
         assertion = TapAssertion.parse(input)
 
@@ -493,7 +493,7 @@ class TapAssertionTest(unittest.TestCase):
         self.assertEqual(assertion.message, 'reset should not modify test status')
         self.assertEqual(assertion.expected, 'something')
         self.assertEqual(assertion.got, 'something else')
-        self.assertListEqual(assertion.stack, ['http://localhost:8000/static/test/js/libs/qunit.js:435'])
+        self.assertListEqual(assertion.stack, ['http://localhost:8000/static/js/test/libs/qunit.js:435'])
 
 
 class TapTestTest(unittest.TestCase):

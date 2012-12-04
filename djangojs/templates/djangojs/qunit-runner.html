@@ -7,7 +7,7 @@
   {% load js %}
 
   {% block js_init %}
-    {% css "test/js/libs/qunit.css" %}
+    {% css "js/test/libs/qunit.css" %}
 
     {% if use_django_js %}
     {% django_js %}
@@ -25,8 +25,8 @@
     <div id="qunit"></div>
     <div id="qunit-fixture">{% block qunit-fixture %}{% endblock %}</div>
 
-    {% js "test/js/libs/qunit.js" %}
-    {% js "test/js/libs/qunit-tap.js" %}
+    {% js "js/test/libs/qunit.js" %}
+    {% js "js/test/libs/qunit-tap.js" %}
     <script type="text/javascript">
         if (navigator.userAgent.indexOf('PhantomJS') != -1) {
             var logger = function() { console.log.apply(console, arguments); };
