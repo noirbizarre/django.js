@@ -14,6 +14,11 @@ Django.js is inspired from:
 
 This is currently a work in progress (API wil not be stable before 1.0) so don't expect it to be perfect but please `submit an issue <https://github.com/noirbizarre/django.js/issues>`_ for any bug you find or any feature you want.
 
+Compatibility
+=============
+
+Django.js requires Python 2.7 and Django 1.4.
+
 
 Installation
 ============

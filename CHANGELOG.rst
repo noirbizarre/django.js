@@ -17,6 +17,7 @@ Current
 - Each framework is tested against its own test suite
 - Make jQuery support optionnal into ``JsTestCase``
 - Improved JsTestCase output
+- Drop Python 2.6 support
 
 
 0.3.2 (2012-11-10)
