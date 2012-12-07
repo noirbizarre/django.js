@@ -93,6 +93,17 @@ class UrlsTestMixin(object):
         self.assertFalse('?' in url)
         self.assertEqual(url, '/test/optionnal/group')
 
+    def test_keep_priority(self):
+        '''It should serialize with priority support'''
+        self.assertTrue('index' in self.result)
+        url = self.result['index']
+        self.assertNotEqual(url, '/admin/')
+        self.assertEqual(url, '/')
+
+    # def test_namespace(self):
+    #     '''It should serialize namespaces'''
+    #     self.assertTrue('admin:index' in self.result)
+
 
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 

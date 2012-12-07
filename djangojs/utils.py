@@ -9,7 +9,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.template.context import RequestContext
 from django.utils import translation
-from django.utils.datastructures import SortedDict
 
 from djangojs.conf import settings
 
@@ -46,7 +45,7 @@ def urls_as_json():
 
 
 def _get_urls(module, prefix=''):
-    urls = SortedDict()
+    urls = {}
     if isinstance(module, (str, unicode)):
         __import__(module)
         root_urls = sys.modules[module]
@@ -58,7 +57,7 @@ def _get_urls(module, prefix=''):
     else:
         raise TypeError('Unsupported type: %s' % type(module))
 
-    for pattern in patterns:
+    for pattern in reversed(patterns):
         if issubclass(pattern.__class__, RegexURLPattern):
             if pattern.name:
                 full_url = prefix + pattern.regex.pattern
