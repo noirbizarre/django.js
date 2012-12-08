@@ -44,7 +44,7 @@ def urls_as_json():
     return json.dumps(urls_as_dict(), cls=DjangoJSONEncoder)
 
 
-def _get_urls(module, prefix=''):
+def _get_urls(module, prefix='', namespace=None):
     urls = {}
     if isinstance(module, (str, unicode)):
         __import__(module)
@@ -57,9 +57,12 @@ def _get_urls(module, prefix=''):
     else:
         raise TypeError('Unsupported type: %s' % type(module))
 
-    for pattern in reversed(patterns):
+    for pattern in patterns:
         if issubclass(pattern.__class__, RegexURLPattern):
             if pattern.name:
+                pattern_name = pattern.name
+                if namespace:
+                    pattern_name = ':'.join((namespace, pattern_name))
                 full_url = prefix + pattern.regex.pattern
                 for chr in ['^', '$']:
                     full_url = full_url.replace(chr, '')
@@ -84,10 +87,15 @@ def _get_urls(module, prefix=''):
                 if args_matches:
                     for el in args_matches:
                         full_url = full_url.replace(el, "<>")  # replace by a empty parameter name
-                urls[pattern.name] = "/" + full_url
+                urls[pattern_name] = "/" + full_url
         elif issubclass(pattern.__class__, RegexURLResolver):
             if pattern.urlconf_name:
-                urls.update(_get_urls(pattern.urlconf_name, pattern.regex.pattern))
+                # Add urls twice: for app and instance namespace
+                for ns in set((pattern.namespace, pattern.app_name)):
+                    namespaces = filter(None, (namespace, ns))
+                    namespaces = ':'.join(namespaces)
+                    new_prefix = '%s%s' % (prefix, pattern.regex.pattern)
+                    urls.update(_get_urls(pattern.urlconf_name, new_prefix, namespaces))
     return urls
 
 

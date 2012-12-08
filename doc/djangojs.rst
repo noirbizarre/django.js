@@ -31,6 +31,13 @@ You can call the ``Django.url()`` method with:
 
     Django.url('my-view', {arg1: 'value1', arg2: 'value2'});
 
+- an url name with one or more namespaces
+
+.. code-block:: javascript
+
+    Django.url('ns:my-view');
+    Django.url('ns:nested:my-view');
+
 You can use anonymous forms (variable arguments and array) with named arguments in urls but you can't use object form with anonymous arguments.
 
 

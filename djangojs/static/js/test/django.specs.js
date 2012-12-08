@@ -173,6 +173,27 @@ describe("Django.js", function(){
             });
         });
 
+        describe('with namespace', function(){
+
+            it("should resolve an URL with a namespace", function(){
+                expect(Django.url('ns1:fake')).toBe('/test/namespace1/fake');
+            });
+
+            it("should resolve an URL with a nested namespace", function(){
+                expect(Django.url('ns2:nested:fake')).toBe('/test/namespace2/nested/fake');
+            });
+
+            it("should resolve an URL with an instance namespace", function(){
+                expect(Django.url('app1:fake')).toBe('/test/namespace1/fake');
+            });
+
+            it("should resolve an URL with a nested instance namespace", function(){
+                expect(Django.url('app2:nested:fake')).toBe('/test/namespace2/nested/fake');
+                expect(Django.url('ns2:appnested:fake')).toBe('/test/namespace2/nested/fake');
+                expect(Django.url('app2:appnested:fake')).toBe('/test/namespace2/nested/fake');
+            });
+        });
+
     });
 
     describe('Resolve static', function(){

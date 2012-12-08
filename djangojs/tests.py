@@ -95,14 +95,41 @@ class UrlsTestMixin(object):
 
     def test_keep_priority(self):
         '''It should serialize with priority support'''
-        self.assertTrue('index' in self.result)
-        url = self.result['index']
-        self.assertNotEqual(url, '/admin/')
-        self.assertEqual(url, '/')
+        self.assertTrue('twice' in self.result)
+        self.assertEqual(self.result['twice'], reverse('twice'))
 
-    # def test_namespace(self):
-    #     '''It should serialize namespaces'''
-    #     self.assertTrue('admin:index' in self.result)
+    def test_single_namespace(self):
+        '''It should serialize namespaces'''
+        self.assertTrue('ns1:fake' in self.result)
+        self.assertEqual(self.result['ns1:fake'], reverse('ns1:fake'))
+        self.assertFalse('fake' in self.result)
+
+    def test_nested_namespaces(self):
+        '''It should serialize nested namespaces'''
+        self.assertTrue('ns2:nested:fake' in self.result)
+        self.assertEqual(self.result['ns2:nested:fake'], reverse('ns2:nested:fake'))
+        self.assertFalse('nested:fake' in self.result)
+        self.assertFalse('ns2:nested' in self.result)
+        self.assertFalse('ns2:fake' in self.result)
+        self.assertFalse('fake' in self.result)
+        self.assertFalse('nested' in self.result)
+
+    def test_single_instance_namespace(self):
+        '''It should serialize instance namespaces'''
+        self.assertTrue('app1:fake' in self.result)
+        self.assertEqual(self.result['app1:fake'], reverse('app1:fake'))
+
+    def test_nested_instance_namespaces(self):
+        '''It should serialize nested instance namespaces'''
+        self.assertTrue('ns2:appnested:fake' in self.result)
+        self.assertTrue('app2:nested:fake' in self.result)
+        self.assertTrue('app2:appnested:fake' in self.result)
+        self.assertEqual(self.result['ns2:appnested:fake'], reverse('ns2:appnested:fake'))
+        self.assertEqual(self.result['app2:nested:fake'], reverse('app2:nested:fake'))
+        self.assertEqual(self.result['app2:appnested:fake'], reverse('app2:appnested:fake'))
+        self.assertFalse('appnested:fake' in self.result)
+        self.assertFalse('ns2:appnested' in self.result)
+        self.assertFalse('app2:fake' in self.result)
 
 
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
