@@ -27,17 +27,17 @@ def custom_processor(request):
 )
 class DjangoJsTests(JasmineMixin, JsTestCase):
     urls = 'djangojs.test_urls'
-    runner_url_name = 'djangojs_tests'
+    url_name = 'djangojs_tests'
 
 
 class JasmineTests(JasmineMixin, JsTestCase):
     urls = 'djangojs.test_urls'
-    runner_url_name = 'djangojs_jasmine_tests'
+    url_name = 'djangojs_jasmine_tests'
 
 
 class QUnitTests(QUnitMixin, JsTestCase):
     urls = 'djangojs.test_urls'
-    runner_url_name = 'djangojs_qunit_tests'
+    url_name = 'djangojs_qunit_tests'
 
 
 class UrlsTestMixin(object):

@@ -70,13 +70,13 @@ class JsTestCase(LiveServerTestCase):
     #: mandatory path to the PhantomJS javascript runner
     phantomjs_runner = None
     #: an optionnal absolute URL to the test runner page
-    runner_url = None
+    url = None
     #: an optionnal named URL that point to the test runner page
-    runner_url_name = None
+    url_name = None
     #: an optionnal arguments array to pass to the ``reverse()`` function
-    runner_url_args = None
+    url_args = None
     #: an optionnal keyword arguments dictionnary to pass to the ``reverse()`` function
-    runner_url_kwargs = None
+    url_kwargs = None
     #: an optionnal title for verbose console output
     title = 'PhantomJS test suite'
 
@@ -136,20 +136,20 @@ class JsTestCase(LiveServerTestCase):
         Run a phantomjs test suite.
 
          - ``phantomjs_runner`` is mandatory.
-         - Either ``runner_url`` or ``runner_url_name`` needs to be defined.
+         - Either ``url`` or ``url_name`` needs to be defined.
         '''
         if not self.phantomjs_runner:
             raise JsTestException('phantomjs_runner need to be defined')
-        if not (self.runner_url or self.runner_url_name):
-            raise JsTestException('Either runner_url or runner_url_name need to be defined')
+        if not (self.url or self.url_name):
+            raise JsTestException('Either url or url_name need to be defined')
 
-        if self.runner_url_name:
-            reversed_url = reverse(self.runner_url_name, args=self.runner_url_args, kwargs=self.runner_url_kwargs)
-            runner_url = ''.join([self.live_server_url, reversed_url])
+        if self.url_name:
+            reversed_url = reverse(self.url_name, args=self.url_args, kwargs=self.url_kwargs)
+            url = ''.join([self.live_server_url, reversed_url])
         else:
-            runner_url = self.runner_url
+            url = self.url
 
-        return self.phantomjs(self.phantomjs_runner, runner_url, title=self.title)
+        return self.phantomjs(self.phantomjs_runner, url, title=self.title)
 
 
 class JasmineMixin(object):
