@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
+from django.test.signals import setting_changed
+from django.dispatch import receiver
+
 # Default configuration values for Django.js
 # All values used by Django.js needs to appears here.
 DEFAULTS = {
@@ -29,27 +32,25 @@ class Settings(dict):
         try:
             from django.conf import settings
 
+            self.update(DEFAULTS)
             self.update(settings._wrapped.__dict__)
 
             # Warn for missings settings
             for key in REQUIREDS:
                 if not key in self:
-                    raise Exception('%s settings key is mandatory')
-
-            # Set defaults for missing keys
-            for key, value in DEFAULTS.iteritems():
-                if not key in self:
-                    self[key] = value
+                    raise Exception('%s settings key is mandatory' % key)
 
         except ImportError:
             pass
-
-    # def set_max_message_length(self):
-    #     extra_message_chars = "#PRIVMSG %s :\r\n" % self["IRC_CHANNEL"]
-    #     self["MAX_MESSAGE_LENGTH"] = 512 - len(extra_message_chars)
 
     def __getattr__(self, k):
         return self[k]
 
 
 settings = Settings()
+
+
+@receiver(setting_changed)
+def on_settings_changed(sender, **kwargs):
+    key, value = kwargs['setting'], kwargs['value']
+    settings[key] = value
