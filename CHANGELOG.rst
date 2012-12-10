@@ -6,6 +6,7 @@ Current
 
 - Rename ``test/js`` into ``js/test`` and reorganize test resources
 - Added namespaced URLs support
+- Handle ``runner_url_args`` and ``runner_url_kwargs`` on ``JsTestCase``
 
 
 0.4 (2012-12-04)

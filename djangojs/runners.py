@@ -73,6 +73,10 @@ class JsTestCase(LiveServerTestCase):
     runner_url = None
     #: an optionnal named URL that point to the test runner page
     runner_url_name = None
+    #: an optionnal arguments array to pass to the ``reverse()`` function
+    runner_url_args = None
+    #: an optionnal keyword arguments dictionnary to pass to the ``reverse()`` function
+    runner_url_kwargs = None
     #: an optionnal title for verbose console output
     title = 'PhantomJS test suite'
 
@@ -139,7 +143,11 @@ class JsTestCase(LiveServerTestCase):
         if not (self.runner_url or self.runner_url_name):
             raise JsTestException('Either runner_url or runner_url_name need to be defined')
 
-        runner_url = self.runner_url or ''.join([self.live_server_url, reverse(self.runner_url_name)])
+        if self.runner_url_name:
+            reversed_url = reverse(self.runner_url_name, args=self.runner_url_args, kwargs=self.runner_url_kwargs)
+            runner_url = ''.join([self.live_server_url, reversed_url])
+        else:
+            runner_url = self.runner_url
 
         return self.phantomjs(self.phantomjs_runner, runner_url, title=self.title)
 
