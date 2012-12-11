@@ -1,3 +1,8 @@
+/**
+ * Django.js test suite
+ *
+ * It depends on djangojs.test_urls
+ */
 describe("Django.js", function(){
     var DJANGO_INFOS = window.DJANGO_INFOS;
 
@@ -176,11 +181,31 @@ describe("Django.js", function(){
         describe('with namespace', function(){
 
             it("should resolve an URL with a namespace", function(){
+                var namespaceless = function(){
+                    Django.url('fake');
+                };
+
                 expect(Django.url('ns1:fake')).toBe('/test/namespace1/fake');
+                expect(namespaceless).toThrow();
+
             });
 
+            it("should not resolve a namespaced url without namespace", function(){
+
+            })
+
             it("should resolve an URL with a nested namespace", function(){
+                var notLeaf = function(){
+                    Django.url('ns2:nested');
+                };
+
+                var notNested = function(){
+                    Django.url('ns2:fake');
+                };
+
                 expect(Django.url('ns2:nested:fake')).toBe('/test/namespace2/nested/fake');
+                expect(notLeaf).toThrow();
+                expect(notNested).toThrow();
             });
 
             it("should resolve an URL with an instance namespace", function(){
