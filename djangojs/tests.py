@@ -10,7 +10,7 @@ from django.utils import translation
 
 from djangojs import JQUERY_VERSION
 from djangojs.conf import settings
-from djangojs.runners import JsTestCase, JasmineMixin, QUnitMixin
+from djangojs.runners import JsTestCase, JsTemplateTestCase, JasmineSuite, QUnitSuite
 from djangojs.tap import TapParser, TapTest, TapModule, TapAssertion
 from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer
 from djangojs.views import JsTestView
@@ -25,17 +25,21 @@ def custom_processor(request):
         'djangojs.tests.custom_processor',
     )
 )
-class DjangoJsTests(JasmineMixin, JsTestCase):
+class DjangoJsTests(JasmineSuite, JsTestCase):
     urls = 'djangojs.test_urls'
     url_name = 'djangojs_tests'
 
 
-class JasmineTests(JasmineMixin, JsTestCase):
+class JasmineTests(JasmineSuite, JsTestCase):
     urls = 'djangojs.test_urls'
     url_name = 'djangojs_jasmine_tests'
 
 
-class QUnitTests(QUnitMixin, JsTestCase):
+class JasmineTests2(JasmineSuite, JsTemplateTestCase):
+    pass
+
+
+class QUnitTests(QUnitSuite, JsTestCase):
     urls = 'djangojs.test_urls'
     url_name = 'djangojs_qunit_tests'
 

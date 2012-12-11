@@ -2,26 +2,32 @@
 '''
 This module provide Javascript test runners for Django unittest.
 '''
+import os
 import re
 import sys
 
 from os.path import join, dirname
 from subprocess import Popen, STDOUT, PIPE
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, mkstemp
 
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 from django.test import LiveServerTestCase
 
 from djangojs.tap import TapParser
+
+from unittest import TestCase
 
 #: Console output line length for separators
 LINE_SIZE = 70
 
 __all__ = (
     'JsTestCase',
+    'JsFileTestCase',
+    'JsTemplateTestCase',
     'JsTestException',
-    'JasmineMixin',
-    'QUnitMixin',
+    'JasmineSuite',
+    'QUnitSuite',
 )
 
 
@@ -63,7 +69,7 @@ class JsTestException(Exception):
         return '\n'.join(output)
 
 
-class JsTestCase(LiveServerTestCase):
+class PhantomJsRunner(object):
     '''
     Test helper to run JS tests with PhantomJS
     '''
@@ -71,12 +77,6 @@ class JsTestCase(LiveServerTestCase):
     phantomjs_runner = None
     #: an optionnal absolute URL to the test runner page
     url = None
-    #: an optionnal named URL that point to the test runner page
-    url_name = None
-    #: an optionnal arguments array to pass to the ``reverse()`` function
-    url_args = None
-    #: an optionnal keyword arguments dictionnary to pass to the ``reverse()`` function
-    url_kwargs = None
     #: an optionnal title for verbose console output
     title = 'PhantomJS test suite'
 
@@ -140,35 +140,92 @@ class JsTestCase(LiveServerTestCase):
         '''
         if not self.phantomjs_runner:
             raise JsTestException('phantomjs_runner need to be defined')
-        if not (self.url or self.url_name):
-            raise JsTestException('Either url or url_name need to be defined')
 
-        if self.url_name:
-            reversed_url = reverse(self.url_name, args=self.url_args, kwargs=self.url_kwargs)
-            url = ''.join([self.live_server_url, reversed_url])
-        else:
-            url = self.url
+        url = self.get_url()
 
-        return self.phantomjs(self.phantomjs_runner, url, title=self.title)
+        self.phantomjs(self.phantomjs_runner, url, title=self.title)
+        self.cleanup()
+
+    def get_url(self):
+        if not self.url:
+            raise JsTestException('url need to be defined')
+        return self.url
+
+    def cleanup(self):
+        pass
 
 
-class JasmineMixin(object):
+class JsTestCase(PhantomJsRunner, LiveServerTestCase):
+    '''
+    A PhantomJS suite that run against the Django LiveServerTestCase
+    '''
+    #: a mandatory named URL that point to the test runner page
+    url_name = None
+    #: an optionnal arguments array to pass to the ``reverse()`` function
+    url_args = None
+    #: an optionnal keyword arguments dictionnary to pass to the ``reverse()`` function
+    url_kwargs = None
+
+    def get_url(self):
+        if not self.url_name:
+            raise JsTestException('url_name need to be defined')
+
+        reversed_url = reverse(self.url_name, args=self.url_args, kwargs=self.url_kwargs)
+        return ''.join([self.live_server_url, reversed_url])
+
+
+class JsFileTestCase(PhantomJsRunner, TestCase):
+    '''
+    A PhantomJS suite that run against a local html file
+    '''
+    #: absolute path to the test runner page
+    filename = None
+
+    def get_url(self):
+        if not self.filename:
+            raise JsTestException('filename need to be defined')
+
+        return 'file://%s' % self.filename
+
+
+class JsTemplateTestCase(JsFileTestCase):
+    '''
+    A PhantomJS suite that run against a rendered html file but without server.
+    '''
+    #: absolute path to the test runner page
+    template_name = None
+
+    def get_url(self):
+        if not self.template_name:
+            raise JsTestException('template_name need to be defined')
+
+        fd, self.filename = mkstemp()
+        os.fdopen(fd, 'w').write(render_to_string(self.template_name, {}))
+        return super(JsTemplateTestCase, self).get_url()
+
+    def cleanup(self):
+        os.remove(self.filename)
+
+
+class JasmineSuite(object):
     '''
     A mixin that runs a jasmine test suite with PhantomJs.
     '''
     title = 'Jasmine test suite'
     phantomjs_runner = join(dirname(__file__), 'phantomjs', 'jasmine-runner.js')
+    template_name = 'djangojs/jasmine-runner.html'
 
     def test(self):
         self.run_suite()
 
 
-class QUnitMixin(object):
+class QUnitSuite(object):
     '''
     A mixin that runs a QUnit test suite with PhantomJs.
     '''
     title = 'QUnit test suite'
     phantomjs_runner = join(dirname(__file__), 'phantomjs', 'qunit-runner.js')
+    template_name = 'djangojs/qunit-runner.html'
 
     def test(self):
         self.run_suite()
