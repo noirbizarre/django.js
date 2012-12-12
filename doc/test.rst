@@ -104,22 +104,41 @@ You can inspect django.js own test suites on github.
 Test cases
 ----------
 
-A Phantom.js test runner parsing TAP is provided
-Jasmine/QUnit support are provided with ``JasmineMixin`` and ``QUnitMixin``.
+A Phantom.js test runner parsing TAP is provided in 3 flavours:
 
-To use it with the previously defined views, just define either ``runner_url`` or ``runner_url_name`` attribute:
+    - ``JsTestCase`` that runs javascript tests against Django liveserver TestCase.
+    - ``JsFileTestCase`` that runs javascript tests against a static html file
+    - ``JsTemplateTestCase`` that runs javascript tests against a rendered html file (but without liveserver running)
+
+.. note::
+
+    Whatever TestCase you choose, it should output TAP.
+    If you don't have complex and specific needs, you just have to use the provided template and extends them if needed.
+
+Jasmine/QUnit support are provided with ``JasmineSuite`` and ``QUnitSuite`` mixins.
+
+To use it with the previously defined views, just define either ``url_name`` or ``filename`` attribute:
 
 .. code-block:: python
 
-    from djangojs.runners import JsTestCase, JasmineMixin, QUnitMixin
+    from djangojs.runners import JsTestCase, JsFileTestCase, JsTemplateTestCase
+    from djangojs.runners import JasmineSuite, QUnitSuite
 
-    class JasminTests(JasmineMixin, JsTestCase):
+
+    class JasminTests(JasmineSuite, JsTestCase):
         urls = 'myapp.test_urls'
         title = 'My Jasmine suite'
-        runner_url_name = 'my_url_name'
+        url_name = 'my_url_name'
 
-    class QUnitTests(QunitMixin, JsTestCase):
-        runner_url = 'http://localhost/some-qunit-test-page'
+
+    class QUnitTests(QunitSuite, JsFileTestCase):
+        filename = '/tmp/my-runner.html'
+
+
+    class JasminTests(JasmineSuite, JsTemplateTestCase):
+        template_name = 'my/template.html'
+        js_files = 'js/test/other/*.js'
+
 
 The verbosity is automatically adjusted with the ``-v/--verbosity`` parameter from the ``manage.py test`` command line.
 

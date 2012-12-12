@@ -12,8 +12,7 @@ from djangojs import JQUERY_VERSION
 from djangojs.conf import settings
 from djangojs.runners import JsTestCase, JsTemplateTestCase, JasmineSuite, QUnitSuite
 from djangojs.tap import TapParser, TapTest, TapModule, TapAssertion
-from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer
-from djangojs.views import JsTestView
+from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer, StorageGlobber
 
 
 def custom_processor(request):
@@ -35,13 +34,18 @@ class JasmineTests(JasmineSuite, JsTestCase):
     url_name = 'djangojs_jasmine_tests'
 
 
-class JasmineTests2(JasmineSuite, JsTemplateTestCase):
-    pass
+class JasmineTemplateTests(JasmineSuite, JsTemplateTestCase):
+    js_files = 'js/test/jasmine/*Spec.js'
 
 
 class QUnitTests(QUnitSuite, JsTestCase):
     urls = 'djangojs.test_urls'
     url_name = 'djangojs_qunit_tests'
+
+
+class QUnitTemplateTests(QUnitSuite, JsTemplateTestCase):
+    template_name = 'djangojs/test/qunit-test-runner.html'
+    js_files = 'js/test/qunit/qunit-*.js'
 
 
 class UrlsTestMixin(object):
@@ -397,50 +401,48 @@ class DjangoJsTagTest(TestCase):
         self.failIf('<script type="text/javascript" src="%s">' % reverse('js_catalog') in rendered)
 
 
-class JsTestViewTest(TestCase):
+class StorageGlobberTest(TestCase):
 
     def test_no_js_file(self):
         '''Should handle empty js file list'''
-        view = JsTestView()
-        self.assertEqual(view.get_js_files(), [])
+        # view = JsTestView()
+        self.assertEqual(StorageGlobber.glob(), [])
 
     def test_single_js_file(self):
         '''Should handle a single js file name as string'''
-        view = JsTestView(js_files='js/test/libs/jasmine-djangojs.js')
-        self.assertEqual(view.get_js_files(), ['js/test/libs/jasmine-djangojs.js'])
+        files = 'js/test/libs/jasmine-djangojs.js'
+        expected = ['js/test/libs/jasmine-djangojs.js']
+        self.assertEqual(StorageGlobber.glob(files), expected)
 
     def test_multi_js_file(self):
         '''Should handle an array of js file names'''
-        view = JsTestView(js_files=['js/test/libs/jasmine-djangojs.js', 'js/test/libs/jasmine.js'])
+        files = ['js/test/libs/jasmine-djangojs.js', 'js/test/libs/jasmine.js']
+        result = StorageGlobber.glob(files)
 
-        files = view.get_js_files()
-
-        self.assertIn('js/test/libs/jasmine-djangojs.js', files)
-        self.assertIn('js/test/libs/jasmine.js', files)
+        self.assertIn('js/test/libs/jasmine-djangojs.js', result)
+        self.assertIn('js/test/libs/jasmine.js', result)
 
     def test_single_glob_expression(self):
         '''Should handle a single glob pattern as js file list'''
-        view = JsTestView(js_files='js/test/libs/jasmine-*.js')
+        files = 'js/test/libs/jasmine-*.js'
+        result = StorageGlobber.glob(files)
 
-        files = view.get_js_files()
-
-        self.assertIn('js/test/libs/jasmine-djangojs.js', files)
-        self.assertIn('js/test/libs/jasmine-html.js', files)
-        self.assertIn('js/test/libs/jasmine-jquery.js', files)
-        self.assertNotIn('js/test/libs/jasmine.js', files)
+        self.assertIn('js/test/libs/jasmine-djangojs.js', result)
+        self.assertIn('js/test/libs/jasmine-html.js', result)
+        self.assertIn('js/test/libs/jasmine-jquery.js', result)
+        self.assertNotIn('js/test/libs/jasmine.js', result)
 
     def test_multi_glob_expression(self):
         '''Should handle a glob pattern list as js file list'''
-        view = JsTestView(js_files=['js/test/libs/jasmine-*.js', 'js/test/libs/qunit-*.js'])
+        files = ['js/test/libs/jasmine-*.js', 'js/test/libs/qunit-*.js']
+        result = StorageGlobber.glob(files)
 
-        files = view.get_js_files()
-
-        self.assertIn('js/test/libs/jasmine-djangojs.js', files)
-        self.assertIn('js/test/libs/jasmine-html.js', files)
-        self.assertIn('js/test/libs/jasmine-jquery.js', files)
-        self.assertIn('js/test/libs/qunit-tap.js', files)
-        self.assertNotIn('js/test/libs/jasmine.js', files)
-        self.assertNotIn('js/test/libs/qunit.js', files)
+        self.assertIn('js/test/libs/jasmine-djangojs.js', result)
+        self.assertIn('js/test/libs/jasmine-html.js', result)
+        self.assertIn('js/test/libs/jasmine-jquery.js', result)
+        self.assertIn('js/test/libs/qunit-tap.js', result)
+        self.assertNotIn('js/test/libs/jasmine.js', result)
+        self.assertNotIn('js/test/libs/qunit.js', result)
 
 
 class TapAssertionTest(unittest.TestCase):

@@ -4,16 +4,13 @@ This module provide helper views for javascript.
 '''
 import json
 import logging
-import os
 import re
 
-from django.contrib.staticfiles import finders
-from django.contrib.staticfiles.utils import matches_patterns
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView
 
-from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer
+from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer, StorageGlobber
 
 logger = logging.getLogger(__name__)
 
@@ -99,34 +96,11 @@ class JsTestView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(JsTestView, self).get_context_data(**kwargs)
 
-        context['js_test_files'] = self.get_js_files()
+        context['js_test_files'] = StorageGlobber.glob(self.js_files)
         context['use_django_js'] = self.django_js
         context['use_query'] = self.jquery
 
         return context
-
-    def get_js_files(self):
-        if self.js_files:
-            if isinstance(self.js_files, str):
-                matches = lambda path: matches_patterns(path, [self.js_files])
-            elif isinstance(self.js_files, (list, tuple)):
-                matches = lambda path: matches_patterns(path, self.js_files)
-            return [path for path in self.get_static_files() if matches(path)]
-        return []
-
-    def get_static_files(self):
-        files = []
-        for finder in finders.get_finders():
-            for path, storage in finder.list(None):
-                # Prefix the relative path if the source storage contains it
-                if getattr(storage, 'prefix', None):
-                    prefixed_path = os.path.join(storage.prefix, path)
-                else:
-                    prefixed_path = path
-
-                if prefixed_path not in files:
-                    files.append(prefixed_path)
-        return files
 
 
 class JasmineView(JsTestView):

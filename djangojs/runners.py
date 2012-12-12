@@ -10,11 +10,14 @@ from os.path import join, dirname
 from subprocess import Popen, STDOUT, PIPE
 from tempfile import NamedTemporaryFile, mkstemp
 
+from django.contrib.staticfiles import finders
+from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.test import LiveServerTestCase
 
 from djangojs.tap import TapParser
+from djangojs.utils import StorageGlobber
 
 from unittest import TestCase
 
@@ -28,6 +31,7 @@ __all__ = (
     'JsTestException',
     'JasmineSuite',
     'QUnitSuite',
+    'AbsoluteFileStorage',
 )
 
 
@@ -130,6 +134,8 @@ class PhantomJsRunner(object):
         failures = parser.suites.get_all_failures()
         if failures:
             raise JsTestException('Failed javascript assertions', failures)
+        if self.returncode > 0:
+            raise JsTestException('PhantomJS return with non-zero exit code (%s)' % self.returncode)
 
     def run_suite(self):
         '''
@@ -184,24 +190,66 @@ class JsFileTestCase(PhantomJsRunner, TestCase):
     def get_url(self):
         if not self.filename:
             raise JsTestException('filename need to be defined')
-
         return 'file://%s' % self.filename
+
+
+class AbsoluteFileStorage(FileSystemStorage):
+    '''
+    A storage that give the absolute file scheme URL as URL.
+    '''
+    def url(self, name):
+        return 'file://%s' % finders.find(name)
 
 
 class JsTemplateTestCase(JsFileTestCase):
     '''
     A PhantomJS suite that run against a rendered html file but without server.
+
+    .. note::
+
+        Template is rendered using a modified static storage that give ``file://`` scheme URLs.
+        To benefits from it, you have to use either the ``static`` template tag
+        or one the djangojs template tags.
+
+
+    .. warning::
+
+        Template is not rendered within a request/response dialog.
+        You can't access the request object and everything that depends on the server.
     '''
     #: absolute path to the test runner page
     template_name = None
+    #: A path or a list of path to javascript files to include into the view.
+    #:
+    #: - Supports glob patterns.
+    #: - Order is kept for rendering.
+    js_files = None
+    #: Includes or not jQuery in the test view.
+    #: Template has to handle the ``use_jquery`` property.
+    jquery = False
+
+    def setUp(self):
+        from django.contrib.staticfiles.storage import staticfiles_storage
+        self.storage_bak = staticfiles_storage._wrapped
+        staticfiles_storage._wrapped = AbsoluteFileStorage()
+
+    def tearDown(self):
+        from django.contrib.staticfiles.storage import staticfiles_storage
+        staticfiles_storage._wrapped = self.storage_bak
 
     def get_url(self):
         if not self.template_name:
             raise JsTestException('template_name need to be defined')
 
-        fd, self.filename = mkstemp()
-        os.fdopen(fd, 'w').write(render_to_string(self.template_name, {}))
+        fd, self.filename = mkstemp(suffix='.html')
+        os.fdopen(fd, 'w').write(render_to_string(self.template_name, self.get_context_data()))
         return super(JsTemplateTestCase, self).get_url()
+
+    def get_context_data(self, **kwargs):
+        return {
+            'js_test_files': StorageGlobber.glob(self.js_files),
+            'use_query': self.jquery
+        }
 
     def cleanup(self):
         os.remove(self.filename)

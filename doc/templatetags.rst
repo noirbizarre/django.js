@@ -108,7 +108,7 @@ It escape a specific part. For example, you may want a subpart of your template 
 jquery_js
 ~~~~~~~~~
 
-The ``{% jquery_js %}`` tag only load the jQuery (1.8.2) library.
+The ``{% jquery_js %}`` tag only load the jQuery (1.8.3) library.
 
 The ``django_js`` tag automatically load jQuery so no need to manually load it unless you set ``jquery=false``.
 

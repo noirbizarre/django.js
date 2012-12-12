@@ -6,7 +6,6 @@ from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from djangojs import JQUERY_VERSION
-from djangojs.conf import settings
 
 register = template.Library()
 
@@ -101,7 +100,7 @@ def verbatim(parser, token):
 
 @register.simple_tag
 def js_lib(filename):
-    return '<script type="text/javascript" src="%sjs/libs/%s"></script>' % (settings.STATIC_URL, filename)
+    return '<script type="text/javascript" src="%s"></script>' % static('js/libs/%s' % filename)
 
 
 @register.simple_tag

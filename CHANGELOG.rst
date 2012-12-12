@@ -8,7 +8,8 @@ Current
 - Added namespaced URLs support
 - Handle ``runner_url_args`` and ``runner_url_kwargs`` on ``JsTestCase``
 - Renamed ``runner_url*`` into ``url*`` on ``JsTestCase``
-- Added ``JsFileTestCase`` to run tests without live server
+- Added ``JsFileTestCase`` to run tests from a static html file without live server
+- Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
 - Renamed ``JasmineMixin`` into ``JasmineSuite``
 - Renamed ``QUnitMixin`` into ``QUnitSuite``
 

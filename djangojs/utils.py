@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
+'''
+This modules holds every helpers that does not fit in any standard django modules.
+
+It might be splitted in futur releases.
+'''
 import json
 import logging
+import os
 import re
 import sys
 import types
 
+from django.contrib.staticfiles import finders
+from django.contrib.staticfiles.utils import matches_patterns
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.template.context import RequestContext
@@ -19,6 +27,7 @@ __all__ = (
     'urls_as_dict',
     'urls_as_json',
     'ContextSerializer',
+    'StorageGlobber',
 )
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing named parameters in urls
@@ -141,8 +150,40 @@ class ContextSerializer(object):
 
     @classmethod
     def serialize_perms(cls, perms):
+        print perms
         return None
 
     @classmethod
     def serialize_languages(cls, languages):
         return dict(languages)
+
+
+class StorageGlobber(object):
+    '''
+    Retrieve file list from static file storages.
+    '''
+    @classmethod
+    def glob(cls, files=[]):
+        '''
+        Glob a pattern or a list of pattern static storage relative(s).
+        '''
+        if isinstance(files, str):
+            matches = lambda path: matches_patterns(path, [files])
+        elif isinstance(files, (list, tuple)):
+            matches = lambda path: matches_patterns(path, files)
+        return [path for path in cls.get_static_files() if matches(path)]
+
+    @classmethod
+    def get_static_files(cls):
+        files = []
+        for finder in finders.get_finders():
+            for path, storage in finder.list(None):
+                # Prefix the relative path if the source storage contains it
+                if getattr(storage, 'prefix', None):
+                    prefixed_path = os.path.join(storage.prefix, path)
+                else:
+                    prefixed_path = path
+
+                if prefixed_path not in files:
+                    files.append(prefixed_path)
+        return files
