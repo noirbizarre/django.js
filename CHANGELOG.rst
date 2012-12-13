@@ -13,6 +13,7 @@ Current
 - Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
 - Renamed ``JasmineMixin`` into ``JasmineSuite``
 - Renamed ``QUnitMixin`` into ``QUnitSuite``
+- Added ``settings.JS_URLS_NAMESPACES`` and ``settings.JS_URLS_NAMESPACES_EXCLUDE``
 
 
 0.4 (2012-12-04)

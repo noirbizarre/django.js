@@ -103,6 +103,10 @@ def _get_urls(module, prefix='', namespace=None):
                 for ns in set((pattern.namespace, pattern.app_name)):
                     namespaces = filter(None, (namespace, ns))
                     namespaces = ':'.join(namespaces)
+                    if settings.JS_URLS_NAMESPACES and namespaces and namespaces not in settings.JS_URLS_NAMESPACES:
+                        continue
+                    if settings.JS_URLS_NAMESPACES_EXCLUDE and namespaces in settings.JS_URLS_NAMESPACES_EXCLUDE:
+                        continue
                     new_prefix = '%s%s' % (prefix, pattern.regex.pattern)
                     urls.update(_get_urls(pattern.urlconf_name, new_prefix, namespaces))
     return urls

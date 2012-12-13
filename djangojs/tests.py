@@ -51,6 +51,9 @@ class QUnitTemplateTests(QUnitSuite, JsTemplateTestCase):
 class UrlsTestMixin(object):
     urls = 'djangojs.test_urls'
 
+    def setUp(self):
+        self.result = self.get_result()
+
     def test_simple_url(self):
         '''It should serialize a simple URL without parameters'''
         self.assertTrue('django_js_urls' in self.result)
@@ -139,24 +142,38 @@ class UrlsTestMixin(object):
         self.assertFalse('ns2:appnested' in self.result)
         self.assertFalse('app2:fake' in self.result)
 
+    @override_settings(JS_URLS_NAMESPACES=['ns1'])
+    def test_urls_namespaces(self):
+        '''Should only include JS_URLS_NAMESPACES'''
+        self.result = self.get_result()
+        self.assertTrue('ns1:fake' in self.result)
+        self.assertFalse('ns2:nested:fake' in self.result)
+
+    @override_settings(JS_URLS_NAMESPACES_EXCLUDE=['ns1'])
+    def test_urls_namespaces_exclude(self):
+        '''Should only include JS_URLS_NAMESPACES'''
+        self.result = self.get_result()
+        self.assertFalse('ns1:fake' in self.result)
+        self.assertTrue('ns2:nested:fake' in self.result)
+
 
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 
-    def setUp(self):
-        self.result = urls_as_dict()
+    def get_result(self):
+        return urls_as_dict()
 
 
 class UrlsAsJsonTest(UrlsTestMixin, TestCase):
 
-    def setUp(self):
-        self.result = json.loads(urls_as_json())
+    def get_result(self):
+        return json.loads(urls_as_json())
 
 
 class UrlsJsonViewTest(UrlsTestMixin, TestCase):
 
-    def setUp(self):
+    def get_result(self):
         self.response = self.client.get(reverse('django_js_urls'))
-        self.result = json.loads(self.response.content)
+        return json.loads(self.response.content)
 
     def test_render(self):
         '''It should render a JSON URLs descriptor'''
@@ -443,6 +460,16 @@ class StorageGlobberTest(TestCase):
         self.assertIn('js/test/libs/qunit-tap.js', result)
         self.assertNotIn('js/test/libs/jasmine.js', result)
         self.assertNotIn('js/test/libs/qunit.js', result)
+
+
+class SettingsTest(TestCase):
+    urls = 'djangojs.test_urls'
+
+    @override_settings(JS_URLS_NAMESPACES=['ns1'])
+    def test_urls_namespaces(self):
+        '''Should only include JS_URLS_NAMESPACES'''
+
+
 
 
 class TapAssertionTest(unittest.TestCase):
