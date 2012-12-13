@@ -14,6 +14,8 @@ Current
 - Renamed ``JasmineMixin`` into ``JasmineSuite``
 - Renamed ``QUnitMixin`` into ``QUnitSuite``
 - Added ``settings.JS_URLS_NAMESPACES`` and ``settings.JS_URLS_NAMESPACES_EXCLUDE``
+- Added ``settings.JS_I18N`` and ``settings.JS_I18N_EXCLUDE``
+
 
 
 0.4 (2012-12-04)

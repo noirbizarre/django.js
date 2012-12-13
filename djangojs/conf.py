@@ -11,6 +11,8 @@ DEFAULTS = {
     'TESTING': 'test' in sys.argv,
     'JS_URLS_NAMESPACES': None,
     'JS_URLS_NAMESPACES_EXCLUDE': None,
+    'JS_I18N': None,
+    'JS_I18N_EXCLUDE': None,
 }
 
 # All required settings keys to import rom project
