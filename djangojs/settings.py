@@ -119,6 +119,11 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+PROJECT_APPS = (
+    'djangojs',
+    'djangojs.fake',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,10 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    'djangojs',
-    'djangojs.fake',
-)
+) + PROJECT_APPS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -161,3 +163,18 @@ LOGGING = {
         },
     }
 }
+
+if 'jenkins' in sys.argv:
+    INSTALLED_APPS += (
+        'django_jenkins',
+    )
+    JENKINS_TASKS = (
+        'django_jenkins.tasks.run_pylint',
+        'django_jenkins.tasks.with_coverage',
+        'django_jenkins.tasks.django_tests',
+        'django_jenkins.tasks.run_pep8',
+        # 'django_jenkins.tasks.run_sloccount',
+        'django_jenkins.tasks.run_jslint',
+        #'django_jenkins.tasks.run_csslint',
+        #'django_jenkins.tasks.with_local_celery',
+    )

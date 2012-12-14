@@ -15,3 +15,6 @@ dist/
 doc/_build
 
 .codeintel/
+
+/reports
+/venv
