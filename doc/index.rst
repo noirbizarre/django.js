@@ -56,14 +56,15 @@ Documentation
 =============
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   templatetags
-   djangojs
-   test
-   integration
-   api
-   changelog
+    templatetags
+    djangojs
+    test
+    integration
+    settings
+    api
+    changelog
 
 
 Indices and tables

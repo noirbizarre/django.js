@@ -72,6 +72,11 @@ When the ``{% django_js %}`` template tag is included in a page, it automaticall
 
 You can disable this feature by setting the ``i18n`` keyword parameter to ``false``.
 
+.. note::
+
+    You can filter included apps by using either the settings whitelist ``settings.JS_I18N`` or the settings blacklist ``settings.JS_I18N_EXCLUDE`` or both.
+    For more informations, see :doc:`settings`.
+
 jQuery Ajax CSRF
 ****************
 

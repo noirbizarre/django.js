@@ -6,15 +6,19 @@ Current
 
 - Added namespaced URLs support
 - Upgraded to Jasmine 1.3.1
-- Rename ``test/js`` into ``js/test`` and reorganize test resources
-- Renamed ``runner_url*`` into ``url*`` on ``JsTestCase``
-- Handle ``url_args`` and ``url_kwargs`` on ``JsTestCase``
-- Added ``JsFileTestCase`` to run tests from a static html file without live server
-- Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
-- Renamed ``JasmineMixin`` into ``JasmineSuite``
-- Renamed ``QUnitMixin`` into ``QUnitSuite``
-- Added ``settings.JS_URLS_NAMESPACES`` and ``settings.JS_URLS_NAMESPACES_EXCLUDE``
-- Added ``settings.JS_I18N`` and ``settings.JS_I18N_EXCLUDE``
+- Refactor testing tools:
+    - Rename ``test/js`` into ``js/test`` and reorganize test resources
+    - Renamed ``runner_url*`` into ``url*`` on ``JsTestCase``
+    - Handle ``url_args`` and ``url_kwargs`` on ``JsTestCase``
+    - Added ``JsFileTestCase`` to run tests from a static html file without live server
+    - Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
+    - Renamed ``JasmineMixin`` into ``JasmineSuite``
+    - Renamed ``QUnitMixin`` into ``QUnitSuite``
+- Added some settings to filter scope:
+    - Serialized namespaces whitelist: ``settings.JS_URLS_NAMESPACES``
+    - Serialized namespaces blacklist: ``settings.JS_URLS_NAMESPACES_EXCLUDE``
+    - Serialized translations whitelist: ``settings.JS_I18N``
+    - Serialized translations blacklist: ``settings.JS_I18N_EXCLUDE``
 
 
 
