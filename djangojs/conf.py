@@ -9,10 +9,12 @@ from django.dispatch import receiver
 DEFAULTS = {
     'DEBUG': True,
     'TESTING': 'test' in sys.argv,
+    'JS_URLS': None,
+    'JS_URLS_EXCLUDE': None,
     'JS_URLS_NAMESPACES': None,
     'JS_URLS_NAMESPACES_EXCLUDE': None,
-    'JS_I18N': None,
-    'JS_I18N_EXCLUDE': None,
+    'JS_I18N_APPS': None,
+    'JS_I18N_APPS_EXCLUDE': None,
 }
 
 # All required settings keys to import rom project

@@ -10,15 +10,17 @@ Current
     - Rename ``test/js`` into ``js/test`` and reorganize test resources
     - Renamed ``runner_url*`` into ``url*`` on ``JsTestCase``
     - Handle ``url_args`` and ``url_kwargs`` on ``JsTestCase``
-    - Added ``JsFileTestCase`` to run tests from a static html file without live server
-    - Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
     - Renamed ``JasmineMixin`` into ``JasmineSuite``
     - Renamed ``QUnitMixin`` into ``QUnitSuite``
+- Added ``JsFileTestCase`` to run tests from a static html file without live server
+- Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
 - Added some settings to filter scope:
+    - Serialized named URLs whitelist: ``settings.JS_URLS``
+    - Serialized named URLs blacklist: ``settings.JS_URLS_EXCLUDE``
     - Serialized namespaces whitelist: ``settings.JS_URLS_NAMESPACES``
     - Serialized namespaces blacklist: ``settings.JS_URLS_NAMESPACES_EXCLUDE``
-    - Serialized translations whitelist: ``settings.JS_I18N``
-    - Serialized translations blacklist: ``settings.JS_I18N_EXCLUDE``
+    - Serialized translations whitelist: ``settings.JS_I18N_APPS``
+    - Serialized translations blacklist: ``settings.JS_I18N_APPS_EXCLUDE``
 
 
 

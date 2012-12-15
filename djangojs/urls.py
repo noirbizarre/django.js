@@ -15,9 +15,9 @@ def js_info_dict():
     }
 
     for app in settings.INSTALLED_APPS:
-        if settings.JS_I18N and app not in settings.JS_I18N:
+        if settings.JS_I18N_APPS and app not in settings.JS_I18N_APPS:
             continue
-        if settings.JS_I18N_EXCLUDE and app in settings.JS_I18N_EXCLUDE:
+        if settings.JS_I18N_APPS_EXCLUDE and app in settings.JS_I18N_APPS_EXCLUDE:
             continue
         module = sys.modules[app]
         for path in module.__path__:

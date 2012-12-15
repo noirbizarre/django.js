@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 
 
-@override_settings(USE_I18N=True, LANGUAGE_CODE='en', JS_I18N=['djangojs'])
+@override_settings(USE_I18N=True, LANGUAGE_CODE='en', JS_I18N_APPS=['djangojs'])
 class I18nIncludeTest(TestCase):
     def setUp(self):
         from djangojs.urls import js_info_dict
@@ -17,7 +17,7 @@ class I18nIncludeTest(TestCase):
         self.assertFalse('djangojs.fake' in self.packages)
 
 
-@override_settings(USE_I18N=True, LANGUAGE_CODE='en', JS_I18N_EXCLUDE=['djangojs'])
+@override_settings(USE_I18N=True, LANGUAGE_CODE='en', JS_I18N_APPS_EXCLUDE=['djangojs'])
 class I18nExcludeTest(TestCase):
     def setUp(self):
         from djangojs.urls import js_info_dict

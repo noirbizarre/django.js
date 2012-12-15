@@ -70,6 +70,10 @@ def _get_urls(module, prefix='', namespace=None):
         if issubclass(pattern.__class__, RegexURLPattern):
             if pattern.name:
                 pattern_name = pattern.name
+                if settings.JS_URLS and pattern_name not in settings.JS_URLS:
+                    continue
+                if settings.JS_URLS_EXCLUDE and pattern_name in settings.JS_URLS_EXCLUDE:
+                    continue
                 if namespace:
                     pattern_name = ':'.join((namespace, pattern_name))
                 full_url = prefix + pattern.regex.pattern

@@ -101,16 +101,30 @@ class UrlsTestMixin(object):
         self.assertFalse('ns2:appnested' in self.result)
         self.assertFalse('app2:fake' in self.result)
 
+    @override_settings(JS_URLS=['django_js_urls'])
+    def test_urls_whitelist(self):
+        '''Should only include urls listed in JS_URLS'''
+        self.result = self.get_result()
+        self.assertTrue('django_js_urls' in self.result)
+        self.assertFalse('test_arg' in self.result)
+
+    @override_settings(JS_URLS_EXCLUDE=['django_js_urls'])
+    def test_urls_blacklist(self):
+        '''Should exclude urls listed in JS_URLS_EXCLUDE'''
+        self.result = self.get_result()
+        self.assertFalse('django_js_urls' in self.result)
+        self.assertTrue('test_arg' in self.result)
+
     @override_settings(JS_URLS_NAMESPACES=['ns1'])
-    def test_urls_namespaces(self):
-        '''Should only include JS_URLS_NAMESPACES'''
+    def test_urls_namespaces_whitelist(self):
+        '''Should only include namespaces listed in JS_URLS_NAMESPACES'''
         self.result = self.get_result()
         self.assertTrue('ns1:fake' in self.result)
         self.assertFalse('ns2:nested:fake' in self.result)
 
     @override_settings(JS_URLS_NAMESPACES_EXCLUDE=['ns1'])
-    def test_urls_namespaces_exclude(self):
-        '''Should only include JS_URLS_NAMESPACES'''
+    def test_urls_namespaces_blacklist(self):
+        '''Should exclude namespaces listed in JS_URLS_NAMESPACES_EXCLUDE'''
         self.result = self.get_result()
         self.assertFalse('ns1:fake' in self.result)
         self.assertTrue('ns2:nested:fake' in self.result)

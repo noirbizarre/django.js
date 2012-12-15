@@ -42,7 +42,7 @@ You can use anonymous forms (variable arguments and array) with named arguments 
 
 .. note::
 
-    You can filter included namespaces by using either the settings whitelist ``settings.JS_URLS_NAMESPACES`` or the settings blacklist ``settings.JS_URLS_NAMESPACES_EXCLUDE`` or both.
+    You can filter included urls names and namespaces by using either the settings whitelists and blacklists: ``settings.JS_URLS``, ``settings.JS_URLS_EXCLUDE``, ``settings.JS_URLS_NAMESPACES``, ``settings.JS_URLS_NAMESPACES_EXCLUDE``.
     For more informations, see :doc:`settings`.
 
 
