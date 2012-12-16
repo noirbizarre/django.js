@@ -1,0 +1,14 @@
+{% load js %}
+{% if use_django_js %}
+  {% django_js %}
+{% elif use_jquery %}
+  {% jquery_js %}
+{% endif %}
+
+{% css "js/test/libs/jasmine.css" %}
+{% js "js/test/libs/jasmine.js" %}
+{% js "js/test/libs/jasmine-html.js" %}
+{% js "js/test/libs/jasmine-djangojs.js" %}
+{% if use_django_js or use_jquery %}
+{% js "js/test/libs/jasmine-jquery.js" %}
+{% endif %}

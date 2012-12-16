@@ -12,6 +12,7 @@ Current
     - Handle ``url_args`` and ``url_kwargs`` on ``JsTestCase``
     - Renamed ``JasmineMixin`` into ``JasmineSuite``
     - Renamed ``QUnitMixin`` into ``QUnitSuite``
+    - Extracted runners initialization into includable templates
 - Added ``JsFileTestCase`` to run tests from a static html file without live server
 - Added ``JsTemplateTestCase`` to run tests from a rendered template file without live server
 - Added some settings to filter scope:

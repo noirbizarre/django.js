@@ -6,19 +6,7 @@
   <title>{% block title %}Jasmine Test Runner{% endblock %}</title>
 
   {% block js_init %}
-    {% if use_django_js %}
-    {% django_js %}
-    {% elif use_jquery %}
-    {% jquery_js %}
-    {% endif %}
-
-    {% css "js/test/libs/jasmine.css" %}
-    {% js "js/test/libs/jasmine.js" %}
-    {% js "js/test/libs/jasmine-html.js" %}
-    {% js "js/test/libs/jasmine-djangojs.js" %}
-    {% if use_django_js or use_jquery %}
-    {% js "js/test/libs/jasmine-jquery.js" %}
-    {% endif %}
+    {% include "djangojs/jasmine-runner-head.html" %}
   {% endblock js_init %}
 
   {% block js_content %}{% endblock %}
@@ -26,42 +14,10 @@
   {% for file in js_test_files %}
   {% js file %}
   {% endfor %}
-
-  <script type="text/javascript">
-    (function() {
-        var jasmineEnv = jasmine.getEnv();
-
-        jasmineEnv.updateInterval = 1000;
-
-        if (navigator.userAgent.indexOf('PhantomJS') != -1) {
-            jasmineEnv.addReporter(new jasmine.TapReporter());
-        } else {
-            var htmlReporter = new jasmine.HtmlReporter();
-            jasmineEnv.addReporter(htmlReporter);
-            jasmineEnv.specFilter = function(spec) {
-                return htmlReporter.specFilter(spec);
-            };
-        }
-
-        var currentWindowOnload = window.onload;
-
-        window.onload = function() {
-            if (currentWindowOnload) {
-                currentWindowOnload();
-            }
-            execJasmine();
-        };
-
-        function execJasmine() {
-            jasmineEnv.execute();
-        }
-
-    })();
-  </script>
-
 </head>
 
 <body>
   {% block body_content %}{% endblock %}
+  {% include "djangojs/jasmine-runner-body.html" %}
 </body>
 </html>

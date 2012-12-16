@@ -1,0 +1,14 @@
+{% load js %}
+<div id="qunit"></div>
+{% js "js/test/libs/qunit.js" %}
+{% js "js/test/libs/qunit-tap.js" %}
+<script type="text/javascript">
+    if (navigator.userAgent.indexOf('PhantomJS') != -1) {
+        var logger = function() { console.log.apply(console, arguments); };
+        qunitTap(QUnit, logger, {
+          noPlan: false,
+          showTestNameOnFailure: false,
+          showModuleNameOnFailure:false
+        });
+    }
+</script>

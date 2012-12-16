@@ -1,0 +1,7 @@
+{% load js %}
+{% css "js/test/libs/qunit.css" %}
+{% if use_django_js %}
+  {% django_js %}
+{% elif use_jquery %}
+  {% jquery_js %}
+{% endif %}

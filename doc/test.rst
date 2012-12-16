@@ -101,6 +101,16 @@ Both provides a ``js_init`` block, a ``js_content`` block and a ``body_content``
 
 You can inspect django.js own test suites on github.
 
+If you just need the Django.js comptible runners, you can include the following templates (depending on your framework):
+
+- QUnit:
+    - ``djangojs/qunit-runner-head.html``
+    - ``djangojs/qunit-runner-body.html``
+- Jasmine:
+    - ``djangojs/jasmine-runner-head.html``
+    - ``djangojs/jasmine-runner-body.html``
+
+
 Test cases
 ----------
 
