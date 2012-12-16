@@ -22,6 +22,7 @@ Current
     - Serialized namespaces blacklist: ``settings.JS_URLS_NAMESPACES_EXCLUDE``
     - Serialized translations whitelist: ``settings.JS_I18N_APPS``
     - Serialized translations blacklist: ``settings.JS_I18N_APPS_EXCLUDE``
+- Expose PhantomJS timeout with ``PhantomJsRunner.timeout`` attribute
 
 
 

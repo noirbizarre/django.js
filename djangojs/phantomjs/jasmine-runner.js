@@ -36,8 +36,8 @@ function waitFor(testFx, onReady, timeOutMillis) {
 }
 
 
-if (system.args.length !== 2) {
-    console.log('Usage: run-jasmine.js URL');
+if (system.args.length < 2 || system.args.length > 3) {
+    console.log('Usage: run-jasmine.js URL [TIMEOUT]');
     phantom.exit(1);
 }
 
@@ -47,6 +47,11 @@ var page = require('webpage').create(),
     failures = 0,
     specs = 0,
     elapsed = 0;
+    timeout = undefined;
+
+if (system.args.length === 3) {
+    timeout = system.args[2] * 1000;
+}
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
 page.onConsoleMessage = function(msg) {
@@ -71,6 +76,7 @@ page.open(system.args[1], function(status){
             return ended;
         }, function(){
             phantom.exit(failures);
-        });
+        },
+        timeout);
     }
 });

@@ -83,6 +83,8 @@ class PhantomJsRunner(object):
     url = None
     #: an optionnal title for verbose console output
     title = 'PhantomJS test suite'
+    #: PhantomJS execution timeout in seconds
+    timeout = 3
 
     def execute(self, command):
         '''
@@ -119,6 +121,8 @@ class PhantomJsRunner(object):
 
         with NamedTemporaryFile(delete=True) as cookies_file:
             cmd = ('phantomjs', '--cookies-file=%s' % cookies_file.name) + args
+            if self.timeout:
+                cmd += (str(self.timeout),)
             parser = TapParser(debug=VERBOSITY > 2)
             output = self.execute(cmd)
 
