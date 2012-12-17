@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Django settings for Django JS project.
 import sys
+
+from os.path import join, dirname, abspath
 from django.conf import global_settings
 
 DEBUG = True
@@ -178,3 +180,4 @@ if 'jenkins' in sys.argv:
         #'django_jenkins.tasks.run_csslint',
         #'django_jenkins.tasks.with_local_celery',
     )
+    PYLINT_RCFILE = abspath(join(dirname(__file__), '..', 'pylint.rc'))

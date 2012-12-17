@@ -11,4 +11,4 @@ fi
 source $VENV/bin/activate
 pip install -q -r requirements/jenkins.pip
 
-python manage.py jenkins
+python manage.py jenkins --pep8-ignore E127,E128,E261,E501
