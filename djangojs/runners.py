@@ -55,9 +55,9 @@ class JsTestException(Exception):
 
     It display javascript errors into the exception message.
     '''
-    def __init__(self, message, failures=[]):
+    def __init__(self, message, failures=None):
         super(JsTestException, self).__init__(message)
-        self.failures = failures
+        self.failures = failures or []
 
     def __str__(self):
         output = [super(JsTestException, self).__str__()]
@@ -93,7 +93,7 @@ class PhantomJsRunner(object):
         process = Popen(command, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         while True:
             if process.poll() is not None:
-                self.returncode = process.returncode
+                self.returncode = process.returncode  # pylint: disable=W0201
                 break
             yield process.stdout.readline()
 

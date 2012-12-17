@@ -41,7 +41,7 @@ class UrlsTestMixin(object):
     def test_unnamed_url(self):
         '''It should not serialize unnamed URLs'''
         self.assertFalse('' in self.result)
-        for key, value in self.result.iteritems():
+        for value in self.result.itervalues():
             self.assertNotEqual(value, '/test/anonymous')
 
     def test_optionnal_chars(self):

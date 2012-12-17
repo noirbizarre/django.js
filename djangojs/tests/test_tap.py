@@ -54,9 +54,9 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_source(self):
         '''Should parse a NOT OK assertion with message and source'''
-        input = 'not ok 298 - reset should not modify test status, source: at http://localhost:8000/static/js/test/libs/qunit.js:435'
+        line = 'not ok 298 - reset should not modify test status, source: at http://localhost:8000/static/js/test/libs/qunit.js:435'
 
-        assertion = TapAssertion.parse(input)
+        assertion = TapAssertion.parse(line)
 
         self.assertIsNotNone(assertion)
         self.assertEqual(assertion.num, 298)
@@ -69,9 +69,9 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_expectations(self):
         '''Should parse a NOT OK assertion with expectations'''
-        input = "not ok 42 - expected: 'something', got: 'something else'"
+        line = "not ok 42 - expected: 'something', got: 'something else'"
 
-        assertion = TapAssertion.parse(input)
+        assertion = TapAssertion.parse(line)
 
         self.assertIsNotNone(assertion)
         self.assertEqual(assertion.num, 42)
@@ -84,9 +84,9 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_all(self):
         '''Should parse a NOT OK assertion with all extras'''
-        input = "not ok 42 - reset should not modify test status, expected: 'something', got: 'something else', source: at http://localhost:8000/static/js/test/libs/qunit.js:435"
+        line = "not ok 42 - reset should not modify test status, expected: 'something', got: 'something else', source: at http://localhost:8000/static/js/test/libs/qunit.js:435"
 
-        assertion = TapAssertion.parse(input)
+        assertion = TapAssertion.parse(line)
 
         self.assertIsNotNone(assertion)
         self.assertEqual(assertion.num, 42)
@@ -101,9 +101,9 @@ class TapAssertionTest(unittest.TestCase):
 class TapTestTest(unittest.TestCase):
     def test_parse_test(self):
         '''Should parse a test statement'''
-        input = '# test: This is a test'
+        line = '# test: This is a test'
 
-        test = TapTest.parse(input)
+        test = TapTest.parse(line)
 
         self.assertEqual(test.name, 'This is a test')
         self.assertEqual(test.parsed_indent, '')
@@ -112,9 +112,9 @@ class TapTestTest(unittest.TestCase):
 class TapModuleTest(unittest.TestCase):
     def test_parse_module(self):
         '''Should parse a module statement'''
-        input = '# module: This is a module'
+        line = '# module: This is a module'
 
-        module = TapModule.parse(input)
+        module = TapModule.parse(line)
 
         self.assertEqual(module.name, 'This is a module')
         self.assertEqual(module.parsed_indent, '')

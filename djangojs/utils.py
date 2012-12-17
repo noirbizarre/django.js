@@ -77,8 +77,8 @@ def _get_urls(module, prefix='', namespace=None):
                 if namespace:
                     pattern_name = ':'.join((namespace, pattern_name))
                 full_url = prefix + pattern.regex.pattern
-                for chr in ['^', '$']:
-                    full_url = full_url.replace(chr, '')
+                for char in ['^', '$']:
+                    full_url = full_url.replace(char, '')
                 # remove optionnal non capturing groups
                 opt_grp_matches = RE_OPT_GRP.findall(full_url)
                 if opt_grp_matches:
@@ -105,7 +105,7 @@ def _get_urls(module, prefix='', namespace=None):
             if pattern.urlconf_name:
                 # Add urls twice: for app and instance namespace
                 for ns in set((pattern.namespace, pattern.app_name)):
-                    namespaces = filter(None, (namespace, ns))
+                    namespaces = [nsp for nsp in (namespace, ns) if nsp]
                     namespaces = ':'.join(namespaces)
                     if settings.JS_URLS_NAMESPACES and namespaces and namespaces not in settings.JS_URLS_NAMESPACES:
                         continue
@@ -171,10 +171,11 @@ class StorageGlobber(object):
     Retrieve file list from static file storages.
     '''
     @classmethod
-    def glob(cls, files=[]):
+    def glob(cls, files=None):
         '''
         Glob a pattern or a list of pattern static storage relative(s).
         '''
+        files = files or []
         if isinstance(files, str):
             matches = lambda path: matches_patterns(path, [files])
         elif isinstance(files, (list, tuple)):

@@ -20,7 +20,7 @@ cache-size=500
 # R0904 Too many public methods
 # E1101 Instance of '*' has no '*' member
 # E1103 Instance of '*' has no '*' member (but some types could not be inferred)
-disable=C0111,E1120,I0011,I0012,W0704,W0142,W0212,W0232,W0613,W0702,R0201,R0904,W0511
+disable=C0111,E1101,E1103,E1120,I0011,I0012,W0704,W0142,W0212,W0232,W0613,W0702,R0201,R0904,W0511
 
 [REPORTS]
 output-format=parseable
@@ -33,7 +33,7 @@ class-rgx=[A-Z_][a-zA-Z0-9_]+$
 function-rgx=[a-zA_][a-zA-Z0-9_]{2,70}$
 method-rgx=[a-z_][a-zA-Z0-9_]{2,70}$
 const-rgx=(([A-Z_][A-Z0-9_]*)|([a-z_][a-z0-9_]*)|(__.*__)|register|urlpatterns)$
-good-names=_,i,j,k,e,qs,pk,setUp,tearDown
+good-names=_,i,j,k,e,qs,pk,setUp,tearDown,el,ns,fd,js
 
 [TYPECHECK]
 
