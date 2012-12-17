@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.5 (2012-12-17)
+----------------
 
 - Added namespaced URLs support
 - Upgraded to Jasmine 1.3.1
