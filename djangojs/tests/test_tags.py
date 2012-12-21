@@ -1,9 +1,9 @@
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import TestCase
 
 from djangojs import JQUERY_VERSION
-from djangojs.conf import settings
 
 
 class VerbatimTagTest(TestCase):
@@ -59,7 +59,7 @@ class DjangoJsTagTest(TestCase):
             {% js "js/my.js" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%sjs/my.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % static('js/my.js') in rendered)
 
     def test_javascript(self):
         '''Should include static javascript files'''
@@ -68,7 +68,7 @@ class DjangoJsTagTest(TestCase):
             {% javascript "js/my.js" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%sjs/my.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % static('js/my.js') in rendered)
 
     def test_css(self):
         '''Should include static css files'''
@@ -77,7 +77,7 @@ class DjangoJsTagTest(TestCase):
             {% css "css/my.css" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<link rel="stylesheet" type="text/css" href="%scss/my.css" />' % settings.STATIC_URL in rendered)
+        self.failUnless('<link rel="stylesheet" type="text/css" href="%s" />' % static('css/my.css') in rendered)
 
     def test_js_lib(self):
         '''Should include js libraries'''
@@ -86,7 +86,7 @@ class DjangoJsTagTest(TestCase):
             {% js_lib "my-lib.js" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%sjs/libs/my-lib.js">' % settings.STATIC_URL in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % static('js/libs/my-lib.js') in rendered)
 
     def test_jquery_js(self):
         '''Should include jQuery library'''
@@ -95,8 +95,8 @@ class DjangoJsTagTest(TestCase):
             {% jquery_js %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-%s.min.js">' %
-            (settings.STATIC_URL, JQUERY_VERSION) in rendered)
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_VERSION)
+        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
 
     def test_django_js(self):
         '''Should include and initialize django.js'''
@@ -105,10 +105,10 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%sjs/libs/jquery-%s.min.js">' %
-            (settings.STATIC_URL, JQUERY_VERSION) in rendered)
-        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' %
-            settings.STATIC_URL in rendered)
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_VERSION)
+        django_js = static('js/djangojs/django.js')
+        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % django_js in rendered)
 
     def test_django_js_jquery_false(self):
         '''Should include django.js without jQuery'''
@@ -116,11 +116,13 @@ class DjangoJsTagTest(TestCase):
             {% load js %}
             {% django_js jquery=false %}
             ''')
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_VERSION)
+        django_js = static('js/djangojs/django.js')
+
         rendered = template.render(Context())
-        self.failIf('<script type="text/javascript" src="%sjs/libs/jquery-%s.min.js">' %
-            (settings.STATIC_URL, JQUERY_VERSION) in rendered)
-        self.failUnless('<script type="text/javascript" src="%sjs/djangojs/django.js">' %
-            settings.STATIC_URL in rendered)
+
+        self.failIf('<script type="text/javascript" src="%s">' % jquery in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % django_js in rendered)
 
     def test_django_js_crsf_false(self):
         '''Should include django.js without jQuery CRSF patch'''
