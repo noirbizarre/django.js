@@ -5,7 +5,8 @@ Provide template tags to help with Javascript/Django integration.
 from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
-from djangojs import JQUERY_VERSION
+from djangojs import JQUERY_MIGRATE_VERSION
+from djangojs.conf import settings
 
 register = template.Library()
 
@@ -121,10 +122,25 @@ def css(filename):
     return '<link rel="stylesheet" type="text/css" href="%s" />' % static(filename)
 
 
+def _boolean(value):
+    if isinstance(value, bool):
+        return value
+    elif isinstance(value, (str, unicode)):
+        return value.lower() == 'true'
+    elif isinstance(value, int):
+        return value != 0
+    else:
+        return False
+
+
 @register.simple_tag
-def jquery_js():
+def jquery_js(version=None, migrate=False):
     '''A shortcut to render a ``script`` tag for the packaged jQuery'''
-    return js_lib('jquery-%s.min.js' % JQUERY_VERSION)
+    version = version or settings.JQUERY_VERSION
+    libs = [js_lib('jquery-%s.min.js' % version)]
+    if _boolean(migrate):
+        libs.append(js_lib('jquery-migrate-%s.min.js' % JQUERY_MIGRATE_VERSION))
+    return '\n'.join(libs)
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html', takes_context=True)
@@ -132,8 +148,8 @@ def django_js(context, jquery=True, i18n=True, crsf=True):
     '''Include Django.js javascript library in the page'''
     return {
         'js': {
-            'jquery': jquery,
-            'i18n': i18n,
-            'crsf': crsf,
+            'jquery': _boolean(jquery),
+            'i18n': _boolean(i18n),
+            'crsf': _boolean(crsf),
         }
     }

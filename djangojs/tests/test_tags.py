@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import TestCase
 
-from djangojs import JQUERY_VERSION
+from djangojs import JQUERY_DEFAULT_VERSION, JQUERY_MIGRATE_VERSION
 
 
 class VerbatimTagTest(TestCase):
@@ -95,8 +95,30 @@ class DjangoJsTagTest(TestCase):
             {% jquery_js %}
             ''')
         rendered = template.render(Context())
-        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_VERSION)
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
+
+    def test_jquery_js_version(self):
+        '''Should include jQuery library with specified version'''
+        template = Template('''
+            {% load js %}
+            {% jquery_js "1.8.3" %}
+            ''')
+        rendered = template.render(Context())
+        jquery = static('js/libs/jquery-1.8.3.min.js')
+        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
+
+    def test_jquery_js_migrate(self):
+        '''Should include jQuery library with migrate'''
+        template = Template('''
+            {% load js %}
+            {% jquery_js migrate="true" %}
+            ''')
+        rendered = template.render(Context())
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
+        migrate = static('js/libs/jquery-migrate-%s.min.js' % JQUERY_MIGRATE_VERSION)
+        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
+        self.failUnless('<script type="text/javascript" src="%s">' % migrate in rendered)
 
     def test_django_js(self):
         '''Should include and initialize django.js'''
@@ -105,7 +127,7 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = template.render(Context())
-        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_VERSION)
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         django_js = static('js/djangojs/django.js')
         self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
         self.failUnless('<script type="text/javascript" src="%s">' % django_js in rendered)
@@ -116,7 +138,7 @@ class DjangoJsTagTest(TestCase):
             {% load js %}
             {% django_js jquery=false %}
             ''')
-        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_VERSION)
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         django_js = static('js/djangojs/django.js')
 
         rendered = template.render(Context())

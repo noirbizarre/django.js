@@ -21,6 +21,10 @@ You can either:
     add_to_builtins('djangojs.templatetags.js')
 
 
+If you want to use boolean parameters, Django.js provide the ``djangojs.context_processors.booleans`` to help. Simply add it to your ``settings.CONTEXT_PROCESSORS``.
+If not, you should use the string versions: ``param="True"``.
+
+
 Usage
 -----
 
@@ -113,7 +117,19 @@ It escape a specific part. For example, you may want a subpart of your template 
 jquery_js
 ~~~~~~~~~
 
-The ``{% jquery_js %}`` tag only load the jQuery (1.8.3) library.
+The ``{% jquery_js %}`` tag only load the jQuery (1.9.0) library.
+
+You can override the version either by passing the version as a parameter or setting the version with the ``settings.JQUERY_VERSION`` property.
+For more informations, see :doc:`settings`.
+
+You can optionnaly load the ``jQuery Migrate`` plugins for legacy support with jQuery 1.9.0+.
+
+.. code-block:: html+django
+
+    {% jquery_js %}
+    {% jquery_js "1.8.3" %}
+    {% jquery_js migrate=true %}
+
 
 The ``django_js`` tag automatically load jQuery so no need to manually load it unless you set ``jquery=false``.
 

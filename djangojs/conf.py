@@ -4,6 +4,8 @@ import sys
 from django.test.signals import setting_changed
 from django.dispatch import receiver
 
+from djangojs import JQUERY_DEFAULT_VERSION
+
 # Default configuration values for Django.js
 # All values used by Django.js needs to appears here.
 DEFAULTS = {
@@ -15,6 +17,7 @@ DEFAULTS = {
     'JS_URLS_NAMESPACES_EXCLUDE': None,
     'JS_I18N_APPS': None,
     'JS_I18N_APPS_EXCLUDE': None,
+    'JQUERY_VERSION': JQUERY_DEFAULT_VERSION,
 }
 
 # All required settings keys to import rom project

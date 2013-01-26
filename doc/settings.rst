@@ -4,6 +4,11 @@ Settings
 You can tune a little Django.js behaviour using settings.
 Django.js provide the following optionnal settings:
 
+``JQUERY_VERSION``
+------------------
+
+Specify the jQuery version. If not specififed, default to last version.
+
 
 ``JS_URLS``
 -----------

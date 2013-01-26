@@ -46,3 +46,11 @@ API
 .. automodule:: djangojs.templatetags.js
     :members:
     :show-inheritance:
+
+
+:mod:`djangojs.context_processors` -- Context processors
+--------------------------------------------------------
+
+.. automodule:: djangojs.context_processors
+    :members:
+    :show-inheritance:

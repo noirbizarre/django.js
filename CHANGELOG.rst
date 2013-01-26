@@ -4,7 +4,11 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Added ``booleans`` context processor
+- Added jQuery 1.9.0 and jQuery Migrate 1.0.0
+- Upgraded QUnit to 1.11.0
+- Added QUnit theme support
+- Allow to specify jQuery version (1.8.3 and 1.9.0 are bundled)
 
 
 0.5 (2012-12-17)
