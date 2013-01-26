@@ -115,3 +115,13 @@ class QUnitView(JsTestView):
     Render a QUnit test runner
     '''
     template_name = 'djangojs/qunit-runner.html'
+
+    #: QUnit runner theme.
+    #:
+    #: Should be one of: qunit, gabe, ninja, nv
+    theme = 'qunit'
+
+    def get_context_data(self, **kwargs):
+        context = super(QUnitView, self).get_context_data(**kwargs)
+        context['css_theme'] = 'js/test/libs/%s.css' % self.theme
+        return context
