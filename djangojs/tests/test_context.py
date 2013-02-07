@@ -79,7 +79,7 @@ class ContextAsDictTest(ContextTestMixin, TestCase):
         'djangojs.tests.custom_processor',
     )
 )
-class ContextAsDictTest(ContextTestMixin, TestCase):
+class ContextAsJsonTest(ContextTestMixin, TestCase):
 
     def setUp(self):
         response = self.client.get(reverse('django_js_context'))
