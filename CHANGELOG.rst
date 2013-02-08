@@ -4,6 +4,7 @@ Changelog
 Current
 -------
 
+- Added permissions support
 - Added ``booleans`` context processor
 - Added jQuery 1.9.0 and jQuery Migrate 1.0.0
 - Upgraded QUnit to 1.11.0

@@ -71,3 +71,14 @@ Django.js wraps some Django values normally accessible in the template context:
 - ``Django.context.LANGUAGE_BIDI``
 
 In fact, any value contributed by a context processor and serializable will be accessible from ``Django.context``.
+
+Permissions
+-----------
+
+Django.js allows you to check user permissions from client side. Simply call the ``Django.has_perm()`` method:
+
+.. code-block:: javascript
+
+    if (Django.has_perm('myapp.do_something')) {
+        do_something();
+    }
