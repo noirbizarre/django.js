@@ -1,65 +1,117 @@
 import json
 
-from django.core.urlresolvers import reverse
-from django.test import TestCase
-from django.test.utils import override_settings
 from django.conf import global_settings
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.db import models
+from django.test import TestCase
+from django.test.client import RequestFactory
+from django.test.utils import override_settings
 from django.utils import translation
 
 from djangojs.conf import settings
 from djangojs.utils import ContextSerializer
 
 
+class FakeModel(models.Model):
+    something = models.CharField(max_length=256)
+
+    class Meta:
+        app_label = 'fake'
+        permissions = (
+            ("do_smething", "Can do something"),
+            ("do_something_else", "Can do something else"),
+        )
+
+
 class ContextTestMixin(object):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def process_request(self, admin=False):
+        request = self.factory.get(reverse('django_js_context'))
+        if admin:
+            request.user = User.objects.create_superuser('admin', 'fake@noirbizarre.info', 'password')
+        else:
+            request.user = User.objects.create_user('user', 'fake@noirbizarre.info', 'password')
+        return self.get_result(request)
 
     def test_static_url(self):
         '''STATIC_URL should be in context'''
-        self.assertTrue('STATIC_URL' in self.result)
-        self.assertEqual(self.result['STATIC_URL'], settings.STATIC_URL)
+        result = self.process_request()
+        self.assertTrue('STATIC_URL' in result)
+        self.assertEqual(result['STATIC_URL'], settings.STATIC_URL)
 
     def test_media_url(self):
         '''MEDIA_URL should be in context'''
-        self.assertTrue('MEDIA_URL' in self.result)
-        self.assertEqual(self.result['MEDIA_URL'], settings.MEDIA_URL)
+        result = self.process_request()
+        self.assertTrue('MEDIA_URL' in result)
+        self.assertEqual(result['MEDIA_URL'], settings.MEDIA_URL)
 
     def test_language_code(self):
         '''LANGUAGE_CODE should be in context'''
-        self.assertTrue('LANGUAGE_CODE' in self.result)
-        self.assertEqual(self.result['LANGUAGE_CODE'], translation.get_language())
+        result = self.process_request()
+        self.assertTrue('LANGUAGE_CODE' in result)
+        self.assertEqual(result['LANGUAGE_CODE'], translation.get_language())
 
     def test_language_bidi(self):
         '''LANGUAGE_BIDI should be in context'''
-        self.assertTrue('LANGUAGE_BIDI' in self.result)
-        self.assertEqual(self.result['LANGUAGE_BIDI'], translation.get_language_bidi())
+        result = self.process_request()
+        self.assertTrue('LANGUAGE_BIDI' in result)
+        self.assertEqual(result['LANGUAGE_BIDI'], translation.get_language_bidi())
 
     def test_language_name(self):
         '''LANGUAGE_NAME should be in context'''
-        self.assertTrue('LANGUAGE_NAME' in self.result)
+        result = self.process_request()
+        self.assertTrue('LANGUAGE_NAME' in result)
         code = translation.get_language()
         code = 'en' if code == 'en-us' else code
         language = translation.get_language_info(code)
-        self.assertEqual(self.result['LANGUAGE_NAME'], language['name'])
+        self.assertEqual(result['LANGUAGE_NAME'], language['name'])
 
     def test_language_name_local(self):
         '''LANGUAGE_NAME_LOCAL should be in context'''
-        self.assertTrue('LANGUAGE_NAME_LOCAL' in self.result)
+        result = self.process_request()
+        self.assertTrue('LANGUAGE_NAME_LOCAL' in result)
         code = translation.get_language()
         code = 'en' if code == 'en-us' else code
         language = translation.get_language_info(code)
-        self.assertEqual(self.result['LANGUAGE_NAME_LOCAL'], language['name_local'])
+        self.assertEqual(result['LANGUAGE_NAME_LOCAL'], language['name_local'])
 
     def test_languages(self):
         '''LANGUAGE_BIDI should be in context'''
-        self.assertTrue('LANGUAGES' in self.result)
-        languages = self.result['LANGUAGES']
+        result = self.process_request()
+        self.assertTrue('LANGUAGES' in result)
+        languages = result['LANGUAGES']
         self.assertTrue(isinstance(languages, dict))
         for code, name in settings.LANGUAGES:
             self.assertEqual(languages[code], name)
 
     def test_any_custom_context_processor(self):
         '''Any custom context processor should be in context'''
-        self.assertTrue('CUSTOM' in self.result)
-        self.assertEqual(self.result['CUSTOM'], 'CUSTOM_VALUE')
+        result = self.process_request()
+        self.assertTrue('CUSTOM' in result)
+        self.assertEqual(result['CUSTOM'], 'CUSTOM_VALUE')
+
+    def test_permissions(self):
+        '''Should list permissions'''
+        result = self.process_request(True)
+        self.assertTrue('permissions' in result)
+        self.assertTrue(isinstance(result['permissions'], (list, tuple)))
+        # Default permissions
+        for perm in ('add', 'change', 'delete'):
+            self.assertTrue('fake.%s_fakemodel' % perm in result['permissions'])
+        # Custom permissions
+        for perm in ('do_smething', 'do_something_else'):
+            self.assertTrue('fake.%s' % perm in result['permissions'])
+
+    def test_no_permissions(self):
+        '''Should not list denied permissions'''
+        result = self.process_request()
+        self.assertTrue('permissions' in result)
+        self.assertTrue(isinstance(result['permissions'], (list, tuple)))
+        self.assertEqual(len(result['permissions']), 0)
 
 
 @override_settings(
@@ -69,9 +121,8 @@ class ContextTestMixin(object):
 )
 class ContextAsDictTest(ContextTestMixin, TestCase):
 
-    def setUp(self):
-        response = self.client.get(reverse('django_js_context'))
-        self.result = ContextSerializer.as_dict(response.request)
+    def get_result(self, request):
+        return ContextSerializer.as_dict(request)
 
 
 @override_settings(
@@ -81,9 +132,8 @@ class ContextAsDictTest(ContextTestMixin, TestCase):
 )
 class ContextAsJsonTest(ContextTestMixin, TestCase):
 
-    def setUp(self):
-        response = self.client.get(reverse('django_js_context'))
-        self.result = json.loads(ContextSerializer.as_json(response.request))
+    def get_result(self, request):
+        return json.loads(ContextSerializer.as_json(request))
 
 
 @override_settings(
@@ -94,13 +144,11 @@ class ContextAsJsonTest(ContextTestMixin, TestCase):
 class ContextJsonViewTest(TestCase):
     urls = 'djangojs.test_urls'
 
-    def setUp(self):
-        self.response = self.client.get(reverse('django_js_context'))
-        self.result = json.loads(self.response.content)
-
     def test_render(self):
         '''It should render a JSON Context descriptor'''
-        self.assertIsNotNone(self.response)
-        self.assertEqual(self.response.status_code, 200)
-        self.assertEqual(self.response['Content-Type'], 'application/json')
-        self.assertIsNotNone(self.result)
+        response = self.client.get(reverse('django_js_context'))
+
+        self.assertIsNotNone(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        self.assertIsNotNone(json.loads(response.content))

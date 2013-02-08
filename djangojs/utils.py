@@ -122,7 +122,6 @@ class ContextSerializer(object):
     '''
     SERIALIZERS = {
         'LANGUAGES': 'serialize_languages',
-        # 'perms': 'serialize_perms',
     }
 
     @classmethod
@@ -133,7 +132,6 @@ class ContextSerializer(object):
         data = {}
         for context in RequestContext(request):
             for key, value in context.iteritems():
-                # print key, value
                 if key in cls.SERIALIZERS:
                     serializer_name = cls.SERIALIZERS[key]
                     if hasattr(cls, serializer_name):
@@ -147,6 +145,7 @@ class ContextSerializer(object):
             language = translation.get_language_info(language_code)
             data['LANGUAGE_NAME'] = language['name']
             data['LANGUAGE_NAME_LOCAL'] = language['name_local']
+        data['permissions'] = tuple(request.user.get_all_permissions())
         return data
 
     @classmethod
