@@ -57,6 +57,10 @@ describe("Django.js", function(){
             expect(Django.context.CUSTOM).toBeDefined();
             expect(Django.context.CUSTOM).toBe('CUSTOM_VALUE');
         });
+
+        it('store the permissions', function(){
+            expect(Django.context.permissions).toBeDefined();
+        });
     });
 
     describe('Resolve reverse URLs', function(){
@@ -242,6 +246,17 @@ describe("Django.js", function(){
             });
         });
 
+    });
+
+    describe('Permissions handling', function() {
+        it('give permission if present in permissions', function() {
+            Django.context.permissions.push('fake.something');
+            expect(Django.has_perm('fake.something')).toBeTruthy();
+        });
+
+        it('deny permission if not present in permissions', function() {
+            expect(Django.has_perm('fake.something_else')).toBeFalsy();
+        });
     });
 
     describe('jQuery Ajax CSRF Helper', function(){

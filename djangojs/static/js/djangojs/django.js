@@ -89,8 +89,18 @@
             return url;
         },
 
+        /**
+         * Equivalent to ``static`` template tag.
+         */
         file: function(filename) {
             return this.context.STATIC_URL + filename;
+        },
+
+        /**
+         * Equivalent to ``User.has_perm`` function.
+         */
+        has_perm: function(permission) {
+            return this.context.permissions.indexOf(permission) > -1;
         },
 
         /**
