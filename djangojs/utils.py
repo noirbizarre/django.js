@@ -145,7 +145,10 @@ class ContextSerializer(object):
             language = translation.get_language_info(language_code)
             data['LANGUAGE_NAME'] = language['name']
             data['LANGUAGE_NAME_LOCAL'] = language['name_local']
-        data['permissions'] = tuple(request.user.get_all_permissions())
+        if 'django.contrib.sessions.middleware.SessionMiddleware' in settings.MIDDLEWARE_CLASSES:
+            data['permissions'] = tuple(request.user.get_all_permissions())
+        else:
+            data['permissions'] = tuple()
         return data
 
     @classmethod
