@@ -145,10 +145,23 @@ class ContextSerializer(object):
             language = translation.get_language_info(language_code)
             data['LANGUAGE_NAME'] = language['name']
             data['LANGUAGE_NAME_LOCAL'] = language['name_local']
+
+        # Default to unauthenticated anonymous user
+        data['user'] = {
+            'username': '',
+            'is_authenticated': False,
+            'is_staff': False,
+            'is_superuser': False,
+            'permissions': tuple(),
+        }
         if 'django.contrib.sessions.middleware.SessionMiddleware' in settings.MIDDLEWARE_CLASSES:
-            data['permissions'] = tuple(request.user.get_all_permissions())
-        else:
-            data['permissions'] = tuple()
+            data['user'].update({
+                    'username': request.user.username,
+                    'is_authenticated': request.user.is_authenticated(),
+                    'is_staff': request.user.is_staff,
+                    'is_superuser': request.user.is_superuser,
+                    'permissions': tuple(request.user.get_all_permissions())
+                })
         return data
 
     @classmethod

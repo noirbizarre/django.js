@@ -58,9 +58,15 @@ describe("Django.js", function(){
             expect(Django.context.CUSTOM).toBe('CUSTOM_VALUE');
         });
 
-        it('store the permissions', function(){
-            expect(Django.context.permissions).toBeDefined();
+        it('store the user and its basic attributes', function(){
+            expect(Django.context.user).toBeDefined();
+            expect(Django.context.user.username).toBeDefined();
+            expect(Django.context.user.is_authenticated).toBeDefined();
+            expect(Django.context.user.is_staff).toBeDefined();
+            expect(Django.context.user.is_superuser).toBeDefined();
+            expect(Django.context.user.permissions).toBeDefined();
         });
+
     });
 
     describe('Resolve reverse URLs', function(){
@@ -248,16 +254,28 @@ describe("Django.js", function(){
 
     });
 
-    describe('Permissions handling', function() {
-        it('give permission if present in permissions', function() {
-            Django.context.permissions.push('fake.something');
-            expect(Django.has_perm('fake.something')).toBeTruthy();
+    describe('User object', function() {
+
+        it('allow access to the basic user attributes', function() {
+            expect(Django.user).toBeDefined();
+            expect(Django.user.username).toBeDefined();
+            expect(Django.user.is_authenticated).toBeDefined();
+            expect(Django.user.is_staff).toBeDefined();
+            expect(Django.user.is_superuser).toBeDefined();
         });
 
-        it('deny permission if not present in permissions', function() {
-            expect(Django.has_perm('fake.something_else')).toBeFalsy();
+        describe('Permissions handling', function() {
+            it('give permission if present in permissions', function() {
+                Django.context.user.permissions.push('fake.something');
+                expect(Django.user.has_perm('fake.something')).toBeTruthy();
+            });
+
+            it('deny permission if not present in permissions', function() {
+                expect(Django.user.has_perm('fake.something_else')).toBeFalsy();
+            });
         });
     });
+
 
     describe('jQuery Ajax CSRF Helper', function(){
 

@@ -4,6 +4,7 @@ Changelog
 Current
 -------
 
+- Added basic user attributes access
 - Added permissions support
 - Added ``booleans`` context processor
 - Added jQuery 1.9.0 and jQuery Migrate 1.0.0

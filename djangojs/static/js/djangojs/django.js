@@ -13,6 +13,7 @@
 
         urls: window.DJANGO_JS_URLS,
         context: window.DJANGO_JS_CONTEXT,
+        user: window.DJANGO_JS_CONTEXT['user'],
         token_regex: /<\w*>/g,
         named_token_regex: /<(\w+)>/g,
 
@@ -97,13 +98,6 @@
         },
 
         /**
-         * Equivalent to ``User.has_perm`` function.
-         */
-        has_perm: function(permission) {
-            return this.context.permissions.indexOf(permission) > -1;
-        },
-
-        /**
          *  Fix ajax request with CSRF Django middleware.
          *  cf. https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
          */
@@ -161,6 +155,14 @@
             return this.context.SITE_ROOT + this.url(name, args);
         }
 
+    };
+
+
+    /**
+     * Equivalent to ``User.has_perm`` function.
+     */
+    Django.user.has_perm = function(permission) {
+        return this.permissions.indexOf(permission) > -1;
     };
 
     if (window.DJANGO_JS_CRSF) {

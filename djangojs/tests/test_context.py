@@ -94,24 +94,38 @@ class ContextTestMixin(object):
         self.assertTrue('CUSTOM' in result)
         self.assertEqual(result['CUSTOM'], 'CUSTOM_VALUE')
 
-    def test_permissions(self):
+    def test_user(self):
+        '''Basic user informations should be in context'''
+        result = self.process_request()
+        self.assertTrue('user' in result)
+        self.assertTrue('username' in result['user'])
+        self.assertTrue('is_authenticated' in result['user'])
+        self.assertTrue(isinstance(result['user']['is_authenticated'], bool))
+        self.assertTrue('is_staff' in result['user'])
+        self.assertTrue(isinstance(result['user']['is_staff'], bool))
+        self.assertTrue('is_superuser' in result['user'])
+        self.assertTrue(isinstance(result['user']['is_superuser'], bool))
+        self.assertTrue('permissions' in result['user'])
+        self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
+
+    def test_user_permissions(self):
         '''Should list permissions'''
         result = self.process_request(True)
-        self.assertTrue('permissions' in result)
-        self.assertTrue(isinstance(result['permissions'], (list, tuple)))
+        self.assertTrue('permissions' in result['user'])
+        self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
         # Default permissions
         for perm in ('add', 'change', 'delete'):
-            self.assertTrue('fake.%s_fakemodel' % perm in result['permissions'])
+            self.assertTrue('fake.%s_fakemodel' % perm in result['user']['permissions'])
         # Custom permissions
         for perm in ('do_smething', 'do_something_else'):
-            self.assertTrue('fake.%s' % perm in result['permissions'])
+            self.assertTrue('fake.%s' % perm in result['user']['permissions'])
 
-    def test_no_permissions(self):
+    def test_user_without_permissions(self):
         '''Should not list denied permissions'''
         result = self.process_request()
-        self.assertTrue('permissions' in result)
-        self.assertTrue(isinstance(result['permissions'], (list, tuple)))
-        self.assertEqual(len(result['permissions']), 0)
+        self.assertTrue('permissions' in result['user'])
+        self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
+        self.assertEqual(len(result['user']['permissions']), 0)
 
 
 @override_settings(

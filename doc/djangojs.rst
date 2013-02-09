@@ -72,13 +72,28 @@ Django.js wraps some Django values normally accessible in the template context:
 
 In fact, any value contributed by a context processor and serializable will be accessible from ``Django.context``.
 
-Permissions
------------
 
-Django.js allows you to check user permissions from client side. Simply call the ``Django.has_perm()`` method:
+User and permissions
+--------------------
+
+Django.js allows you to check basic user attributes and permissions from client side. You can simply access the ``Django.user`` object or call the ``Django.user.has_perm()`` method:
 
 .. code-block:: javascript
 
-    if (Django.has_perm('myapp.do_something')) {
+    console.log(Django.user.username);
+
+    if (Django.user.is_authenticated) {
+        do_something();
+    }
+
+    if (Django.user.is_staff) {
+        go_to_admin();
+    }
+
+    if (Django.user.is_superuser) {
+        do_a_superuser_thing();
+    }
+
+    if (Django.user.has_perm('myapp.do_something')) {
         do_something();
     }
