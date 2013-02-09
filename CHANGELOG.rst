@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.6 (2013-02-09)
+----------------
 
 - Added basic user attributes access
 - Added permissions support
