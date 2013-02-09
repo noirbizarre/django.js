@@ -99,14 +99,24 @@ class ContextTestMixin(object):
         result = self.process_request()
         self.assertTrue('user' in result)
         self.assertTrue('username' in result['user'])
+        self.assertEqual(result['user']['username'], 'user')
         self.assertTrue('is_authenticated' in result['user'])
-        self.assertTrue(isinstance(result['user']['is_authenticated'], bool))
+        self.assertTrue(result['user']['is_authenticated'])
         self.assertTrue('is_staff' in result['user'])
-        self.assertTrue(isinstance(result['user']['is_staff'], bool))
+        self.assertFalse(result['user']['is_staff'])
         self.assertTrue('is_superuser' in result['user'])
-        self.assertTrue(isinstance(result['user']['is_superuser'], bool))
+        self.assertFalse(result['user']['is_superuser'])
         self.assertTrue('permissions' in result['user'])
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
+
+    def test_super_user(self):
+        '''Basic superuser informations should be in context'''
+        result = self.process_request(True)
+
+        self.assertEqual(result['user']['username'], 'admin')
+        self.assertTrue(result['user']['is_authenticated'])
+        self.assertTrue(result['user']['is_staff'])
+        self.assertTrue(result['user']['is_superuser'])
 
     def test_user_permissions(self):
         '''Should list permissions'''
