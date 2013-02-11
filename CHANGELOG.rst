@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Added ``static`` method (even if it's a unused reserved keyword)
 
 
 0.6 (2013-02-09)
