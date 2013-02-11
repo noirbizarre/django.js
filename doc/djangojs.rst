@@ -49,11 +49,13 @@ You can use anonymous forms (variable arguments and array) with named arguments 
 Static URLs
 -----------
 
-You can obtain a static file url with:
+You can obtain a static file url with the ``static`` or ``file`` methods:
 
 .. code-block:: javascript
 
+    Django.static('my-data.json');
     Django.file('my-data.json');
+    Django.static('another/data.pdf');
     Django.file('another/data.pdf');
 
 

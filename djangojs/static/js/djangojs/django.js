@@ -98,6 +98,13 @@
         },
 
         /**
+         * Equivalent to ``static`` template tag.
+         */
+        'static': function(filename) {
+            return this.context.STATIC_URL + filename;
+        },
+
+        /**
          *  Fix ajax request with CSRF Django middleware.
          *  cf. https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
          */

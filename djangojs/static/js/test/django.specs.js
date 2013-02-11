@@ -201,7 +201,7 @@ describe("Django.js", function(){
                     Django.url('fake');
                 };
                 expect(namespaceless).toThrow();
-            })
+            });
 
             it("resolve an URL with a nested namespace", function(){
                 var notLeaf = function(){
@@ -233,6 +233,7 @@ describe("Django.js", function(){
     describe('Resolve static', function(){
         it("resolve a static URL", function(){
             expect(Django.file('my.json')).toBe(DJANGO_INFOS.STATIC_URL + 'my.json');
+            expect(Django.static('my.json')).toBe(DJANGO_INFOS.STATIC_URL + 'my.json');
         });
     });
 
