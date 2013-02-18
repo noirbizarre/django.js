@@ -3,7 +3,7 @@
 Provide template tags to help with Javascript/Django integration.
 '''
 from django import template
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from djangojs import JQUERY_MIGRATE_VERSION
 from djangojs.conf import settings
@@ -101,13 +101,13 @@ def verbatim(parser, token):
 
 @register.simple_tag
 def js_lib(filename):
-    return '<script type="text/javascript" src="%s"></script>' % static('js/libs/%s' % filename)
+    return '<script type="text/javascript" src="%s"></script>' % staticfiles_storage.url('js/libs/%s' % filename)
 
 
 @register.simple_tag
 def javascript(filename):
     '''A simple shortcut to render a ``script`` tag to a static javascript file'''
-    return '<script type="text/javascript" src="%s"></script>' % static(filename)
+    return '<script type="text/javascript" src="%s"></script>' % staticfiles_storage.url(filename)
 
 
 @register.simple_tag
@@ -119,7 +119,7 @@ def js(filename):
 @register.simple_tag
 def css(filename):
     '''A simple shortcut to render a ``link`` tag to a static CSS file'''
-    return '<link rel="stylesheet" type="text/css" href="%s" />' % static(filename)
+    return '<link rel="stylesheet" type="text/css" href="%s" />' % staticfiles_storage.url(filename)
 
 
 def _boolean(value):
