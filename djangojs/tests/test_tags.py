@@ -136,7 +136,7 @@ class DjangoJsTagTest(TestCase):
         '''Should include django.js without jQuery'''
         template = Template('''
             {% load js %}
-            {% django_js jquery=false %}
+            {% django_js jquery="false" %}
             ''')
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         django_js = static('js/djangojs/django.js')
@@ -150,7 +150,7 @@ class DjangoJsTagTest(TestCase):
         '''Should include django.js without jQuery CRSF patch'''
         template = Template('''
             {% load js %}
-            {% django_js crsf=false %}
+            {% django_js crsf="false" %}
             ''')
         rendered = template.render(Context())
         self.failUnless('window.DJANGO_JS_CRSF = false;' in rendered)
@@ -168,7 +168,7 @@ class DjangoJsTagTest(TestCase):
         '''Should include django.js without i18n support'''
         template = Template('''
             {% load js %}
-            {% django_js i18n=false %}
+            {% django_js i18n="false" %}
             ''')
         rendered = template.render(Context())
         self.failIf('<script type="text/javascript" src="%s">' % reverse('js_catalog') in rendered)

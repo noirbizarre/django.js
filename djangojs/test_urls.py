@@ -67,9 +67,10 @@ test_patterns = patterns('',
 )
 
 urlpatterns = patterns('',
+    url(r'^$', DjangoJsTestView.as_view(), name='djangojs_tests'),
+
     url(r'^djangojs/', include('djangojs.urls')),
 
-    url(r'^tests/$', DjangoJsTestView.as_view(), name='djangojs_tests'),
     url(r'^jasmine/$', JasmineTestView.as_view(), name='djangojs_jasmine_tests'),
     url(r'^qunit/$', QUnitTestView.as_view(), name='djangojs_qunit_tests'),
 

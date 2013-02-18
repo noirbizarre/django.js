@@ -1,7 +1,7 @@
 {% load js %}
-<script type="text/javascript" src="{% url django_js_init %}"></script>
+<script type="text/javascript" src="{% url "django_js_init" %}"></script>
 {% if js.i18n %}
-<script type="text/javascript" src="{% url js_catalog %}"></script>
+<script type="text/javascript" src="{% url "js_catalog" %}"></script>
 {% endif %}
 <script>
     window.DJANGO_JS_CRSF = {% if js.crsf %}true{% else %}false{% endif %};
