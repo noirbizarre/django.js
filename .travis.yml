@@ -1,7 +1,10 @@
 language: python
 python:
   - "2.7"
+env:
+    - DJANGO='django>=1.4,<1.5'
+    - DJANGO=https://www.djangoproject.com/download/1.5c1/tarball/
 install:
-  - pip install . --use-mirrors
+  - pip install $DJANGO --use-mirrors
 # command to run tests
 script: python manage.py test djangojs
