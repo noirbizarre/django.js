@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Compatible with Django 1.5
 
 
 0.6.1 (2013-02-11)
