@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.6.2 (2013-02-18)
+------------------
 
 - Compatible with Django 1.5
 
