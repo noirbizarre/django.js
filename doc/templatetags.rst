@@ -113,6 +113,7 @@ It escape a specific part. For example, you may want a subpart of your template 
     </script>
 
 
+.. note:: Starting from Django 1.5, use the included `verbatim tag <https://docs.djangoproject.com/en/dev/ref/templates/builtins/#std:templatetag-verbatim>`_ .
 
 jquery_js
 ~~~~~~~~~

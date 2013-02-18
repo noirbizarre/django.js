@@ -1,3 +1,5 @@
+import unittest
+
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
@@ -6,6 +8,7 @@ from django.test import TestCase
 from djangojs import JQUERY_DEFAULT_VERSION, JQUERY_MIGRATE_VERSION
 
 
+@unittest.skipIf(__import__('django').VERSION >= (1, 5), "Django 1.5+ already include a verbatim template tag")
 class VerbatimTagTest(TestCase):
     def test_rendering(self):
         '''Should escape {{ and }}'''
