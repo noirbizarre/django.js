@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{% url "js_catalog" %}"></script>
 {% endif %}
 <script>
-    window.DJANGO_JS_CRSF = {% if js.crsf %}true{% else %}false{% endif %};
+    window.DJANGO_JS_CSRF = {% if js.csrf %}true{% else %}false{% endif %};
 </script>
 
 {% if js.jquery %}{% jquery_js %}{% endif %}

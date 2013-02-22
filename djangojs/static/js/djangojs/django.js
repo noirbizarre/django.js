@@ -172,7 +172,7 @@
         return this.permissions.indexOf(permission) > -1;
     };
 
-    if (window.DJANGO_JS_CRSF) {
+    if (window.DJANGO_JS_CSRF) {
         Django.jquery_csrf();
     }
 

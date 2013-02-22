@@ -144,12 +144,12 @@ def jquery_js(version=None, migrate=False):
 
 
 @register.inclusion_tag('djangojs/django_js_tag.html', takes_context=True)
-def django_js(context, jquery=True, i18n=True, crsf=True):
+def django_js(context, jquery=True, i18n=True, csrf=True):
     '''Include Django.js javascript library in the page'''
     return {
         'js': {
             'jquery': _boolean(jquery),
             'i18n': _boolean(i18n),
-            'crsf': _boolean(crsf),
+            'csrf': _boolean(csrf),
         }
     }
