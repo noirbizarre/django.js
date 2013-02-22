@@ -52,7 +52,7 @@ It supports the following keyword parameters (in this order if you want to omit 
 =========== ========= ======================================
 ``jquery``  ``true``  Load the jQuery library
 ``i18n``    ``true``  Load the javascript i18n catalog
-``crsf``    ``true``  Patch jQuery.ajax() fot Django CRSF
+``csrf``    ``true``  Patch jQuery.ajax() fot Django CSRF
 =========== ========= ======================================
 
 
@@ -60,7 +60,7 @@ You can disable all this features by simply providing arguments to the template 
 
 .. code-block:: html+django
 
-    {% django_js jquery=false i18n=false crsf=false %}
+    {% django_js jquery=false i18n=false csrf=false %}
 
 
 Internationalization
@@ -86,13 +86,13 @@ jQuery Ajax CSRF
 
 When the ``django_js`` template tag is ininitialized it automatically patch ``jQuery.ajax()`` to handle CSRF tokens on ajax request.
 
-You can disable this feature by setting the ``crsf`` keyword parameter to ``false``.
+You can disable this feature by setting the ``csrf`` keyword parameter to ``false``.
 
 You can manually enable it later with:
 
 .. code-block:: javascript
 
-    Django.jquery_crsf();
+    Django.jquery_csrf();
 
 
 verbatim

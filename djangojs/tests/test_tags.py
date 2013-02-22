@@ -149,14 +149,14 @@ class DjangoJsTagTest(TestCase):
         self.failIf('<script type="text/javascript" src="%s">' % jquery in rendered)
         self.failUnless('<script type="text/javascript" src="%s">' % django_js in rendered)
 
-    def test_django_js_crsf_false(self):
-        '''Should include django.js without jQuery CRSF patch'''
+    def test_django_js_csrf_false(self):
+        '''Should include django.js without jQuery CSRF patch'''
         template = Template('''
             {% load js %}
-            {% django_js crsf="false" %}
+            {% django_js csrf="false" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('window.DJANGO_JS_CRSF = false;' in rendered)
+        self.failUnless('window.DJANGO_JS_CSRF = false;' in rendered)
 
     def test_django_js_i18n(self):
         '''Should include django.js with i18n support'''
