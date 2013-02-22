@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Fix CSRF misspelling (thanks to Andy Freeland)
 
 
 0.6.2 (2013-02-18)
