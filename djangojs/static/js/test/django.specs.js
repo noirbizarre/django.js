@@ -278,6 +278,23 @@ describe("Django.js", function(){
     });
 
 
+    describe('The CSRF Token', function(){
+        beforeEach(function(){
+            this.csrfToken = $('#csrf-token').text();
+        });
+
+        it("is accessible through csrf_token()", function(){
+            var c = Django.csrf_token();
+            expect(c).toBe(this.csrfToken);
+        });
+
+        it("Template Tag can be replicated with csrf_element()", function(){
+            var $csrfTag = $('#test-csrf-elem input[name="csrfmiddlewaretoken"]');
+            var e = Django.csrf_element();
+            expect(e).toBe($csrfTag[0].outerHTML);
+        });
+    });
+
     describe('jQuery Ajax CSRF Helper', function(){
 
         it("allow to post Django forms with jQuery Ajax", function(){
