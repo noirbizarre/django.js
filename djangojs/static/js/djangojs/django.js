@@ -105,27 +105,52 @@
         },
 
         /**
-         *  Fix ajax request with CSRF Django middleware.
+         * Return cookie value by name.
          *  cf. https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
          */
-        jquery_csrf: function() {
-            $(document).ajaxSend(function(event, xhr, settings) {
-                function getCookie(name) {
-                    var cookieValue = null;
-                    if (document.cookie && document.cookie !== '') {
-                        var cookies = document.cookie.split(';');
-                        for (var i = 0; i < cookies.length; i++) {
-                            var cookie = $.trim(cookies[i]);
-                            // Does this cookie string begin with the name we want?
-                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                break;
-                            }
-                        }
+        _getCookie: function(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = $.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
-                    return cookieValue;
                 }
+            }
+            return cookieValue;
+        },
 
+        /**
+         * Get the CSRF token from the cookie.
+         */
+        csrf_token: function() {
+            return this._getCookie('csrftoken');
+        },
+
+        /**
+         * Equivalent to ``{% csrf_token %}`` template tag.
+         */
+        csrf_element: function() {
+            var token = this.csrf_token(),
+                elem = [
+                '<input type="hidden" name="csrfmiddlewaretoken" value="',
+                token ? token : '',
+                '">'
+            ];
+
+            return elem.join('');
+        },
+
+        /**
+         *  Fix ajax request with CSRF Django middleware.
+         */
+        jquery_csrf: function() {
+            var getCookie = this._getCookie;
+            $(document).ajaxSend(function(event, xhr, settings) {
                 function sameOrigin(url) {
                     // url could be relative or scheme relative or absolute
                     var host = document.location.host; // host + port
