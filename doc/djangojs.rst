@@ -99,3 +99,21 @@ Django.js allows you to check basic user attributes and permissions from client 
     if (Django.user.has_perm('myapp.do_something')) {
         do_something();
     }
+
+
+CSRF Tokens
+-----------
+
+Django.js provides some helpers for CSRF protection.
+
+- return the value of the CSRF token
+
+.. code-block:: javascript
+
+    Django.csrf_token();
+
+- return the hidden input element containing the CSRF token, like the ``{% csrf_token %}`` template tag
+
+.. code-block:: javascript
+
+    Django.csrf_element();

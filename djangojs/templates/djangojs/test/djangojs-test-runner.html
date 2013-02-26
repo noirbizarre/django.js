@@ -9,7 +9,11 @@
 
 {% block body_content %}
   <form id="test-form" action="{% url "test_form" %}" method="POST" style="display: none;">
-    {{csrf_token}}
+    <span id="csrf-token">{{csrf_token}}</span>
+    {{form}}
+  </form>
+  <form id="test-csrf-elem" action="{% url "test_form" %}" method="POST" style="display: none;">
+    {% csrf_token %}
     {{form}}
   </form>
 {% endblock %}
