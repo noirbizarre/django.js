@@ -21,11 +21,11 @@ class VerbatimTagTest(TestCase):
             ''')
         rendered = template.render(Context())
 
-        self.failUnless('{{name}}' in rendered)
-        self.failUnless('{{{rawname}}}' in rendered)
+        self.assertIn('{{name}}', rendered)
+        self.assertIn('{{{rawname}}}', rendered)
         # HTML should not be escaped
-        self.failUnless('<p>' in rendered)
-        self.failUnless('</p>' in rendered)
+        self.assertIn('<p>', rendered)
+        self.assertIn('</p>', rendered)
 
     def test_rendering_with_tags(self):
         '''Should process django template tags'''
@@ -41,15 +41,15 @@ class VerbatimTagTest(TestCase):
             ''')
         rendered = template.render(Context())
 
-        self.failUnless('{{name}}' in rendered)
-        self.failUnless('{{{rawname}}}' in rendered)
-        self.failUnless('with translation' in rendered)
+        self.assertIn('{{name}}', rendered)
+        self.assertIn('{{{rawname}}}', rendered)
+        self.assertIn('with translation', rendered)
         # Those should not be rendered :
-        self.failUnless('{% trans %}' not in rendered)
-        self.failUnless('comments' not in rendered)
+        self.assertNotIn('{% trans %}', rendered)
+        self.assertNotIn('comments', rendered)
         # HTML should not be escaped
-        self.failUnless('<p>' in rendered)
-        self.failUnless('</p>' in rendered)
+        self.assertIn('<p>', rendered)
+        self.assertIn('</p>', rendered)
 
 
 class DjangoJsTagTest(TestCase):
@@ -62,7 +62,7 @@ class DjangoJsTagTest(TestCase):
             {% js "js/my.js" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%s">' % static('js/my.js') in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
 
     def test_javascript(self):
         '''Should include static javascript files'''
@@ -71,7 +71,7 @@ class DjangoJsTagTest(TestCase):
             {% javascript "js/my.js" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%s">' % static('js/my.js') in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
 
     def test_css(self):
         '''Should include static css files'''
@@ -80,7 +80,7 @@ class DjangoJsTagTest(TestCase):
             {% css "css/my.css" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<link rel="stylesheet" type="text/css" href="%s" />' % static('css/my.css') in rendered)
+        self.assertIn('<link rel="stylesheet" type="text/css" href="%s" />' % static('css/my.css'), rendered)
 
     def test_js_lib(self):
         '''Should include js libraries'''
@@ -89,7 +89,7 @@ class DjangoJsTagTest(TestCase):
             {% js_lib "my-lib.js" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%s">' % static('js/libs/my-lib.js') in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % static('js/libs/my-lib.js'), rendered)
 
     def test_jquery_js(self):
         '''Should include jQuery library'''
@@ -99,7 +99,7 @@ class DjangoJsTagTest(TestCase):
             ''')
         rendered = template.render(Context())
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
-        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
 
     def test_jquery_js_version(self):
         '''Should include jQuery library with specified version'''
@@ -109,7 +109,7 @@ class DjangoJsTagTest(TestCase):
             ''')
         rendered = template.render(Context())
         jquery = static('js/libs/jquery-1.8.3.min.js')
-        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
 
     def test_jquery_js_migrate(self):
         '''Should include jQuery library with migrate'''
@@ -120,8 +120,8 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         migrate = static('js/libs/jquery-migrate-%s.min.js' % JQUERY_MIGRATE_VERSION)
-        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
-        self.failUnless('<script type="text/javascript" src="%s">' % migrate in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % migrate, rendered)
 
     def test_django_js(self):
         '''Should include and initialize django.js'''
@@ -132,8 +132,8 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         django_js = static('js/djangojs/django.js')
-        self.failUnless('<script type="text/javascript" src="%s">' % jquery in rendered)
-        self.failUnless('<script type="text/javascript" src="%s">' % django_js in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % django_js, rendered)
 
     def test_django_js_jquery_false(self):
         '''Should include django.js without jQuery'''
@@ -146,8 +146,8 @@ class DjangoJsTagTest(TestCase):
 
         rendered = template.render(Context())
 
-        self.failIf('<script type="text/javascript" src="%s">' % jquery in rendered)
-        self.failUnless('<script type="text/javascript" src="%s">' % django_js in rendered)
+        self.assertNotIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % django_js, rendered)
 
     def test_django_js_csrf_false(self):
         '''Should include django.js without jQuery CSRF patch'''
@@ -156,7 +156,7 @@ class DjangoJsTagTest(TestCase):
             {% django_js csrf="false" %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('window.DJANGO_JS_CSRF = false;' in rendered)
+        self.assertIn('window.DJANGO_JS_CSRF = false;', rendered)
 
     def test_django_js_i18n(self):
         '''Should include django.js with i18n support'''
@@ -165,7 +165,7 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = template.render(Context())
-        self.failUnless('<script type="text/javascript" src="%s">' % reverse('js_catalog') in rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % reverse('js_catalog'), rendered)
 
     def test_django_js_i18n_false(self):
         '''Should include django.js without i18n support'''
@@ -174,4 +174,4 @@ class DjangoJsTagTest(TestCase):
             {% django_js i18n="false" %}
             ''')
         rendered = template.render(Context())
-        self.failIf('<script type="text/javascript" src="%s">' % reverse('js_catalog') in rendered)
+        self.assertNotIn('<script type="text/javascript" src="%s">' % reverse('js_catalog'), rendered)

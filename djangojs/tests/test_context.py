@@ -40,31 +40,31 @@ class ContextTestMixin(object):
     def test_static_url(self):
         '''STATIC_URL should be in context'''
         result = self.process_request()
-        self.assertTrue('STATIC_URL' in result)
+        self.assertIn('STATIC_URL', result)
         self.assertEqual(result['STATIC_URL'], settings.STATIC_URL)
 
     def test_media_url(self):
         '''MEDIA_URL should be in context'''
         result = self.process_request()
-        self.assertTrue('MEDIA_URL' in result)
+        self.assertIn('MEDIA_URL', result)
         self.assertEqual(result['MEDIA_URL'], settings.MEDIA_URL)
 
     def test_language_code(self):
         '''LANGUAGE_CODE should be in context'''
         result = self.process_request()
-        self.assertTrue('LANGUAGE_CODE' in result)
+        self.assertIn('LANGUAGE_CODE', result)
         self.assertEqual(result['LANGUAGE_CODE'], translation.get_language())
 
     def test_language_bidi(self):
         '''LANGUAGE_BIDI should be in context'''
         result = self.process_request()
-        self.assertTrue('LANGUAGE_BIDI' in result)
+        self.assertIn('LANGUAGE_BIDI', result)
         self.assertEqual(result['LANGUAGE_BIDI'], translation.get_language_bidi())
 
     def test_language_name(self):
         '''LANGUAGE_NAME should be in context'''
         result = self.process_request()
-        self.assertTrue('LANGUAGE_NAME' in result)
+        self.assertIn('LANGUAGE_NAME', result)
         code = translation.get_language()
         code = 'en' if code == 'en-us' else code
         language = translation.get_language_info(code)
@@ -82,7 +82,7 @@ class ContextTestMixin(object):
     def test_languages(self):
         '''LANGUAGE_BIDI should be in context'''
         result = self.process_request()
-        self.assertTrue('LANGUAGES' in result)
+        self.assertIn('LANGUAGES', result)
         languages = result['LANGUAGES']
         self.assertTrue(isinstance(languages, dict))
         for code, name in settings.LANGUAGES:
@@ -91,22 +91,22 @@ class ContextTestMixin(object):
     def test_any_custom_context_processor(self):
         '''Any custom context processor should be in context'''
         result = self.process_request()
-        self.assertTrue('CUSTOM' in result)
+        self.assertIn('CUSTOM', result)
         self.assertEqual(result['CUSTOM'], 'CUSTOM_VALUE')
 
     def test_user(self):
         '''Basic user informations should be in context'''
         result = self.process_request()
-        self.assertTrue('user' in result)
-        self.assertTrue('username' in result['user'])
+        self.assertIn('user', result)
+        self.assertIn('username', result['user'])
         self.assertEqual(result['user']['username'], 'user')
-        self.assertTrue('is_authenticated' in result['user'])
+        self.assertIn('is_authenticated', result['user'])
         self.assertTrue(result['user']['is_authenticated'])
-        self.assertTrue('is_staff' in result['user'])
+        self.assertIn('is_staff', result['user'])
         self.assertFalse(result['user']['is_staff'])
-        self.assertTrue('is_superuser' in result['user'])
+        self.assertIn('is_superuser', result['user'])
         self.assertFalse(result['user']['is_superuser'])
-        self.assertTrue('permissions' in result['user'])
+        self.assertIn('permissions', result['user'])
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
 
     def test_super_user(self):
@@ -121,19 +121,19 @@ class ContextTestMixin(object):
     def test_user_permissions(self):
         '''Should list permissions'''
         result = self.process_request(True)
-        self.assertTrue('permissions' in result['user'])
+        self.assertIn('permissions', result['user'])
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
         # Default permissions
         for perm in ('add', 'change', 'delete'):
-            self.assertTrue('fake.%s_fakemodel' % perm in result['user']['permissions'])
+            self.assertIn('fake.%s_fakemodel' % perm, result['user']['permissions'])
         # Custom permissions
         for perm in ('do_smething', 'do_something_else'):
-            self.assertTrue('fake.%s' % perm in result['user']['permissions'])
+            self.assertIn('fake.%s' % perm, result['user']['permissions'])
 
     def test_user_without_permissions(self):
         '''Should not list denied permissions'''
         result = self.process_request()
-        self.assertTrue('permissions' in result['user'])
+        self.assertIn('permissions', result['user'])
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
         self.assertEqual(len(result['user']['permissions']), 0)
 

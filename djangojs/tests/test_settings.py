@@ -10,11 +10,11 @@ class I18nIncludeTest(TestCase):
 
     def test_include_translation(self):
         '''Should include apps listed in JS_I18N'''
-        self.assertTrue('djangojs' in self.packages)
+        self.assertIn('djangojs', self.packages)
 
     def test_not_include_translation(self):
         '''Should not include apps not listed in JS_I18N'''
-        self.assertFalse('djangojs.fake' in self.packages)
+        self.assertNotIn('djangojs.fake', self.packages)
 
 
 @override_settings(USE_I18N=True, LANGUAGE_CODE='en', JS_I18N_APPS_EXCLUDE=['djangojs'])
@@ -25,8 +25,8 @@ class I18nExcludeTest(TestCase):
 
     def test_include_translation(self):
         '''Should exclude apps listed in JS_I18N_EXCLUDE'''
-        self.assertFalse('djangojs' in self.packages)
+        self.assertNotIn('djangojs', self.packages)
 
     def test_not_include_translation(self):
         '''Should not exlude apps not listed in JS_I18N_EXCLUDE'''
-        self.assertTrue('djangojs.fake' in self.packages)
+        self.assertIn('djangojs.fake', self.packages)
