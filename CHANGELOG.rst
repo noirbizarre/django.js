@@ -5,6 +5,7 @@ Current
 -------
 
 - Fix CSRF misspelling (thanks to Andy Freeland)
+- Added some client side CSRF helpers (thanks to Andy Freeland)
 
 
 0.6.2 (2013-02-18)
