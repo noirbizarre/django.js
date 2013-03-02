@@ -3,7 +3,7 @@ python:
   - "2.7"
 env:
     - DJANGO='django>=1.4,<1.5'
-    - DJANGO=https://www.djangoproject.com/download/1.5c2/tarball/
+    - DJANGO='django>=1.5'
 install:
   - pip install $DJANGO --use-mirrors
 # command to run tests
