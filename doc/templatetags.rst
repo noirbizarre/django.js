@@ -118,12 +118,12 @@ It escape a specific part. For example, you may want a subpart of your template 
 jquery_js
 ~~~~~~~~~
 
-The ``{% jquery_js %}`` tag only load the jQuery (1.9.0) library.
+The ``{% jquery_js %}`` tag only load the jQuery library.
 
 You can override the version either by passing the version as a parameter or setting the version with the ``settings.JQUERY_VERSION`` property.
 For more informations, see :doc:`settings`.
 
-You can optionnaly load the ``jQuery Migrate`` plugins for legacy support with jQuery 1.9.0+.
+You can optionnaly load the `jQuery Migrate <http://plugins.jquery.com/migrate/>`_ plugins for legacy support with jQuery 1.9.0+.
 
 .. code-block:: html+django
 

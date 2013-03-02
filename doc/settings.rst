@@ -7,7 +7,13 @@ Django.js provide the following optionnal settings:
 ``JQUERY_VERSION``
 ------------------
 
-Specify the jQuery version. If not specififed, default to last version.
+Specify the jQuery version to use. If not specififed, default to last version.
+
+Django.js provide the following versions:
+
+- 1.8.3
+- 1.9.0
+- 1.9.1
 
 
 ``JS_URLS``
