@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.6.3 (2013-03-08)
+------------------
 
 - Fix CSRF misspelling (thanks to Andy Freeland)
 - Added some client side CSRF helpers (thanks to Andy Freeland)
