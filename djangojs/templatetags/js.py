@@ -101,13 +101,17 @@ def verbatim(parser, token):
 
 @register.simple_tag
 def js_lib(filename):
-    return '<script type="text/javascript" src="%s"></script>' % staticfiles_storage.url('js/libs/%s' % filename)
+    return javascript('js/libs/%s' % filename)
 
 
 @register.simple_tag
 def javascript(filename):
     '''A simple shortcut to render a ``script`` tag to a static javascript file'''
-    return '<script type="text/javascript" src="%s"></script>' % staticfiles_storage.url(filename)
+    if '?' in filename and len(filename.split('?')) is 2:
+        filename, params = filename.split('?')
+        return '<script type="text/javascript" src="%s?%s"></script>' % (staticfiles_storage.url(filename), params)
+    else:
+        return '<script type="text/javascript" src="%s"></script>' % staticfiles_storage.url(filename)
 
 
 @register.simple_tag

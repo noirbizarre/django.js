@@ -7,6 +7,7 @@ Current
 - Fix CSRF misspelling (thanks to Andy Freeland)
 - Added some client side CSRF helpers (thanks to Andy Freeland)
 - Upgrade to jQuery 1.9.1 and jQuery Migrate 1.1.1
+- Do not clutter url parameters in ``js``, ``javascript`` and ``js_lib`` template tags.
 
 
 0.6.2 (2013-02-18)

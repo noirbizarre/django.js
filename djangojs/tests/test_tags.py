@@ -64,6 +64,15 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
 
+    def test_js_url_params(self):
+        '''Should include static javascript files with url parameters'''
+        template = Template('''
+            {% load js %}
+            {% js "js/my.js?key=value" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/javascript" src="%s?%s">' % (static('js/my.js'), 'key=value'), rendered)
+
     def test_javascript(self):
         '''Should include static javascript files'''
         template = Template('''
@@ -72,6 +81,15 @@ class DjangoJsTagTest(TestCase):
             ''')
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
+
+    def test_javascript_url_params(self):
+        '''Should include static javascript files with url parameters'''
+        template = Template('''
+            {% load js %}
+            {% javascript "js/my.js?key=value" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/javascript" src="%s?%s">' % (static('js/my.js'), 'key=value'), rendered)
 
     def test_css(self):
         '''Should include static css files'''
@@ -90,6 +108,15 @@ class DjangoJsTagTest(TestCase):
             ''')
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/libs/my-lib.js'), rendered)
+
+    def test_js_lib_url_param(self):
+        '''Should include js libraries with url parameters'''
+        template = Template('''
+            {% load js %}
+            {% js_lib "my-lib.js?k=v" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/javascript" src="%s?%s">' % (static('js/libs/my-lib.js'), 'k=v'), rendered)
 
     def test_jquery_js(self):
         '''Should include jQuery library'''
