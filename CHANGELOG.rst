@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.6.4 (2013-03-10)
+------------------
 
 - Support namespaces without app_name set.
 
