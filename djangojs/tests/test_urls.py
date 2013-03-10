@@ -102,6 +102,12 @@ class UrlsTestMixin(object):
         self.assertNotIn('app2:fake', self.result)
         self.assertNotIn('fake', self.result)
 
+    def test_single_namespace_without_app_name(self):
+        '''It should serialize namespaces without app_name set'''
+        self.assertIn('ns3:fake', self.result)
+        self.assertEqual(self.result['ns3:fake'], reverse('ns3:fake'))
+        self.assertNotIn('fake', self.result)
+
     @override_settings(JS_URLS=['django_js_urls'])
     def test_urls_whitelist(self):
         '''Should only include urls listed in JS_URLS'''

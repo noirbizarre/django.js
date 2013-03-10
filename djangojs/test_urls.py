@@ -47,6 +47,10 @@ nested_patterns = patterns('',
     url(r'^nested/', include(fake_patterns, namespace="nested", app_name="appnested")),
 )
 
+other_fake_patterns = patterns('',
+    url(r'^fake$', TestFormView.as_view(), name='fake'),
+)
+
 test_patterns = patterns('',
     url(r'^form$', TestFormView.as_view(), name='test_form'),
     url(r'^arg/(\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg'),
@@ -64,6 +68,7 @@ test_patterns = patterns('',
     url(r'^last/$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='twice'),
     url(r'^namespace1/', include(fake_patterns, namespace="ns1", app_name="app1")),
     url(r'^namespace2/', include(nested_patterns, namespace="ns2", app_name="app2")),
+    url(r'^namespace3/', include(fake_patterns, namespace="ns3")),
 )
 
 urlpatterns = patterns('',

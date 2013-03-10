@@ -103,8 +103,13 @@ def _get_urls(module, prefix='', namespace=None):
                 urls[pattern_name] = "/" + full_url
         elif issubclass(pattern.__class__, RegexURLResolver):
             if pattern.urlconf_name:
-                # Add urls twice: for app and instance namespace
-                for ns in set((pattern.namespace, pattern.app_name)):
+                if pattern.namespace and not pattern.app_name:
+                    # Namespace without app_name
+                    nss = [pattern.namespace]
+                else:
+                    # Add urls twice: for app and instance namespace
+                    nss = set((pattern.namespace, pattern.app_name))
+                for ns in nss:
                     namespaces = [nsp for nsp in (namespace, ns) if nsp]
                     namespaces = ':'.join(namespaces)
                     if settings.JS_URLS_NAMESPACES and namespaces and namespaces not in settings.JS_URLS_NAMESPACES:
