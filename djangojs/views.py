@@ -55,8 +55,8 @@ class JsonView(View):
     '''
     A views that render JSON.
     '''
-    def get(self, request, *args, **kwargs):
-        data = self.get_context_data(request, *args, **kwargs)
+    def get(self, request, **kwargs):
+        data = self.get_context_data(**kwargs)
         return HttpResponse(
             json.dumps(data, cls=DjangoJSONEncoder),
             mimetype=JSON_MIMETYPE
@@ -67,7 +67,7 @@ class UrlsJsonView(JsonView):
     '''
     Render the URLs as a JSON object.
     '''
-    def get_context_data(self, request, *args, **kwargs):
+    def get_context_data(self, **kwargs):
         return urls_as_dict()
 
 
@@ -75,8 +75,8 @@ class ContextJsonView(JsonView):
     '''
     Render the context as a JSON object.
     '''
-    def get_context_data(self, request, *args, **kwargs):
-        return ContextSerializer.as_dict(request)
+    def get_context_data(self, **kwargs):
+        return ContextSerializer.as_dict(self.request)
 
 
 class JsTestView(TemplateView):
