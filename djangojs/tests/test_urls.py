@@ -68,6 +68,11 @@ class UrlsTestMixin(object):
         self.assertIn('twice', self.result)
         self.assertEqual(self.result['twice'], reverse('twice'))
 
+    def test_escape(self):
+        '''It should unescape escaped characters'''
+        self.assertIn('escaped', self.result)
+        self.assertEqual(self.result['escaped'], reverse('escaped'))
+
     def test_single_namespace(self):
         '''It should serialize namespaces'''
         self.assertIn('ns1:fake', self.result)

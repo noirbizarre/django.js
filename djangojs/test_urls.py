@@ -69,6 +69,7 @@ test_patterns = patterns('',
     url(r'^namespace1/', include(fake_patterns, namespace="ns1", app_name="app1")),
     url(r'^namespace2/', include(nested_patterns, namespace="ns2", app_name="app2")),
     url(r'^namespace3/', include(fake_patterns, namespace="ns3")),
+    url(r'^test\.json$', TestFormView.as_view(), name='escaped'),
 )
 
 urlpatterns = patterns('',

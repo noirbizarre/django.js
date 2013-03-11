@@ -4,7 +4,8 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Make JsonView reusable
+- Unescape regex characters in URLs
 
 
 0.6.4 (2013-03-10)

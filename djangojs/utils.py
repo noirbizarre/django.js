@@ -34,6 +34,8 @@ RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing name
 RE_ARG = re.compile(r"(\(.*?\))")  # Pattern for recognizing unnamed url parameters
 RE_OPT = re.compile(r"\w\?")  # Pattern for recognizing optionnal character
 RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
+RE_ESCAPE = re.compile(r'([^\\]?)\\')  # Recognize escape characters
+RE_START_END = re.compile(r'[\$\^]') # Recognize start and end charaters
 
 
 def urls_as_dict():
@@ -100,6 +102,9 @@ def _get_urls(module, prefix='', namespace=None):
                 if args_matches:
                     for el in args_matches:
                         full_url = full_url.replace(el, "<>")  # replace by a empty parameter name
+                # Unescape charaters
+                full_url = RE_ESCAPE.sub(r'\1', full_url)
+
                 urls[pattern_name] = "/" + full_url
         elif issubclass(pattern.__class__, RegexURLResolver):
             if pattern.urlconf_name:
