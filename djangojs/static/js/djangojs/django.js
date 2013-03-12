@@ -29,7 +29,7 @@
                 throw new DjangoJsError('URL for view "' + name + '" not found');
             }
 
-            if (!args) {
+            if (args === undefined) {
                 return url;
             }
 
@@ -80,7 +80,7 @@
                     prop = token.slice(1, -1),
                     value = object[prop];
 
-                if (!value) {
+                if (value === undefined) {
                     throw new DjangoJsError('Property "' + prop + '" not found');
                 }
 

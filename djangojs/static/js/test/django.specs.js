@@ -100,6 +100,10 @@ describe("Django.js", function(){
                 expect(Django.url('test_named_multi', 'value', 41)).toBe('/test/named/value/41');
             });
 
+            it("resolve an URL with an anonymous token and 0 as value", function(){
+                expect(Django.url('test_arg', 0)).toBe('/test/arg/0');
+            });
+
             it('throw if number of parameters mismatch', function(){
                 var tooMany = function() {
                     Django.url('test_arg', 1, 2);
@@ -138,6 +142,10 @@ describe("Django.js", function(){
                 expect(Django.url('test_named_multi', ['test', 41])).toBe('/test/named/test/41');
             });
 
+            it("resolve an URL with an anonymous token and 0 as value", function(){
+                expect(Django.url('test_arg', [0])).toBe('/test/arg/0');
+            });
+
             it('throw if number of parameters mismatch', function(){
                 var tooMany = function() {
                     Django.url('test_arg', [1, 2]);
@@ -160,7 +168,12 @@ describe("Django.js", function(){
 
             it("resolve an URL with named parameters", function(){
                 expect(Django.url('test_named', {test: 'value'})).toBe('/test/named/value');
-                expect(Django.url('test_named_multi', {str: 'value', num:41})).toBe('/test/named/value/41');
+                expect(Django.url('test_named_multi', {str: 'value', num: 41})).toBe('/test/named/value/41');
+            });
+
+            it("resolve an URL with named parameters and 0 as value", function(){
+                expect(Django.url('test_named', {test: 0})).toBe('/test/named/0');
+                expect(Django.url('test_named_multi', {str: 'value', num: 0})).toBe('/test/named/value/0');
             });
 
             it('throw if there is an anonymous token', function(){
