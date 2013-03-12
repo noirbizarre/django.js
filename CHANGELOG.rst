@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.6.5 (2013-03-13)
+------------------
 
 - Make JsonView reusable
 - Unescape regex characters in URLs
