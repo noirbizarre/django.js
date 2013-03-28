@@ -110,7 +110,7 @@ class PhantomJsRunner(object):
         '''
         separator = '=' * LINE_SIZE
         title = kwargs['title'] if 'title' in kwargs else 'phantomjs output'
-        nb_spaces = (LINE_SIZE - len(title)) / 2
+        nb_spaces = (LINE_SIZE - len(title)) // 2
 
         if VERBOSE:
             print ''

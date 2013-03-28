@@ -158,7 +158,7 @@ class UrlsJsonViewTest(UrlsTestMixin, TestCase):
 
     def get_result(self):
         self.response = self.client.get(reverse('django_js_urls'))
-        return json.loads(self.response.content)
+        return json.loads(self.response.content.decode())
 
     def test_render(self):
         '''It should render a JSON URLs descriptor'''
