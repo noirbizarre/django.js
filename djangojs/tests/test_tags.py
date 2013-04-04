@@ -64,6 +64,14 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
 
+    def test_js_coffeescript(self):
+        '''Should include static coffeescript files'''
+        template = Template('''
+            {% load js %}
+            {% js "js/my.coffee" type="text/coffeescript" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/coffeescript" src="%s">' % static('js/my.coffee'), rendered)
     def test_js_url_params(self):
         '''Should include static javascript files with url parameters'''
         template = Template('''
@@ -81,6 +89,15 @@ class DjangoJsTagTest(TestCase):
             ''')
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
+
+    def test_javascript_coffeescript(self):
+        '''Should include static coffeescript files'''
+        template = Template('''
+            {% load js %}
+            {% javascript "js/my.coffee" type="text/coffeescript" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/coffeescript" src="%s">' % static('js/my.coffee'), rendered)
 
     def test_javascript_url_params(self):
         '''Should include static javascript files with url parameters'''
