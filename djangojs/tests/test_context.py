@@ -175,4 +175,4 @@ class ContextJsonViewTest(TestCase):
         self.assertIsNotNone(response)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
-        self.assertIsNotNone(json.loads(response.content))
+        self.assertIsNotNone(json.loads(response.content.decode()))
