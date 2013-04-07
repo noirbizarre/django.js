@@ -131,4 +131,4 @@ ok 1
         '''
 
         for item in parser.parse(output):
-            print item.display()
+            print(item.display())

@@ -113,10 +113,10 @@ class PhantomJsRunner(object):
         nb_spaces = (LINE_SIZE - len(title)) // 2
 
         if VERBOSE:
-            print ''
-            print separator
-            print ' ' * nb_spaces + title
-            print separator
+            print('')
+            print(separator)
+            print(' ' * nb_spaces + title)
+            print(separator)
             sys.stdout.flush()
 
         with NamedTemporaryFile(delete=True) as cookies_file:
@@ -128,11 +128,11 @@ class PhantomJsRunner(object):
 
             for item in parser.parse(output):
                 if VERBOSE:
-                    print item.display()
+                    print(item.display())
                     sys.stdout.flush()
 
         if VERBOSE:
-            print separator
+            print(separator)
             sys.stdout.flush()
 
         failures = parser.suites.get_all_failures()

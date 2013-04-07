@@ -217,11 +217,11 @@ class TapParser(object):
 
         match = TAP_END_REGEX.match(line.rstrip())
         if match and self.debug:
-            print '# end %s-%s' % (match.group('start'), match.group('end'))
+            print('# end %s-%s' % (match.group('start'), match.group('end')))
             return []
 
         if line and self.debug:
-            print 'not matched: %s' % line
+            print('not matched: %s' % line)
 
         return []
 
