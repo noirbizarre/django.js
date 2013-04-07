@@ -193,11 +193,6 @@ class ContextSerializer(object):
         return json.dumps(cls.as_dict(request), cls=DjangoJSONEncoder)
 
     @classmethod
-    def serialize_perms(cls, perms):
-        print perms
-        return None
-
-    @classmethod
     def serialize_languages(cls, languages):
         return dict(languages)
 
