@@ -52,6 +52,15 @@ Serialized namespaces blacklist. It this setting is specified, URLs from namespa
 - Expected: a list of URL namespaces to exclude
 
 
+``JS_URLS_UNNAMED``
+-------------------
+
+Serialize unnamed URLs. If this setting is set to ``True``,
+unnamed URLs will be serialized (only for function based views).
+
+- Default value: ``False``
+
+
 ``JS_I18N_APPS``
 ----------------
 

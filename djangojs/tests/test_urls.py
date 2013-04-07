@@ -39,10 +39,23 @@ class UrlsTestMixin(object):
         self.assertEqual(self.result['test_named_multi'], '/test/named/<str>/<num>')
 
     def test_unnamed_url(self):
-        '''It should not serialize unnamed URLs'''
+        '''It should not serialize unnamed URLs by default'''
         self.assertNotIn('', self.result)
         for value in self.result.itervalues():
-            self.assertNotEqual(value, '/test/anonymous')
+            self.assertNotEqual(value, '/test/unnamed')
+            self.assertNotEqual(value, '/test/unnamed-class')
+
+    @override_settings(JS_URLS_UNNAMED=True)
+    def test_unnamed_url_set(self):
+        '''It should serialize unnamed url if JS_URLS_UNNAMED is set'''
+        self.result = self.get_result()  # To take override_settings in account
+        self.assertIn('djangojs.test_urls.unnamed', self.result)
+
+    @override_settings(JS_URLS_UNNAMED=True)
+    def test_unnamed_url_set_class(self):
+        '''It should not serialize unnamed url for class based views if JS_URLS_UNNAMED is set'''
+        self.result = self.get_result()  # To take override_settings in account
+        self.assertNotIn('djangojs.test_urls.TestFormView', self.result)
 
     def test_optionnal_chars(self):
         '''It should not serialize optionnal characters (take the shortest)'''
@@ -116,28 +129,28 @@ class UrlsTestMixin(object):
     @override_settings(JS_URLS=['django_js_urls'])
     def test_urls_whitelist(self):
         '''Should only include urls listed in JS_URLS'''
-        self.result = self.get_result()
+        self.result = self.get_result()  # To take override_settings in account
         self.assertIn('django_js_urls', self.result)
         self.assertNotIn('test_arg', self.result)
 
     @override_settings(JS_URLS_EXCLUDE=['django_js_urls'])
     def test_urls_blacklist(self):
         '''Should exclude urls listed in JS_URLS_EXCLUDE'''
-        self.result = self.get_result()
+        self.result = self.get_result()  # To take override_settings in account
         self.assertNotIn('django_js_urls', self.result)
         self.assertIn('test_arg', self.result)
 
     @override_settings(JS_URLS_NAMESPACES=['ns1'])
     def test_urls_namespaces_whitelist(self):
         '''Should only include namespaces listed in JS_URLS_NAMESPACES'''
-        self.result = self.get_result()
+        self.result = self.get_result()  # To take override_settings in account
         self.assertIn('ns1:fake', self.result)
         self.assertNotIn('ns2:nested:fake', self.result)
 
     @override_settings(JS_URLS_NAMESPACES_EXCLUDE=['ns1'])
     def test_urls_namespaces_blacklist(self):
         '''Should exclude namespaces listed in JS_URLS_NAMESPACES_EXCLUDE'''
-        self.result = self.get_result()
+        self.result = self.get_result()  # To take override_settings in account
         self.assertNotIn('ns1:fake', self.result)
         self.assertIn('ns2:nested:fake', self.result)
 

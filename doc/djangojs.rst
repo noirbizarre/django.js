@@ -40,10 +40,20 @@ You can call the ``Django.url()`` method with:
 
 You can use anonymous forms (variable arguments and array) with named arguments in urls but you can't use object form with anonymous arguments.
 
+
+You can also force unnamed URLs serialization with ``settings.JS_URLS_UNNAMED``:
+
+.. code-block:: javascript
+
+    Django.url('path.to.my.view');
+
+
 .. note::
 
     You can filter included urls names and namespaces by using either the settings whitelists and blacklists: ``settings.JS_URLS``, ``settings.JS_URLS_EXCLUDE``, ``settings.JS_URLS_NAMESPACES``, ``settings.JS_URLS_NAMESPACES_EXCLUDE``.
+
     For more informations, see :doc:`settings`.
+
 
 
 Static URLs

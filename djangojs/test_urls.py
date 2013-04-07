@@ -8,6 +8,10 @@ from django.views.generic.edit import BaseFormView
 from djangojs.views import JasmineView, QUnitView
 
 
+def unnamed(request, **kwargs):
+    return None
+
+
 class TestForm(forms.Form):
     message = forms.CharField()
 
@@ -53,6 +57,8 @@ other_fake_patterns = patterns('',
 
 test_patterns = patterns('',
     url(r'^form$', TestFormView.as_view(), name='test_form'),
+    url(r'^unamed$', 'djangojs.test_urls.unnamed'),
+    url(r'^unnamed-class$', TestFormView.as_view()),
     url(r'^arg/(\d+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg'),
     url(r'^arg/(\d+)/(\w)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_arg_multi'),
     url(r'^named/(?P<test>\w+)$', TemplateView.as_view(template_name='djangojs/test/test1.html'), name='test_named'),

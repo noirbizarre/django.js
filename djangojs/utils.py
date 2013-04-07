@@ -35,7 +35,7 @@ RE_ARG = re.compile(r"(\(.*?\))")  # Pattern for recognizing unnamed url paramet
 RE_OPT = re.compile(r"\w\?")  # Pattern for recognizing optionnal character
 RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
 RE_ESCAPE = re.compile(r'([^\\]?)\\')  # Recognize escape characters
-RE_START_END = re.compile(r'[\$\^]') # Recognize start and end charaters
+RE_START_END = re.compile(r'[\$\^]')  # Recognize start and end charaters
 
 
 def urls_as_dict():
@@ -70,8 +70,19 @@ def _get_urls(module, prefix='', namespace=None):
 
     for pattern in patterns:
         if issubclass(pattern.__class__, RegexURLPattern):
-            if pattern.name:
+            if settings.JS_URLS_UNNAMED:
+                mod_name, obj_name = pattern.callback.__module__, pattern.callback.__name__
+                try:
+                    module = __import__(mod_name, fromlist=[obj_name])
+                    obj = getattr(module, obj_name)
+                    func_name = u"{0}.{1}".format(mod_name, obj_name) if isinstance(obj, types.FunctionType) else None
+                    pattern_name = pattern.name or func_name
+                except:
+                    pattern_name = pattern.name
+            else:
                 pattern_name = pattern.name
+
+            if pattern_name:
                 if settings.JS_URLS and pattern_name not in settings.JS_URLS:
                     continue
                 if settings.JS_URLS_EXCLUDE and pattern_name in settings.JS_URLS_EXCLUDE:
