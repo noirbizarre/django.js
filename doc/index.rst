@@ -60,6 +60,7 @@ Documentation
 
     templatetags
     djangojs
+    requirejs
     test
     integration
     settings

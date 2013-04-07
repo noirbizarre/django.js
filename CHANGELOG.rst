@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Added RequireJS/AMD helpers and documentation
 
 
 0.6.5 (2013-03-13)

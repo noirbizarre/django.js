@@ -157,10 +157,32 @@ class DjangoJsTagTest(TestCase):
             {% django_js %}
             ''')
         rendered = template.render(Context())
+
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
         django_js = static('js/djangojs/django.js')
-        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
-        self.assertIn('<script type="text/javascript" src="%s">' % django_js, rendered)
+        django_js_init = reverse('django_js_init')
+        js_catalog = reverse('js_catalog')
+
+        for script in jquery, django_js, django_js_init, js_catalog:
+            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
+
+        self.assertIn('window.DJANGO_JS_CSRF', rendered)
+
+    def test_django_js_amd(self):
+        '''Should include django.js AMD prerequisites'''
+        template = Template('''
+            {% load js %}
+            {% django_js_amd %}
+            ''')
+        rendered = template.render(Context())
+
+        django_js_init = reverse('django_js_init')
+        js_catalog = reverse('js_catalog')
+
+        for script in django_js_init, js_catalog:
+            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
+
+        self.assertIn('window.DJANGO_JS_CSRF', rendered)
 
     def test_django_js_jquery_false(self):
         '''Should include django.js without jQuery'''

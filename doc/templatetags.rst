@@ -63,6 +63,32 @@ You can disable all this features by simply providing arguments to the template 
     {% django_js jquery=false i18n=false csrf=false %}
 
 
+.. _django-js-amd-templatetag:
+
+django_js_amd
+~~~~~~~~~~~~~~
+
+The ``{% django_js_amd %}`` provide the necessary bootstrap for the Django JS AMD module.
+It supports the following keyword parameters (in this order if you want to omit the keyword):
+
+=========== ========= ======================================
+ Parameter   Default                Description
+=========== ========= ======================================
+``i18n``    ``true``  Load the javascript i18n catalog
+``csrf``    ``true``  Patch jQuery.ajax() fot Django CSRF
+=========== ========= ======================================
+
+
+You can disable all this features by simply providing arguments to the template tag:
+
+.. code-block:: html+django
+
+    {% django_js_amd i18n=false csrf=false %}
+
+
+If you want to use it with require.js, see :doc:`requirejs`.
+
+
 Internationalization
 ********************
 

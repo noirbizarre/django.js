@@ -1,12 +1,4 @@
 {% load js %}
-{% load url from future %}
-<script type="text/javascript" src="{% url "django_js_init" %}"></script>
-{% if js.i18n %}
-<script type="text/javascript" src="{% url "js_catalog" %}"></script>
-{% endif %}
-<script>
-    window.DJANGO_JS_CSRF = {% if js.csrf %}true{% else %}false{% endif %};
-</script>
-
+{% include "djangojs/django_js_init.html" %}
 {% if js.jquery %}{% jquery_js %}{% endif %}
 {% js "js/djangojs/django.js" %}
