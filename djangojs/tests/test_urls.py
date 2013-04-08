@@ -3,6 +3,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.utils import six
 
 from djangojs.utils import urls_as_dict, urls_as_json
 
@@ -41,7 +42,7 @@ class UrlsTestMixin(object):
     def test_unnamed_url(self):
         '''It should not serialize unnamed URLs by default'''
         self.assertNotIn('', self.result)
-        for value in self.result.itervalues():
+        for value in six.itervalues(self.result):
             self.assertNotEqual(value, '/test/unnamed')
             self.assertNotEqual(value, '/test/unnamed-class')
 
