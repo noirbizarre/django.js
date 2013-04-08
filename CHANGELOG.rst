@@ -6,6 +6,7 @@ Current
 
 - Added RequireJS/AMD helpers and documentation
 - Support unnamed URLs resolution.
+- Python 3 compatibility
 
 
 0.6.5 (2013-03-13)
