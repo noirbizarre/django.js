@@ -44,7 +44,7 @@ setup(
     include_package_data=True,
     install_requires=['django'],
     license='LGPL',
-    use_2to3 = True,
+    use_2to3=True,
     classifiers=[
         "Framework :: Django",
         "Development Status :: 4 - Beta",

@@ -5,7 +5,6 @@ Current
 -------
 
 - Added RequireJS/AMD helpers and documentation
-- Added Python 3 support (thanks to Travis Jensen)
 - Support unnamed URLs resolution.
 
 
