@@ -58,6 +58,9 @@ class TapGroup(list, TapItem):
     def __nonzero__(self):
         return True
 
+    def __bool__(self):
+        return True
+
     def append(self, item):
         if isinstance(item, (TapGroup, TapAssertion)) and not item.parent:
             item.parent = self
@@ -152,7 +155,7 @@ class TapAssertion(TapItem):
     def parse(cls, line):
         match = TAP_ASSERTION_REGEX.match(line.rstrip())
         if match:
-            assertion = TapAssertion(
+            assertion = cls(
                 int(match.group('num')),
                 match.group('type') == 'ok',
                 parsed_indent=match.group('indent')

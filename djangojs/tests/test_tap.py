@@ -122,13 +122,32 @@ class TapModuleTest(unittest.TestCase):
 
 class TapParserTest(unittest.TestCase):
     def test_single_test(self):
-        '''a single test should output TapAssertion and TapTast'''
-
-        parser = TapParser(TapTest)
+        '''Should parse a test and its children'''
+        # import ipdb; ipdb.set_trace()
+        parser = TapParser(TapAssertion)
         output = '''
+# test: should be defined
+ok 1
+not ok 2
+        '''
+
+        items = list(parser.parse(output.splitlines()))
+
+        self.assertIsInstance(items[0], TapTest)
+        self.assertIsInstance(items[1], TapAssertion)
+        self.assertIsInstance(items[2], TapAssertion)
+
+    def test_single_module(self):
+        '''Should parse a module and its children'''
+        parser = TapParser(TapAssertion)
+        output = '''
+# module: This is a module
 # test: should be defined
 ok 1
         '''
 
-        for item in parser.parse(output):
-            print(item.display())
+        items = list(parser.parse(output.splitlines()))
+
+        self.assertIsInstance(items[0], TapModule)
+        self.assertIsInstance(items[1], TapTest)
+        self.assertIsInstance(items[2], TapAssertion)
