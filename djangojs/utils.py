@@ -16,7 +16,7 @@ from django.contrib.staticfiles.utils import matches_patterns
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.template.context import RequestContext
-from django.utils import translation
+from django.utils import translation, six
 
 from djangojs.conf import settings
 
@@ -152,7 +152,7 @@ class ContextSerializer(object):
         '''
         data = {}
         for context in RequestContext(request):
-            for key, value in context.iteritems():
+            for key, value in six.iteritems(context):
                 if key in cls.SERIALIZERS:
                     serializer_name = cls.SERIALIZERS[key]
                     if hasattr(cls, serializer_name):
@@ -177,12 +177,12 @@ class ContextSerializer(object):
         }
         if 'django.contrib.sessions.middleware.SessionMiddleware' in settings.MIDDLEWARE_CLASSES:
             data['user'].update({
-                    'username': request.user.username,
-                    'is_authenticated': request.user.is_authenticated(),
-                    'is_staff': request.user.is_staff,
-                    'is_superuser': request.user.is_superuser,
-                    'permissions': tuple(request.user.get_all_permissions())
-                })
+                'username': request.user.username,
+                'is_authenticated': request.user.is_authenticated(),
+                'is_staff': request.user.is_staff,
+                'is_superuser': request.user.is_superuser,
+                'permissions': tuple(request.user.get_all_permissions())
+            })
         return data
 
     @classmethod
