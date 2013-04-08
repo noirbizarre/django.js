@@ -2,6 +2,8 @@
 '''
 This module provide Javascript test runners for Django unittest.
 '''
+from __future__ import unicode_literals
+
 import os
 import re
 import sys

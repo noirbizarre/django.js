@@ -4,6 +4,8 @@ This modules holds every helpers that does not fit in any standard django module
 
 It might be splitted in futur releases.
 '''
+from __future__ import unicode_literals
+
 import json
 import logging
 import os
@@ -57,7 +59,7 @@ def urls_as_json():
 
 def _get_urls(module, prefix='', namespace=None):
     urls = {}
-    if isinstance(module, (str, unicode)):
+    if isinstance(module, (six.text_type, six.string_types)):
         __import__(module)
         root_urls = sys.modules[module]
         patterns = root_urls.urlpatterns
@@ -75,7 +77,7 @@ def _get_urls(module, prefix='', namespace=None):
                 try:
                     module = __import__(mod_name, fromlist=[obj_name])
                     obj = getattr(module, obj_name)
-                    func_name = u"{0}.{1}".format(mod_name, obj_name) if isinstance(obj, types.FunctionType) else None
+                    func_name = "{0}.{1}".format(mod_name, obj_name) if isinstance(obj, types.FunctionType) else None
                     pattern_name = pattern.name or func_name
                 except:
                     pattern_name = pattern.name

@@ -2,10 +2,12 @@
 '''
 This module provide test runners for JS in Django.
 '''
+from __future__ import unicode_literals
+
 import re
-import sys
 
 from django.utils import termcolors
+from django.utils.encoding import python_2_unicode_compatible
 
 green = termcolors.make_style(fg='green', opts=('bold',))
 red = termcolors.make_style(fg='red', opts=('bold',))
@@ -42,6 +44,7 @@ class TapItem(object):
         return ''
 
 
+@python_2_unicode_compatible
 class TapGroup(list, TapItem):
     def __init__(self, name='', parent=None, parsed_indent='', *args, **kwargs):
         super(TapGroup, self).__init__(*args, **kwargs)
@@ -49,11 +52,8 @@ class TapGroup(list, TapItem):
         self.parent = parent
         self.parsed_indent = parsed_indent
 
-    def __unicode__(self):
-        return u'%s: %s' % (self.name, super(TapGroup, self).__unicode__())
-
     def __str__(self):
-        return unicode(self).encode(sys.stdout.encoding or DEFAULT_ENCODING, 'replace')
+        return '# Groupe %s' % self.name
 
     def __nonzero__(self):
         return True
@@ -73,13 +73,14 @@ class TapGroup(list, TapItem):
         return failures
 
 
+@python_2_unicode_compatible
 class TapModule(TapGroup):
 
     def display(self):
-        return u'%s%s' % (self.indent, self.name)
+        return '%s%s' % (self.indent, self.name)
 
-    def __unicode__(self):
-        return u'# module: %s' % self.name
+    def __str__(self):
+        return '# module: %s' % self.name
 
     @classmethod
     def parse(cls, line):
@@ -93,17 +94,18 @@ class TapModule(TapGroup):
             return None
 
 
+@python_2_unicode_compatible
 class TapTest(TapGroup):
 
     def display(self):
         assertions = [result.display(True) for result in self]
         if assertions:
-            return u'%s%s (%s)' % (self.indent, self.name, ' '.join(assertions))
+            return '%s%s (%s)' % (self.indent, self.name, ' '.join(assertions))
         else:
-            return u'%s%s' % (self.indent, self.name)
+            return '%s%s' % (self.indent, self.name)
 
-    def __unicode__(self):
-        return u'# test: %s' % self.name
+    def __str__(self):
+        return '# test: %s' % self.name
 
     @classmethod
     def parse(cls, line):
@@ -114,6 +116,7 @@ class TapTest(TapGroup):
             return None
 
 
+@python_2_unicode_compatible
 class TapAssertion(TapItem):
     def __init__(self, num, success=True, message=None, parsed_indent='', *args, **kwargs):
         super(TapAssertion, self).__init__()
@@ -128,13 +131,13 @@ class TapAssertion(TapItem):
 
     def display(self, inline=False):
         if inline:
-            return green(u'ok') if self.success else red(u'ko')
+            return green('ok') if self.success else red('ko')
         else:
             text = self.indent
             if self.success:
-                text += green(u'ok %s' % self.num)
+                text += green('ok %s' % self.num)
             else:
-                text += red(u'not ok %s' % self.num)
+                text += red('not ok %s' % self.num)
             text = '%s - %s' % (text, self.message) if self.message else text
             if self.expected is not None and self.got is not None:
                 text = '\n'.join([text, '# expected: %s' % self.expected, '# got: %s' % self.got])
@@ -142,11 +145,8 @@ class TapAssertion(TapItem):
                 text = '\n'.join([text] + ['# stack: %s' % line for line in self.stack])
             return text
 
-    def __unicode__(self):
-        return u'ok %s' % self.num if self.success else u'not ok %s' % self.num
-
     def __str__(self):
-        return unicode(self).encode(sys.stdout.encoding or DEFAULT_ENCODING, 'replace')
+        return 'ok %s' % self.num if self.success else 'not ok %s' % self.num
 
     @classmethod
     def parse(cls, line):
