@@ -168,22 +168,6 @@ class DjangoJsTagTest(TestCase):
 
         self.assertIn('window.DJANGO_JS_CSRF', rendered)
 
-    def test_django_js_amd(self):
-        '''Should include django.js AMD prerequisites'''
-        template = Template('''
-            {% load js %}
-            {% django_js_amd %}
-            ''')
-        rendered = template.render(Context())
-
-        django_js_init = reverse('django_js_init')
-        js_catalog = reverse('js_catalog')
-
-        for script in django_js_init, js_catalog:
-            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
-
-        self.assertIn('window.DJANGO_JS_CSRF', rendered)
-
     def test_django_js_jquery_false(self):
         '''Should include django.js without jQuery'''
         template = Template('''
@@ -223,4 +207,52 @@ class DjangoJsTagTest(TestCase):
             {% django_js i18n="false" %}
             ''')
         rendered = template.render(Context())
+        self.assertNotIn('<script type="text/javascript" src="%s">' % reverse('js_catalog'), rendered)
+
+    def test_django_js_init(self):
+        '''Should include django.js prerequisites'''
+        template = Template('''
+            {% load js %}
+            {% django_js_init %}
+            ''')
+        rendered = template.render(Context())
+
+        django_js_init = reverse('django_js_init')
+        js_catalog = reverse('js_catalog')
+
+        rendered = template.render(Context())
+
+        for script in django_js_init, js_catalog:
+            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
+
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
+        self.assertNotIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        self.assertIn('window.DJANGO_JS_CSRF = true;', rendered)
+
+    def test_django_js_init_crsf_false(self):
+        '''Should include django.js prerequisites'''
+        template = Template('''
+            {% load js %}
+            {% django_js_init csrf="false" %}
+            ''')
+        rendered = template.render(Context())
+
+        django_js_init = reverse('django_js_init')
+        js_catalog = reverse('js_catalog')
+
+        for script in django_js_init, js_catalog:
+            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
+
+        self.assertIn('window.DJANGO_JS_CSRF = false;', rendered)
+
+    def test_django_js_init_i18n_false(self):
+        '''Should include django.js prerequisites'''
+        template = Template('''
+            {% load js %}
+            {% django_js_init i18n="false" %}
+            ''')
+        rendered = template.render(Context())
+
+        self.assertIn('window.DJANGO_JS_CSRF', rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % reverse('django_js_init'), rendered)
         self.assertNotIn('<script type="text/javascript" src="%s">' % reverse('js_catalog'), rendered)

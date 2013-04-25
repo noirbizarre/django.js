@@ -6,12 +6,12 @@ Django.js works with `RequireJS`_ but it requires some extras step to do it.
 Preloading prerequisites
 ------------------------
 
-You should use the ``django_js_amd`` template tag before loading your application with `RequireJS`_.
+You should use the ``django_js_init`` template tag before loading your application with `RequireJS`_.
 
 .. code-block:: html+django
 
     {% load js %}
-    {% django_js_amd %}
+    {% django_js_init %}
     <script data-main="scripts/main" src="scripts/require.js"></script>
 
 It works with `django-require`_ too:
@@ -19,11 +19,11 @@ It works with `django-require`_ too:
 .. code-block:: html+django
 
     {% load js require %}
-    {% django_js_amd %}
+    {% django_js_init %}
     {% require_module 'main' %}
 
 
-See :ref:`django-js-amd-templatetag`.
+See :ref:`django-js-init-templatetag`.
 
 shim configuration
 ------------------

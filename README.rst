@@ -23,7 +23,7 @@ Django.js requires Python 2.7+ and Django 1.4.2+.
 Installation
 ============
 
-You can install Django.JS with pip:
+You can install Django.js with pip:
 
 .. code-block:: bash
 

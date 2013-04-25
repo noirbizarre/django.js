@@ -5,6 +5,7 @@ Current
 -------
 
 - Added RequireJS/AMD helpers and documentation
+- Added Django Pipeline integration documentation
 - Support unnamed URLs resolution.
 - Python 3 compatibility
 

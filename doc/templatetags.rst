@@ -63,12 +63,13 @@ You can disable all this features by simply providing arguments to the template 
     {% django_js jquery=false i18n=false csrf=false %}
 
 
-.. _django-js-amd-templatetag:
+.. _django-js-init-templatetag:
 
-django_js_amd
+django_js_init
 ~~~~~~~~~~~~~~
 
-The ``{% django_js_amd %}`` provide the necessary bootstrap for the Django JS AMD module.
+The ``{% django_js_init %}`` provide the necessary bootstrap for the Django.js without loading it.
+It allows you to use Django.js with an AMD loader or a javascript compressor.
 It supports the following keyword parameters (in this order if you want to omit the keyword):
 
 =========== ========= ======================================
@@ -83,10 +84,10 @@ You can disable all this features by simply providing arguments to the template 
 
 .. code-block:: html+django
 
-    {% django_js_amd i18n=false csrf=false %}
+    {% django_js_init i18n=false csrf=false %}
 
 
-If you want to use it with require.js, see :doc:`requirejs`.
+If you want to use it with require.js or Django Pipeline, see :doc:`requirejs` or :ref:`django-pipeline`.
 
 
 Internationalization

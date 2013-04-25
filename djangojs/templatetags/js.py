@@ -161,9 +161,10 @@ def django_js(context, jquery=True, i18n=True, csrf=True):
         }
     }
 
+
 @register.inclusion_tag('djangojs/django_js_init.html', takes_context=True)
-def django_js_amd(context, i18n=True, csrf=True):
-    '''Include Django.js javascript library in the page'''
+def django_js_init(context, i18n=True, csrf=True):
+    '''Include Django.js javascript library initialization in the page'''
     return {
         'js': {
             'i18n': _boolean(i18n),
