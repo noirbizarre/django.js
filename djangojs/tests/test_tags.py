@@ -265,6 +265,26 @@ class DjangoJsTagTest(TestCase):
         self.assertNotIn('<script type="text/javascript" src="%s">' % jquery, rendered)
         self.assertIn('window.DJANGO_JS_CSRF = true;', rendered)
 
+    def test_django_js_init_jquery(self):
+        '''Should include django.js prerequisites with jquery'''
+        template = Template('''
+            {% load js %}
+            {% django_js_init jquery="true" %}
+            ''')
+        rendered = template.render(Context())
+
+        django_js_init = reverse('django_js_init')
+        js_catalog = reverse('js_catalog')
+
+        rendered = template.render(Context())
+
+        for script in django_js_init, js_catalog:
+            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
+
+        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        self.assertIn('window.DJANGO_JS_CSRF = true;', rendered)
+
     def test_django_js_init_crsf_false(self):
         '''Should include django.js prerequisites'''
         template = Template('''

@@ -75,6 +75,7 @@ It supports the following keyword parameters (in this order if you want to omit 
 =========== ========= ======================================
  Parameter   Default                Description
 =========== ========= ======================================
+``jquery``  ``false``  Load the jQuery library
 ``i18n``    ``true``  Load the javascript i18n catalog
 ``csrf``    ``true``  Patch jQuery.ajax() fot Django CSRF
 =========== ========= ======================================
@@ -84,7 +85,7 @@ You can disable all this features by simply providing arguments to the template 
 
 .. code-block:: html+django
 
-    {% django_js_init i18n=false csrf=false %}
+    {% django_js_init jquery=true i18n=false csrf=false %}
 
 
 If you want to use it with require.js or Django Pipeline, see :doc:`requirejs` or :ref:`django-pipeline`.
