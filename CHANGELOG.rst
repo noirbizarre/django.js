@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.7.1 (2013-04-25)
+------------------
 
 - Optionnaly include jQuery with ``{% django_js_init %}``.
 
