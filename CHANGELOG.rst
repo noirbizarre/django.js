@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.7.0 (2013-04-25)
+------------------
 
 - Added RequireJS/AMD helpers and documentation
 - Added Django Pipeline integration helpers and documentation
