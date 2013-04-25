@@ -5,8 +5,10 @@ Current
 -------
 
 - Added RequireJS/AMD helpers and documentation
-- Added Django Pipeline integration documentation
+- Added Django Pipeline integration helpers and documentation
 - Support unnamed URLs resolution.
+- Support custom content types to be passed into the js/javascript script tag (thanks to Travis Jensen)
+- Added ``coffee`` and ``coffescript`` template tags
 - Python 3 compatibility
 
 

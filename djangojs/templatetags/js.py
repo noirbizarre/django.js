@@ -124,6 +124,18 @@ def js(filename, type='text/javascript'):
 
 
 @register.simple_tag
+def coffeescript(filename):
+    '''A simple shortcut to render a ``script`` tag to a static coffeescript file'''
+    return javascript(filename, type='text/coffeescript')
+
+
+@register.simple_tag
+def coffee(filename):
+    '''A simple shortcut to render a ``script`` tag to a static coffeescript file'''
+    return javascript(filename, type='text/coffeescript')
+
+
+@register.simple_tag
 def css(filename):
     '''A simple shortcut to render a ``link`` tag to a static CSS file'''
     return '<link rel="stylesheet" type="text/css" href="%s" />' % staticfiles_storage.url(filename)

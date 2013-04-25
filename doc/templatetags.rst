@@ -178,13 +178,30 @@ is equivalent to:
 
     <script type="text/javascript" src="{% static "js/my.js" %}"></script>
 
-Both tags take an options ``type`` parameter that specifies the content type of the ``script`` tag:
+Both tags take an options ``type`` parameter that specifies the content type of the ``<script>`` tag:
 
 .. code-block:: html+django
 
-    {% javascript "js/my.coffee" type="text/coffeescript" %}
+    {% javascript "js/my.custom" type="text/custom" %}
 
 yields:
+
+.. code-block:: html+django
+
+    <script type="text/custom" src="{% static "js/my.custom" %}"></script>
+
+
+coffescript/coffee
+~~~~~~~~~~~~~~~~~~
+
+The ``coffeescript`` and ``coffee`` tags are the same quick helper to include coffeescript files from ``{{STATIC_URL}}``:
+
+.. code-block:: html+django
+
+    {% coffeescript "js/my.coffee" %}
+    {% coffee "js/my.coffee" %}
+
+is equivalent to:
 
 .. code-block:: html+django
 

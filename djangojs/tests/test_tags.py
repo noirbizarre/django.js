@@ -64,14 +64,15 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
 
-    def test_js_coffeescript(self):
-        '''Should include static coffeescript files'''
+    def test_js_custom_type(self):
+        '''Should include static js files with custom content type'''
         template = Template('''
             {% load js %}
-            {% js "js/my.coffee" type="text/coffeescript" %}
+            {% js "js/my.custom" type="text/custom" %}
             ''')
         rendered = template.render(Context())
-        self.assertIn('<script type="text/coffeescript" src="%s">' % static('js/my.coffee'), rendered)
+        self.assertIn('<script type="text/custom" src="%s">' % static('js/my.custom'), rendered)
+
     def test_js_url_params(self):
         '''Should include static javascript files with url parameters'''
         template = Template('''
@@ -90,11 +91,29 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s">' % static('js/my.js'), rendered)
 
-    def test_javascript_coffeescript(self):
+    def test_javascript_custom(self):
+        '''Should include static javacript files with custom content type'''
+        template = Template('''
+            {% load js %}
+            {% javascript "js/my.custom" type="text/custom" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/custom" src="%s">' % static('js/my.custom'), rendered)
+
+    def test_coffee(self):
+        '''Should include static coffeescript files (short)'''
+        template = Template('''
+            {% load js %}
+            {% coffee "js/my.coffee" %}
+            ''')
+        rendered = template.render(Context())
+        self.assertIn('<script type="text/coffeescript" src="%s">' % static('js/my.coffee'), rendered)
+
+    def test_coffeescript(self):
         '''Should include static coffeescript files'''
         template = Template('''
             {% load js %}
-            {% javascript "js/my.coffee" type="text/coffeescript" %}
+            {% coffeescript "js/my.coffee" %}
             ''')
         rendered = template.render(Context())
         self.assertIn('<script type="text/coffeescript" src="%s">' % static('js/my.coffee'), rendered)
