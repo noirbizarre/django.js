@@ -108,19 +108,19 @@ def js_lib(filename):
 
 
 @register.simple_tag
-def javascript(filename):
+def javascript(filename, type='text/javascript'):
     '''A simple shortcut to render a ``script`` tag to a static javascript file'''
     if '?' in filename and len(filename.split('?')) is 2:
         filename, params = filename.split('?')
-        return '<script type="text/javascript" src="%s?%s"></script>' % (staticfiles_storage.url(filename), params)
+        return '<script type="%s" src="%s?%s"></script>' % (type, staticfiles_storage.url(filename), params)
     else:
-        return '<script type="text/javascript" src="%s"></script>' % staticfiles_storage.url(filename)
+        return '<script type="%s" src="%s"></script>' % (type, staticfiles_storage.url(filename))
 
 
 @register.simple_tag
-def js(filename):
+def js(filename, type='text/javascript'):
     '''A simple shortcut to render a ``script`` tag to a static javascript file'''
-    return javascript(filename)
+    return javascript(filename, type=type)
 
 
 @register.simple_tag

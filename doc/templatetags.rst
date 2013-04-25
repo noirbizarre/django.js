@@ -178,6 +178,18 @@ is equivalent to:
 
     <script type="text/javascript" src="{% static "js/my.js" %}"></script>
 
+Both tags take an options ``type`` parameter that specifies the content type of the ``script`` tag:
+
+.. code-block:: html+django
+
+    {% javascript "js/my.coffee" type="text/coffeescript" %}
+
+yields:
+
+.. code-block:: html+django
+
+    <script type="text/coffeescript" src="{% static "js/my.coffee" %}"></script>
+
 
 css
 ~~~
@@ -209,4 +221,3 @@ is equivalent to:
 .. code-block:: html+django
 
     <script type="text/javascript" src="{{STATIC_URL}}js/libs/my-lib.js"></script>
-
