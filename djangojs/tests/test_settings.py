@@ -8,7 +8,6 @@ from djangojs.urls import js_info_dict
                    JS_I18N_APPS=['djangojs'])
 class I18nIncludeTest(TestCase):
     def setUp(self):
-        import djangojs.fake
         self.packages = js_info_dict()['packages']
 
     def test_include_translation(self):
@@ -25,7 +24,6 @@ class I18nIncludeTest(TestCase):
                    JS_I18N_APPS_EXCLUDE=['djangojs'])
 class I18nExcludeTest(TestCase):
     def setUp(self):
-        import djangojs.fake
         self.packages = js_info_dict()['packages']
 
     def test_exclude_translation(self):

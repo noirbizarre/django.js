@@ -1,2 +1,2 @@
 include README.rst CHANGELOG.rst LICENSE MANIFEST.in
-recursive-include  djangojs *.html *.js *.css
+recursive-include  djangojs *.html *.js *.css *.po *.mo
