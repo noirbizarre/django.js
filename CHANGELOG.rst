@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.7.2 (2013-04-30)
+------------------
 
 - Fix `issue #16 <https://github.com/noirbizarre/django.js/issues/16>`_
 - Declare package as Python 3 compatible on PyPI
