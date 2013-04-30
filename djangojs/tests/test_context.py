@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 import json
 
 from django.conf import global_settings
+from django.contrib.auth.management import create_permissions
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.management import update_contenttypes
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db.models import get_app
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
@@ -11,17 +14,6 @@ from django.utils import translation
 
 from djangojs.conf import settings
 from djangojs.utils import ContextSerializer
-
-
-class FakeModel(models.Model):
-    something = models.CharField(max_length=256)
-
-    class Meta:
-        app_label = 'fake'
-        permissions = (
-            ("do_smething", "Can do something"),
-            ("do_something_else", "Can do something else"),
-        )
 
 
 class ContextTestMixin(object):
@@ -120,14 +112,17 @@ class ContextTestMixin(object):
 
     def test_user_permissions(self):
         '''Should list permissions'''
+        self.fake_permissions()
         result = self.process_request(True)
+
         self.assertIn('permissions', result['user'])
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
+
         # Default permissions
         for perm in ('add', 'change', 'delete'):
             self.assertIn('fake.%s_fakemodel' % perm, result['user']['permissions'])
         # Custom permissions
-        for perm in ('do_smething', 'do_something_else'):
+        for perm in ('do_something', 'do_something_else'):
             self.assertIn('fake.%s' % perm, result['user']['permissions'])
 
     def test_user_without_permissions(self):
@@ -137,11 +132,18 @@ class ContextTestMixin(object):
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
         self.assertEqual(len(result['user']['permissions']), 0)
 
+    def fake_permissions(self):
+        ''' Add fake app missing content types and permissions'''
+        app = get_app('fake')
+        update_contenttypes(app, None, 0)
+        create_permissions(app, None, 0)
+
 
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
         'djangojs.tests.custom_processor',
-    )
+    ),
+    INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsDictTest(ContextTestMixin, TestCase):
 
@@ -152,7 +154,8 @@ class ContextAsDictTest(ContextTestMixin, TestCase):
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
         'djangojs.tests.custom_processor',
-    )
+    ),
+    INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsJsonTest(ContextTestMixin, TestCase):
 
@@ -163,7 +166,8 @@ class ContextAsJsonTest(ContextTestMixin, TestCase):
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
         'djangojs.tests.custom_processor',
-    )
+    ),
+    INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextJsonViewTest(TestCase):
     urls = 'djangojs.test_urls'
