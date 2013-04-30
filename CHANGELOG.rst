@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.7.3 (2013-04-30)
+------------------
 
 - Upgraded to jQuery 2.0.0
 - Package both minified and unminified versions.
