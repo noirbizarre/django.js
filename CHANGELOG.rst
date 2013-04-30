@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Fix `issue #16 <https://github.com/noirbizarre/django.js/issues/16>`_
 
 
 0.7.1 (2013-04-25)
