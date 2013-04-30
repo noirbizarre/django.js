@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Package a minified version.
 
 
 0.7.2 (2013-04-30)
