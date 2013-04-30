@@ -5,8 +5,6 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import six
 
-from djangojs.utils import urls_as_dict, urls_as_json
-
 
 class UrlsTestMixin(object):
     urls = 'djangojs.test_urls'
@@ -159,12 +157,14 @@ class UrlsTestMixin(object):
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 
     def get_result(self):
+        from djangojs.utils import urls_as_dict
         return urls_as_dict()
 
 
 class UrlsAsJsonTest(UrlsTestMixin, TestCase):
 
     def get_result(self):
+        from djangojs.utils import urls_as_json
         return json.loads(urls_as_json())
 
 

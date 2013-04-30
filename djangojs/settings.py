@@ -111,6 +111,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'djangojs.test_urls'
+ROOT_URLCONF = 'djangojs.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'djangojs.wsgi.application'

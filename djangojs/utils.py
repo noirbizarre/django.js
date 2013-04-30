@@ -44,8 +44,6 @@ def urls_as_dict():
     '''
     Get the URLs mapping as a dictionnary
     '''
-    if not hasattr(settings, 'ROOT_URLCONF'):
-        raise Exception
     module = settings.ROOT_URLCONF
     return _get_urls(module)
 
