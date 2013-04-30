@@ -54,6 +54,7 @@ setup(
         "Intended Audience :: Developers",
         "Topic :: System :: Software Distribution",
         "Programming Language :: Python",
+        'Programming Language :: Python :: 3',
         "Topic :: Software Development :: Libraries :: Python Modules",
         'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
     ],
