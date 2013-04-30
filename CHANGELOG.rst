@@ -4,6 +4,7 @@ Changelog
 Current
 -------
 
+- Upgraded to jQuery 2.0.0
 - Package both minified and unminified versions.
 - Load minified versions (Django.js, jQuery and jQuery Migrate) when DEBUG=False
 
