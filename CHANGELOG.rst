@@ -5,7 +5,7 @@ Current
 -------
 
 - Fix `issue #16 <https://github.com/noirbizarre/django.js/issues/16>`_
-- Declare package as Python 3compatible on PyPI
+- Declare package as Python 3 compatible on PyPI
 
 
 0.7.1 (2013-04-25)
