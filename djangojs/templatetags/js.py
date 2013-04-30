@@ -156,9 +156,10 @@ def _boolean(value):
 def jquery_js(version=None, migrate=False):
     '''A shortcut to render a ``script`` tag for the packaged jQuery'''
     version = version or settings.JQUERY_VERSION
-    libs = [js_lib('jquery-%s.min.js' % version)]
+    suffix = '.min' if not settings.DEBUG else ''
+    libs = [js_lib('jquery-%s%s.js' % (version, suffix))]
     if _boolean(migrate):
-        libs.append(js_lib('jquery-migrate-%s.min.js' % JQUERY_MIGRATE_VERSION))
+        libs.append(js_lib('jquery-migrate-%s%s.js' % (JQUERY_MIGRATE_VERSION, suffix)))
     return '\n'.join(libs)
 
 
@@ -167,6 +168,7 @@ def django_js(context, jquery=True, i18n=True, csrf=True):
     '''Include Django.js javascript library in the page'''
     return {
         'js': {
+            'minified': not settings.DEBUG,
             'jquery': _boolean(jquery),
             'i18n': _boolean(i18n),
             'csrf': _boolean(csrf),

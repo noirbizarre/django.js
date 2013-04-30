@@ -24,6 +24,9 @@ You can either:
 If you want to use boolean parameters, Django.js provide the ``djangojs.context_processors.booleans`` to help. Simply add it to your ``settings.CONTEXT_PROCESSORS``.
 If not, you should use the string versions: ``param="True"``.
 
+If ``settings.DEBUG=True``, unminified versions are loaded (only for provided libraries,
+aka. Django.js, jQuery and jQuery Migrate).
+
 
 Usage
 -----

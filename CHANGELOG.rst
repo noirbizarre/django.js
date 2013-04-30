@@ -4,7 +4,8 @@ Changelog
 Current
 -------
 
-- Package a minified version.
+- Package both minified and unminified versions.
+- Load minified versions (Django.js, jQuery and jQuery Migrate) when DEBUG=False
 
 
 0.7.2 (2013-04-30)

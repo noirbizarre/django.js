@@ -4,6 +4,7 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from djangojs import JQUERY_DEFAULT_VERSION, JQUERY_MIGRATE_VERSION
 
@@ -154,14 +155,26 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
         self.assertIn('<script type="text/javascript" src="%s?%s">' % (static('js/libs/my-lib.js'), 'k=v'), rendered)
 
-    def test_jquery_js(self):
-        '''Should include jQuery library'''
+    @override_settings(DEBUG=False)
+    def test_jquery_js_minified(self):
+        '''Should include minified jQuery library when DEBUG=False'''
         template = Template('''
             {% load js %}
             {% jquery_js %}
             ''')
         rendered = template.render(Context())
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+
+    @override_settings(DEBUG=True)
+    def test_jquery_js_unminified(self):
+        '''Should include unminified jQuery library when DEBUG=True'''
+        template = Template('''
+            {% load js %}
+            {% jquery_js %}
+            ''')
+        rendered = template.render(Context())
+        jquery = static('js/libs/jquery-%s.js' % JQUERY_DEFAULT_VERSION)
         self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
 
     def test_jquery_js_version(self):
@@ -171,11 +184,12 @@ class DjangoJsTagTest(TestCase):
             {% jquery_js "1.8.3" %}
             ''')
         rendered = template.render(Context())
-        jquery = static('js/libs/jquery-1.8.3.min.js')
-        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        jquery = static('js/libs/jquery-1.8.3')
+        self.assertIn('<script type="text/javascript" src="%s' % jquery, rendered)
 
-    def test_jquery_js_migrate(self):
-        '''Should include jQuery library with migrate'''
+    @override_settings(DEBUG=False)
+    def test_jquery_js_migrate_minified(self):
+        '''Should include jQuery minified library with migrate when DEBUG=False'''
         template = Template('''
             {% load js %}
             {% jquery_js migrate="true" %}
@@ -186,8 +200,22 @@ class DjangoJsTagTest(TestCase):
         self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
         self.assertIn('<script type="text/javascript" src="%s">' % migrate, rendered)
 
-    def test_django_js(self):
-        '''Should include and initialize django.js'''
+    @override_settings(DEBUG=True)
+    def test_jquery_js_migrate_unminified(self):
+        '''Should include jQuery unminified library with migrate when DEBUG=True'''
+        template = Template('''
+            {% load js %}
+            {% jquery_js migrate="true" %}
+            ''')
+        rendered = template.render(Context())
+        jquery = static('js/libs/jquery-%s.js' % JQUERY_DEFAULT_VERSION)
+        migrate = static('js/libs/jquery-migrate-%s.js' % JQUERY_MIGRATE_VERSION)
+        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        self.assertIn('<script type="text/javascript" src="%s">' % migrate, rendered)
+
+    @override_settings(DEBUG=False)
+    def test_django_js_minified(self):
+        '''Should include and initialize django.js minified when DEBUG=False'''
         template = Template('''
             {% load js %}
             {% django_js %}
@@ -195,6 +223,25 @@ class DjangoJsTagTest(TestCase):
         rendered = template.render(Context())
 
         jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
+        django_js = static('js/djangojs/django.min.js')
+        django_js_init = reverse('django_js_init')
+        js_catalog = reverse('js_catalog')
+
+        for script in jquery, django_js, django_js_init, js_catalog:
+            self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
+
+        self.assertIn('window.DJANGO_JS_CSRF', rendered)
+
+    @override_settings(DEBUG=True)
+    def test_django_js_unminified(self):
+        '''Should include and initialize django.js unminified when DEBUG=True'''
+        template = Template('''
+            {% load js %}
+            {% django_js %}
+            ''')
+        rendered = template.render(Context())
+
+        jquery = static('js/libs/jquery-%s.js' % JQUERY_DEFAULT_VERSION)
         django_js = static('js/djangojs/django.js')
         django_js_init = reverse('django_js_init')
         js_catalog = reverse('js_catalog')
@@ -210,13 +257,13 @@ class DjangoJsTagTest(TestCase):
             {% load js %}
             {% django_js jquery="false" %}
             ''')
-        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
-        django_js = static('js/djangojs/django.js')
+        jquery = static('js/libs/jquery-%s' % JQUERY_DEFAULT_VERSION)
+        django_js = static('js/djangojs/django')
 
         rendered = template.render(Context())
 
-        self.assertNotIn('<script type="text/javascript" src="%s">' % jquery, rendered)
-        self.assertIn('<script type="text/javascript" src="%s">' % django_js, rendered)
+        self.assertNotIn('<script type="text/javascript" src="%s' % jquery, rendered)
+        self.assertIn('<script type="text/javascript" src="%s' % django_js, rendered)
 
     def test_django_js_csrf_false(self):
         '''Should include django.js without jQuery CSRF patch'''
@@ -261,8 +308,8 @@ class DjangoJsTagTest(TestCase):
         for script in django_js_init, js_catalog:
             self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
 
-        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
-        self.assertNotIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        jquery = static('js/libs/jquery-%s' % JQUERY_DEFAULT_VERSION)
+        self.assertNotIn('<script type="text/javascript" src="%s' % jquery, rendered)
         self.assertIn('window.DJANGO_JS_CSRF = true;', rendered)
 
     def test_django_js_init_jquery(self):
@@ -281,8 +328,8 @@ class DjangoJsTagTest(TestCase):
         for script in django_js_init, js_catalog:
             self.assertIn('<script type="text/javascript" src="%s">' % script, rendered)
 
-        jquery = static('js/libs/jquery-%s.min.js' % JQUERY_DEFAULT_VERSION)
-        self.assertIn('<script type="text/javascript" src="%s">' % jquery, rendered)
+        jquery = static('js/libs/jquery-%s' % JQUERY_DEFAULT_VERSION)
+        self.assertIn('<script type="text/javascript" src="%s' % jquery, rendered)
         self.assertIn('window.DJANGO_JS_CSRF = true;', rendered)
 
     def test_django_js_init_crsf_false(self):

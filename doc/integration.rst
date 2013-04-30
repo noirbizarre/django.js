@@ -35,7 +35,7 @@ First add jQuery and Django.js to your pipelines in you ``settings.py``:
         'base': {
             'source_filenames': (
                 '...',
-                'js/libs/jquery-1.9.1.min.js',
+                'js/libs/jquery-1.9.1.js',
                 'js/djangojs/django.js',
                 '...',
             ),
