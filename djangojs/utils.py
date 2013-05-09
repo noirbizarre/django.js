@@ -209,9 +209,15 @@ class StorageGlobber(object):
         files = files or []
         if isinstance(files, str):
             matches = lambda path: matches_patterns(path, [files])
+            return [path for path in cls.get_static_files() if matches(path)]
         elif isinstance(files, (list, tuple)):
-            matches = lambda path: matches_patterns(path, files)
-        return [path for path in cls.get_static_files() if matches(path)]
+            all_files = cls.get_static_files()
+            sorted_result = []
+            for pattern in files:
+                sorted_result.extend([f for f in all_files if matches_patterns(f, [pattern])])
+            return sorted_result
+
+
 
     @classmethod
     def get_static_files(cls):

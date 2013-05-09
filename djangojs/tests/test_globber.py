@@ -45,3 +45,16 @@ class StorageGlobberTest(TestCase):
         self.assertIn('js/test/libs/qunit-tap.js', result)
         self.assertNotIn('js/test/libs/jasmine.js', result)
         self.assertNotIn('js/test/libs/qunit.js', result)
+
+    def test_preserve_order(self):
+        '''Should preserve declaration order'''
+        # Orders matters: should not be an alphabeticaly sorted list
+        files = ['js/test/libs/jasmine.js', 'js/djangojs/django.js', 'js/test/libs/qunit-*.js']
+        result = StorageGlobber.glob(files)
+
+        self.assertEqual(result[0], 'js/test/libs/jasmine.js')
+        self.assertEqual(result[1], 'js/djangojs/django.js')
+
+        for lib in result[2:]:
+            self.assertIn('js/test/libs/qunit-', lib)
+            self.assertTrue(lib.endswith('.js'))
