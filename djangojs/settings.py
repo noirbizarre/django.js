@@ -103,6 +103,7 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -181,3 +182,15 @@ if 'jenkins' in sys.argv:
         #'django_jenkins.tasks.with_local_celery',
     )
     PYLINT_RCFILE = abspath(join(dirname(__file__), '..', 'pylint.rc'))
+
+if DEBUG:
+    try:
+        import debug_toolbar
+        MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+        INSTALLED_APPS += ('debug_toolbar',)
+        INTERNAL_IPS = ('127.0.0.1',)
+        DEBUG_TOOLBAR_CONFIG = {
+            'INTERCEPT_REDIRECTS': False,
+        }
+    except:
+        pass

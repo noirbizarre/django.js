@@ -19,6 +19,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.template.context import RequestContext
 from django.utils import translation, six
+from django.utils.encoding import force_text
+from django.utils.functional import Promise
+from django.utils.translation import ugettext_lazy as _
 
 from djangojs.conf import settings
 
@@ -137,14 +140,22 @@ def _get_urls(module, prefix='', namespace=None):
     return urls
 
 
+class LazyJsonEncoder(DjangoJSONEncoder):
+    '''
+    A JSON encoder handling promises (aka. Django lazy objects).
+
+    See: https://docs.djangoproject.com/en/dev/topics/serialization/#id2
+    '''
+    def default(self, obj):
+        if isinstance(obj, Promise):
+            return force_text(obj)
+        return super(LazyJsonEncoder, self).default(obj)
+
+
 class ContextSerializer(object):
     '''
     Serialize the context from requests.
     '''
-    SERIALIZERS = {
-        'LANGUAGES': 'serialize_languages',
-    }
-
     @classmethod
     def as_dict(cls, request):
         '''
@@ -153,20 +164,37 @@ class ContextSerializer(object):
         data = {}
         for context in RequestContext(request):
             for key, value in six.iteritems(context):
-                if key in cls.SERIALIZERS:
-                    serializer_name = cls.SERIALIZERS[key]
-                    if hasattr(cls, serializer_name):
-                        serializer = getattr(cls, serializer_name)
-                        data[key] = serializer(value)
+                processor_name = 'process_%s' % key
+                if hasattr(cls, processor_name):
+                    processor = getattr(cls, processor_name)
+                    data[key] = processor(value, data)
                 elif isinstance(value, (str, tuple, list, dict, int, bool, set)):
                     data[key] = value
-        if 'LANGUAGE_CODE' in data:
-            # Dirty hack to fix non included default
-            language_code = 'en' if data['LANGUAGE_CODE'] == 'en-us' else data['LANGUAGE_CODE']
-            language = translation.get_language_info(language_code)
-            data['LANGUAGE_NAME'] = language['name']
-            data['LANGUAGE_NAME_LOCAL'] = language['name_local']
+        cls.handle_user(data, request)
+        return data
 
+    @classmethod
+    def as_json(cls, request):
+        '''
+        Serialize the context as JSON from a given request.
+        '''
+        return json.dumps(cls.as_dict(request), cls=LazyJsonEncoder)
+
+    @classmethod
+    def process_LANGUAGES(cls, languages, data):
+        return dict((code, _(name)) for code, name in languages)
+
+    @classmethod
+    def process_LANGUAGE_CODE(cls, language_code, data):
+        # Dirty hack to fix non included default
+        language = translation.get_language_info('en' if language_code == 'en-us' else language_code)
+        data['LANGUAGE_NAME'] = language['name']
+        data['LANGUAGE_NAME_LOCAL'] = language['name_local']
+        return language_code
+
+    @classmethod
+    def handle_user(cls, data, request):
+        '''Insert user informations in data'''
         # Default to unauthenticated anonymous user
         data['user'] = {
             'username': '',
@@ -183,18 +211,6 @@ class ContextSerializer(object):
                 'is_superuser': request.user.is_superuser,
                 'permissions': tuple(request.user.get_all_permissions())
             })
-        return data
-
-    @classmethod
-    def as_json(cls, request):
-        '''
-        Serialize the context as JSON from a given request.
-        '''
-        return json.dumps(cls.as_dict(request), cls=DjangoJSONEncoder)
-
-    @classmethod
-    def serialize_languages(cls, languages):
-        return dict(languages)
 
 
 class StorageGlobber(object):
@@ -216,8 +232,6 @@ class StorageGlobber(object):
             for pattern in files:
                 sorted_result.extend([f for f in all_files if matches_patterns(f, [pattern])])
             return sorted_result
-
-
 
     @classmethod
     def get_static_files(cls):

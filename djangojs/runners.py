@@ -17,6 +17,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.test import LiveServerTestCase
+from django.utils.encoding import python_2_unicode_compatible
 
 from djangojs.tap import TapParser
 from djangojs.utils import StorageGlobber
@@ -51,6 +52,7 @@ VERBOSITY = parse_verbosity()
 VERBOSE = VERBOSITY > 1
 
 
+@python_2_unicode_compatible
 class JsTestException(Exception):
     '''
     An exception raised by Javascript tests.

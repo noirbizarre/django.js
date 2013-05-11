@@ -8,11 +8,10 @@ import json
 import logging
 import re
 
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView
 
-from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer, StorageGlobber
+from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer, StorageGlobber, LazyJsonEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +59,7 @@ class JsonView(View):
     def get(self, request, **kwargs):
         data = self.get_context_data(**kwargs)
         return HttpResponse(
-            json.dumps(data, cls=DjangoJSONEncoder),
+            json.dumps(data, cls=LazyJsonEncoder),
             mimetype=JSON_MIMETYPE
         )
 

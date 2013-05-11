@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import json
 
 from django.conf import global_settings
@@ -11,9 +12,20 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
 from django.utils import translation
+from django.middleware.locale import LocaleMiddleware
+from django.contrib.sessions.middleware import SessionMiddleware
 
 from djangojs.conf import settings
 from djangojs.utils import ContextSerializer
+
+TEST_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    'djangojs.tests.custom_processor',
+    'django.core.context_processors.i18n',
+)
+
+TEST_MIDDLEWARES = global_settings.MIDDLEWARE_CLASSES + (
+    'django.middleware.locale.LocaleMiddleware',
+)
 
 
 class ContextTestMixin(object):
@@ -21,8 +33,11 @@ class ContextTestMixin(object):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def process_request(self, admin=False):
-        request = self.factory.get(reverse('django_js_context'))
+    def process_request(self, admin=False, headers=None):
+        headers = headers if headers else {}
+        request = self.factory.get(reverse('django_js_context'), **headers)
+        SessionMiddleware().process_request(request)
+        LocaleMiddleware().process_request(request)
         if admin:
             request.user = User.objects.create_superuser('admin', 'fake@noirbizarre.info', 'password')
         else:
@@ -41,11 +56,19 @@ class ContextTestMixin(object):
         self.assertIn('MEDIA_URL', result)
         self.assertEqual(result['MEDIA_URL'], settings.MEDIA_URL)
 
+    @override_settings(LANGUAGE_CODE='en-us')
     def test_language_code(self):
         '''LANGUAGE_CODE should be in context'''
+        result = self.process_request(headers={'HTTP_ACCEPT_LANGUAGE': 'fr'})
+        self.assertIn('LANGUAGE_CODE', result)
+        self.assertEqual(result['LANGUAGE_CODE'], 'fr')
+
+    @override_settings(LANGUAGE_CODE='en-us')
+    def test_language_code_default(self):
+        '''Should handle the default LANGUAGE_CODE="en-us"'''
         result = self.process_request()
         self.assertIn('LANGUAGE_CODE', result)
-        self.assertEqual(result['LANGUAGE_CODE'], translation.get_language())
+        self.assertEqual(result['LANGUAGE_CODE'], 'en-us')
 
     def test_language_bidi(self):
         '''LANGUAGE_BIDI should be in context'''
@@ -53,32 +76,61 @@ class ContextTestMixin(object):
         self.assertIn('LANGUAGE_BIDI', result)
         self.assertEqual(result['LANGUAGE_BIDI'], translation.get_language_bidi())
 
+    @override_settings(LANGUAGE_CODE='en-us')
     def test_language_name(self):
         '''LANGUAGE_NAME should be in context'''
+        result = self.process_request(headers={'HTTP_ACCEPT_LANGUAGE': 'fr'})
+        self.assertIn('LANGUAGE_NAME', result)
+        self.assertEqual(result['LANGUAGE_NAME'], 'French')
+
+    @override_settings(LANGUAGE_CODE='en-us')
+    def test_language_name_en_us(self):
+        '''LANGUAGE_NAME should handle en-us special case'''
         result = self.process_request()
         self.assertIn('LANGUAGE_NAME', result)
-        code = translation.get_language()
-        code = 'en' if code == 'en-us' else code
-        language = translation.get_language_info(code)
-        self.assertEqual(result['LANGUAGE_NAME'], language['name'])
+        # code = translation.get_language()
+        # code = 'en' if code == 'en-us' else code
+        # language = translation.get_language_info(code)
+        self.assertEqual(result['LANGUAGE_NAME'], 'English')
 
     def test_language_name_local(self):
         '''LANGUAGE_NAME_LOCAL should be in context'''
         result = self.process_request()
-        self.assertTrue('LANGUAGE_NAME_LOCAL' in result)
+        self.assertIn('LANGUAGE_NAME_LOCAL', result)
         code = translation.get_language()
         code = 'en' if code == 'en-us' else code
         language = translation.get_language_info(code)
         self.assertEqual(result['LANGUAGE_NAME_LOCAL'], language['name_local'])
 
+    @override_settings(DEBUG=True, LANGUAGE_CODE=global_settings.LANGUAGE_CODE)
+    def test_language_debug(self):
+        '''LANGUAGE_* should be present even in debug with default language'''
+        result = self.process_request()
+        self.assertIn('LANGUAGE_BIDI', result)
+        self.assertIn('LANGUAGE_CODE', result)
+        self.assertIn('LANGUAGE_NAME', result)
+        self.assertIn('LANGUAGE_NAME_LOCAL', result)
+
+    @override_settings(LANGUAGE_CODE='en-us')
     def test_languages(self):
-        '''LANGUAGE_BIDI should be in context'''
+        '''LANGUAGES should be in context'''
         result = self.process_request()
         self.assertIn('LANGUAGES', result)
         languages = result['LANGUAGES']
         self.assertTrue(isinstance(languages, dict))
         for code, name in settings.LANGUAGES:
             self.assertEqual(languages[code], name)
+
+    @override_settings(LANGUAGE_CODE='en-us')
+    def test_languages_localized(self):
+        '''LANGUAGES should be localized'''
+        result = self.process_request(headers={'HTTP_ACCEPT_LANGUAGE': 'fr'})
+        self.assertIn('LANGUAGES', result)
+        languages = result['LANGUAGES']
+        self.assertTrue(isinstance(languages, dict))
+        translation.activate('fr')
+        for code, name in settings.LANGUAGES:
+            self.assertEqual(languages[code], translation.ugettext_lazy(name))
 
     def test_any_custom_context_processor(self):
         '''Any custom context processor should be in context'''
@@ -140,9 +192,8 @@ class ContextTestMixin(object):
 
 
 @override_settings(
-    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-        'djangojs.tests.custom_processor',
-    ),
+    TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
+    MIDDLEWARE_CLASSES=TEST_MIDDLEWARES,
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsDictTest(ContextTestMixin, TestCase):
@@ -152,9 +203,8 @@ class ContextAsDictTest(ContextTestMixin, TestCase):
 
 
 @override_settings(
-    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-        'djangojs.tests.custom_processor',
-    ),
+    TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
+    MIDDLEWARE_CLASSES=TEST_MIDDLEWARES,
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsJsonTest(ContextTestMixin, TestCase):
@@ -164,9 +214,8 @@ class ContextAsJsonTest(ContextTestMixin, TestCase):
 
 
 @override_settings(
-    TEMPLATE_CONTEXT_PROCESSORS=global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-        'djangojs.tests.custom_processor',
-    ),
+    TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
+    MIDDLEWARE_CLASSES=TEST_MIDDLEWARES,
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextJsonViewTest(TestCase):
