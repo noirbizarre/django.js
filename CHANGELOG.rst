@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.7.4 (2013-05-11)
+------------------
 
 - Preserve declaration order in StorageGlobber.glob() (Fix `issue #17 <https://github.com/noirbizarre/django.js/issues/17>`_)
 - Fixes on localization on handling
