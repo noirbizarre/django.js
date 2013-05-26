@@ -111,6 +111,14 @@ Django.js allows you to check basic user attributes and permissions from client 
     }
 
 
+.. note::
+
+    When using a custom user model with Django 1.5+,
+    only the username and is_authenticated fields are significants.
+    The other fields values will always be False or an empty tuple (for permissions),
+    unless they exists on your custom model.
+
+
 CSRF Tokens
 -----------
 

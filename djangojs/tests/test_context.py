@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import unittest
 import json
 
 from django.conf import global_settings
@@ -14,6 +15,7 @@ from django.test.utils import override_settings
 from django.utils import translation
 from django.middleware.locale import LocaleMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
+from django import VERSION as DJANGO_VERSION
 
 from djangojs.conf import settings
 from djangojs.utils import ContextSerializer
@@ -33,13 +35,16 @@ class ContextTestMixin(object):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def process_request(self, admin=False, headers=None):
+    def process_request(self, admin=False, headers=None, custom=False):
         headers = headers if headers else {}
         request = self.factory.get(reverse('django_js_context'), **headers)
         SessionMiddleware().process_request(request)
         LocaleMiddleware().process_request(request)
         if admin:
             request.user = User.objects.create_superuser('admin', 'fake@noirbizarre.info', 'password')
+        elif custom:
+            from djangojs.fake.models import CustomUser
+            request.user = CustomUser(identifier='custom')
         else:
             request.user = User.objects.create_user('user', 'fake@noirbizarre.info', 'password')
         return self.get_result(request)
@@ -183,6 +188,23 @@ class ContextTestMixin(object):
         self.assertIn('permissions', result['user'])
         self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
         self.assertEqual(len(result['user']['permissions']), 0)
+
+    @unittest.skipIf(DJANGO_VERSION < (1, 5), "Custom user model exists only in Django 1.5+")
+    @override_settings(AUTH_USER_MODEL='fake.CustomUser')
+    def test_custom_user_model(self):
+        '''Should have at least degraded informations on custom user model in Django 1.5+'''
+        result = self.process_request(custom=True)
+        self.assertIn('user', result)
+        self.assertIn('username', result['user'])
+        self.assertEqual(result['user']['username'], 'custom')
+        self.assertIn('is_authenticated', result['user'])
+        self.assertTrue(result['user']['is_authenticated'])
+        self.assertIn('is_staff', result['user'])
+        self.assertFalse(result['user']['is_staff'])
+        self.assertIn('is_superuser', result['user'])
+        self.assertFalse(result['user']['is_superuser'])
+        self.assertIn('permissions', result['user'])
+        self.assertTrue(isinstance(result['user']['permissions'], (list, tuple)))
 
     def fake_permissions(self):
         ''' Add fake app missing content types and permissions'''

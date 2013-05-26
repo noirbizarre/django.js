@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Handle Django 1.5+ custom user model
 
 
 0.7.4 (2013-05-11)
