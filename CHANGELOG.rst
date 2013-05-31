@@ -5,7 +5,7 @@ Current
 -------
 
 - Handle Django 1.5+ custom user model
-- Upgraded to jQuery 2.0.1 and jQuery Migrate 1.2.1
+- Upgraded to jQuery 2.0.2 and jQuery Migrate 1.2.1
 
 
 0.7.4 (2013-05-11)

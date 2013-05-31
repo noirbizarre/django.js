@@ -14,8 +14,10 @@ Django.js provide the following versions:
 - 1.8.3
 - 1.9.0
 - 1.9.1
+- 1.10.1
 - 2.0.0
 - 2.0.1
+- 2.0.2
 
 
 ``JS_URLS``

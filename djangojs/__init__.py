@@ -7,5 +7,5 @@ __version__ = '0.7.5.dev'
 __description__ = "Django JS Tools"
 
 #: Packaged jQuery version
-JQUERY_DEFAULT_VERSION = '2.0.1'
+JQUERY_DEFAULT_VERSION = '2.0.2'
 JQUERY_MIGRATE_VERSION = '1.2.1'
