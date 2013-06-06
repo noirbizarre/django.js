@@ -1,4 +1,4 @@
-import unittest
+from django.utils import unittest
 
 from djangojs.tap import TapParser, TapTest, TapModule, TapAssertion
 

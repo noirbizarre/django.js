@@ -22,7 +22,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from djangojs.tap import TapParser
 from djangojs.utils import StorageGlobber
 
-from unittest import TestCase
+from django.utils.unittest import TestCase
 
 #: Console output line length for separators
 LINE_SIZE = 70
