@@ -4,7 +4,7 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Reintroduce Python 2.6 support (thanks to Andy Freeland)
 
 
 0.7.5 (2013-06-01)
