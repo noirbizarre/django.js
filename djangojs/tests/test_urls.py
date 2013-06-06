@@ -68,6 +68,13 @@ class UrlsTestMixin(object):
         self.assertNotIn('?', url)
         self.assertEqual(url, '/test/man/optionnal')
 
+    def test_optional_slash(self):
+        '''It should not serialize optional trailing slash'''
+        self.assertIn('opt', self.result)
+        url = self.result['opt-trailing-slash']
+        self.assertNotIn('?', url)
+        self.assertEqual(url, '/test/optionnal')
+
     def test_optionnal_groups(self):
         '''It should not serialize optionnal non capturing groups'''
         self.assertIn('opt_grp', self.result)
