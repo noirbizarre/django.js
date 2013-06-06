@@ -5,6 +5,7 @@ Current
 -------
 
 - Reintroduce Python 2.6 support (thanks to Andy Freeland)
+- Fix `issue #20 <https://github.com/noirbizarre/django.js/issues/20>`_
 
 
 0.7.5 (2013-06-01)
