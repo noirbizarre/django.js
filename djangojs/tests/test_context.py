@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import unittest
+from django.utils import unittest
 import json
 
 from django.conf import global_settings
