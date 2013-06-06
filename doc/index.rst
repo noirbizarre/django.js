@@ -20,7 +20,7 @@ Django.js is inspired from:
 Compatibility
 =============
 
-Django.js requires Python 2.7+ and Django 1.4.2+.
+Django.js requires Python 2.6+ and Django 1.4.2+.
 
 
 Installation
