@@ -6,5 +6,6 @@
 {% endif %}
 <script>
     window.DJANGO_JS_CSRF = {% if js.csrf %}true{% else %}false{% endif %};
+    window.DJANGO_JS_INIT = {% if js.init %}true{% else %}false{% endif %};
 </script>
 {% if js.jquery %}{% jquery_js %}{% endif %}

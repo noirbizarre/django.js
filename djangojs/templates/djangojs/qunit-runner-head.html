@@ -1,7 +1,7 @@
 {% load js %}
 {% css css_theme %}
 {% if use_django_js %}
-  {% django_js %}
+  {% django_js init=django_js_init %}
 {% elif use_jquery %}
   {% jquery_js %}
 {% endif %}

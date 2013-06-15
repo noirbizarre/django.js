@@ -11,11 +11,25 @@
 
     var Django = window.Django = {
 
-        urls: window.DJANGO_JS_URLS,
-        context: window.DJANGO_JS_CONTEXT,
-        user: window.DJANGO_JS_CONTEXT['user'],
         token_regex: /<\w*>/g,
         named_token_regex: /<(\w+)>/g,
+
+        /**
+         * Initialize required attributes
+         */
+        initialize: function() {
+            this.urls = window.DJANGO_JS_URLS;
+            this.context = window.DJANGO_JS_CONTEXT;
+            this.user = window.DJANGO_JS_CONTEXT.user;
+            if (this.user) {
+                /**
+                 * Equivalent to ``User.has_perm`` function.
+                 */
+                this.user.has_perm = function(permission) {
+                    return this.permissions.indexOf(permission) > -1;
+                };
+            }
+        },
 
         /**
          * Equivalent to ``reverse`` function and ``url`` template tag.
@@ -189,13 +203,9 @@
 
     };
 
-
-    /**
-     * Equivalent to ``User.has_perm`` function.
-     */
-    Django.user.has_perm = function(permission) {
-        return this.permissions.indexOf(permission) > -1;
-    };
+    if (window.DJANGO_JS_INIT) {
+        Django.initialize();
+    }
 
     if (window.DJANGO_JS_CSRF) {
         Django.jquery_csrf();

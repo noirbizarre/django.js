@@ -89,17 +89,20 @@ class JsTestView(TemplateView):
     #: - Supports glob patterns.
     #: - Order is kept for rendering.
     js_files = None
-    #: Includes or not Django.js in the test view
-    django_js = False
     #: Includes or not jQuery in the test view.
     jquery = False
+    #: Includes or not Django.js in the test view
+    django_js = False
+    #: Initialize or not Django.js in the test view (only if included)
+    django_js_init = True
 
     def get_context_data(self, **kwargs):
         context = super(JsTestView, self).get_context_data(**kwargs)
 
         context['js_test_files'] = StorageGlobber.glob(self.js_files)
-        context['use_django_js'] = self.django_js
         context['use_query'] = self.jquery
+        context['use_django_js'] = self.django_js
+        context['django_js_init'] = self.django_js_init
 
         return context
 

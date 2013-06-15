@@ -288,6 +288,24 @@ describe("Django.js", function(){
                 expect(Django.user.has_perm('fake.something_else')).toBeFalsy();
             });
         });
+
+        describe('When settings.JS_USER_ENABLED=False', function() {
+            var user_backup;
+
+            beforeEach(function() {
+                user_backup = window.DJANGO_JS_CONTEXT['user'];
+                delete window.DJANGO_JS_CONTEXT['user'];
+                Django.initialize();
+            });
+
+            afterEach(function() {
+                window.DJANGO_JS_CONTEXT['user'] = user_backup;
+            });
+
+            it('should not expose user', function() {
+                expect(Django.user).toBeUndefined();
+            });
+        });
     });
 
 
