@@ -48,7 +48,7 @@ def urls_as_dict():
     Get the URLs mapping as a dictionnary
     '''
     module = settings.ROOT_URLCONF
-    return _get_urls(module)
+    return _get_urls(module) if settings.JS_URLS_ENABLED else {}
 
 
 def urls_as_json():
@@ -162,15 +162,17 @@ class ContextSerializer(object):
         Serialize the context as a dictionnary from a given request.
         '''
         data = {}
-        for context in RequestContext(request):
-            for key, value in six.iteritems(context):
-                processor_name = 'process_%s' % key
-                if hasattr(cls, processor_name):
-                    processor = getattr(cls, processor_name)
-                    data[key] = processor(value, data)
-                elif isinstance(value, (str, tuple, list, dict, int, bool, set)):
-                    data[key] = value
-        cls.handle_user(data, request)
+        if settings.JS_CONTEXT_ENABLED:
+            for context in RequestContext(request):
+                for key, value in six.iteritems(context):
+                    processor_name = 'process_%s' % key
+                    if hasattr(cls, processor_name):
+                        processor = getattr(cls, processor_name)
+                        data[key] = processor(value, data)
+                    elif isinstance(value, (str, tuple, list, dict, int, bool, set)):
+                        data[key] = value
+        if settings.JS_USER_ENABLED:
+            cls.handle_user(data, request)
         return data
 
     @classmethod

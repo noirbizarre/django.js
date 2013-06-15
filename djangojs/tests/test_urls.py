@@ -160,6 +160,12 @@ class UrlsTestMixin(object):
         self.assertNotIn('ns1:fake', self.result)
         self.assertIn('ns2:nested:fake', self.result)
 
+    @override_settings(JS_URLS_ENABLED=False)
+    def test_urls_disabled(self):
+        '''Should be empty if settings.JS_URLS_ENABLED is False'''
+        self.result = self.get_result()  # To take override_settings in account
+        self.assertEqual(len(self.result.keys()), 0)
+
 
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 

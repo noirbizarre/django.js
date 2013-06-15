@@ -212,6 +212,20 @@ class ContextTestMixin(object):
         update_contenttypes(app, None, 0)
         create_permissions(app, None, 0)
 
+    @override_settings(JS_CONTEXT_ENABLED=False)
+    def test_context_disabled(self):
+        '''Should only have user in context if settings.JS_CONTEXT_ENABLED is False'''
+        result = self.process_request()
+        self.assertIn('user', result)
+        self.assertEqual(len(result.keys()), 1)
+
+    @override_settings(JS_USER_ENABLED=False)
+    def test_user_disabled(self):
+        '''Should not have user in context if settings.JS_USER_ENABLED is False'''
+        result = self.process_request()
+        self.assertNotIn('user', result)
+        self.assertTrue(len(result.keys()) > 0)
+
 
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,

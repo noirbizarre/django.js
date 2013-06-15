@@ -4,7 +4,10 @@ Changelog
 Current
 -------
 
-- nothing yet
+- Allow features to be disabled with:
+  - ``settings.JS_URLS_ENABLED``
+  - ``settings.JS_USER_ENABLED``
+  - ``settings.JS_CONTEXT_ENABLED``
 
 
 0.7.6 (2013-06-07)
