@@ -165,6 +165,10 @@ class ContextSerializer(object):
         if settings.JS_CONTEXT_ENABLED:
             for context in RequestContext(request):
                 for key, value in six.iteritems(context):
+                    if settings.JS_CONTEXT and key not in settings.JS_CONTEXT:
+                        continue
+                    if settings.JS_CONTEXT_EXCLUDE and key in settings.JS_CONTEXT_EXCLUDE:
+                        continue
                     processor_name = 'process_%s' % key
                     if hasattr(cls, processor_name):
                         processor = getattr(cls, processor_name)
@@ -190,8 +194,12 @@ class ContextSerializer(object):
     def process_LANGUAGE_CODE(cls, language_code, data):
         # Dirty hack to fix non included default
         language = translation.get_language_info('en' if language_code == 'en-us' else language_code)
-        data['LANGUAGE_NAME'] = language['name']
-        data['LANGUAGE_NAME_LOCAL'] = language['name_local']
+        if not settings.JS_CONTEXT or 'LANGUAGE_NAME' in settings.JS_CONTEXT \
+            or (settings.JS_CONTEXT_EXCLUDE and 'LANGUAGE_NAME' in settings.JS_CONTEXT_EXCLUDE):
+            data['LANGUAGE_NAME'] = language['name']
+        if not settings.JS_CONTEXT or 'LANGUAGE_NAME_LOCAL' in settings.JS_CONTEXT \
+            or (settings.JS_CONTEXT_EXCLUDE and 'LANGUAGE_NAME_LOCAL' in settings.JS_CONTEXT_EXCLUDE):
+            data['LANGUAGE_NAME_LOCAL'] = language['name_local']
         return language_code
 
     @classmethod

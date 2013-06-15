@@ -8,6 +8,8 @@ Current
   - ``settings.JS_URLS_ENABLED``
   - ``settings.JS_USER_ENABLED``
   - ``settings.JS_CONTEXT_ENABLED``
+- Added context black and white lists (``settings.JS_CONTEXT`` and ``settings.JS_CONTEXT_EXCLUDE``)
+
 
 
 0.7.6 (2013-06-07)
