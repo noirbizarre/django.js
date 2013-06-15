@@ -22,6 +22,7 @@ serve:
 
 test:
 	@echo 'Running test suite'
+	@./minify.sh
 	@python manage.py test djangojs
 
 doc:
@@ -31,11 +32,13 @@ doc:
 
 dist:
 	@echo 'Generating a distributable python package'
+	@./minify.sh
 	@python setup.py sdist
 	@echo 'Done'
 
 release:
 	@echo 'Bumping version and publishing it'
+	@./minify.sh
 	@./release.sh
 	@echo 'Done'
 
