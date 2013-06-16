@@ -11,7 +11,8 @@ import re
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView
 
-from djangojs.utils import urls_as_dict, urls_as_json, ContextSerializer, StorageGlobber, LazyJsonEncoder
+from djangojs.conf import settings
+from djangojs.utils import urls_as_dict, urls_as_json, StorageGlobber, LazyJsonEncoder, class_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,8 @@ class JsInitView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(JsInitView, self).get_context_data(**kwargs)
         context['urls'] = urls_as_json()
-        context['context'] = ContextSerializer.as_json(self.request)
+        serializer = class_from_string(settings.JS_CONTEXT_PROCESSOR)
+        context['context'] = serializer(self.request).as_json()
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -77,7 +79,8 @@ class ContextJsonView(JsonView):
     Render the context as a JSON object.
     '''
     def get_context_data(self, **kwargs):
-        return ContextSerializer.as_dict(self.request)
+        serializer = class_from_string(settings.JS_CONTEXT_PROCESSOR)
+        return serializer(self.request).as_dict()
 
 
 class JsTestView(TemplateView):

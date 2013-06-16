@@ -18,7 +18,7 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django import VERSION as DJANGO_VERSION
 
 from djangojs.conf import settings
-from djangojs.utils import ContextSerializer
+from djangojs.utils import class_from_string
 
 TEST_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'djangojs.tests.custom_processor',
@@ -34,6 +34,10 @@ class ContextTestMixin(object):
 
     def setUp(self):
         self.factory = RequestFactory()
+
+    @property
+    def serializer(self):
+        return class_from_string(settings.JS_CONTEXT_PROCESSOR)
 
     def process_request(self, admin=False, headers=None, custom=False):
         headers = headers if headers else {}
@@ -230,7 +234,7 @@ class ContextTestMixin(object):
     def test_context_whitelist(self):
         '''Should only include context variable from settings.JS_CONTEXT if set'''
         result = self.process_request()
-        self.assertEqual(len(result.keys()), 2 + 1) #: User is always in context
+        self.assertEqual(len(result.keys()), 2 + 1)  #: User is always in context
         self.assertIn('STATIC_URL', result)
         self.assertIn('LANGUAGE_CODE', result)
 
@@ -241,6 +245,13 @@ class ContextTestMixin(object):
         self.assertNotIn('STATIC_URL', result)
         self.assertNotIn('LANGUAGE_CODE', result)
 
+    @override_settings(JS_CONTEXT_PROCESSOR='djangojs.tests.CustomContextProcessor')
+    def test_context_custom_processors(self):
+        '''Should allow custom context processor from settings.JS_CONTEXT_PROCESSOR'''
+        result = self.process_request()
+        self.assertIn('CUSTOM', result)
+        self.assertEqual(result['CUSTOM'], 'MODIFIED CUSTOM VALUE')
+
 
 @override_settings(
     TEMPLATE_CONTEXT_PROCESSORS=TEST_CONTEXT_PROCESSORS,
@@ -248,9 +259,8 @@ class ContextTestMixin(object):
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsDictTest(ContextTestMixin, TestCase):
-
     def get_result(self, request):
-        return ContextSerializer.as_dict(request)
+        return self.serializer(request).as_dict()
 
 
 @override_settings(
@@ -259,9 +269,8 @@ class ContextAsDictTest(ContextTestMixin, TestCase):
     INSTALLED_APPS=['djangojs', 'djangojs.fake']
 )
 class ContextAsJsonTest(ContextTestMixin, TestCase):
-
     def get_result(self, request):
-        return json.loads(ContextSerializer.as_json(request))
+        return json.loads(self.serializer(request).as_json())
 
 
 @override_settings(

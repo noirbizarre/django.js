@@ -43,6 +43,16 @@ RE_ESCAPE = re.compile(r'([^\\]?)\\')  # Recognize escape characters
 RE_START_END = re.compile(r'[\$\^]')  # Recognize start and end charaters
 
 
+SERIALZABLE_TYPES = six.string_types + six.integer_types + (six.text_type, tuple, list, dict, bool, set)
+
+
+def class_from_string(name):
+    module_name, class_name = name.rsplit('.', 1)
+    __import__(module_name)
+    module = sys.modules[module_name]
+    return getattr(module, class_name)
+
+
 def urls_as_dict():
     '''
     Get the URLs mapping as a dictionnary
@@ -156,42 +166,42 @@ class ContextSerializer(object):
     '''
     Serialize the context from requests.
     '''
-    @classmethod
-    def as_dict(cls, request):
+
+    def __init__(self, request):
+        self.request = request
+
+    def as_dict(self):
         '''
         Serialize the context as a dictionnary from a given request.
         '''
         data = {}
         if settings.JS_CONTEXT_ENABLED:
-            for context in RequestContext(request):
+            for context in RequestContext(self.request):
                 for key, value in six.iteritems(context):
                     if settings.JS_CONTEXT and key not in settings.JS_CONTEXT:
                         continue
                     if settings.JS_CONTEXT_EXCLUDE and key in settings.JS_CONTEXT_EXCLUDE:
                         continue
-                    processor_name = 'process_%s' % key
-                    if hasattr(cls, processor_name):
-                        processor = getattr(cls, processor_name)
-                        data[key] = processor(value, data)
-                    elif isinstance(value, (str, tuple, list, dict, int, bool, set)):
+                    handler_name = 'process_%s' % key
+                    if hasattr(self, handler_name):
+                        handler = getattr(self, handler_name)
+                        data[key] = handler(value, data)
+                    elif isinstance(value, SERIALZABLE_TYPES):
                         data[key] = value
         if settings.JS_USER_ENABLED:
-            cls.handle_user(data, request)
+            self.handle_user(data)
         return data
 
-    @classmethod
-    def as_json(cls, request):
+    def as_json(self):
         '''
-        Serialize the context as JSON from a given request.
+        Serialize the context as JSON.
         '''
-        return json.dumps(cls.as_dict(request), cls=LazyJsonEncoder)
+        return json.dumps(self.as_dict(), cls=LazyJsonEncoder)
 
-    @classmethod
-    def process_LANGUAGES(cls, languages, data):
+    def process_LANGUAGES(self, languages, data):
         return dict((code, _(name)) for code, name in languages)
 
-    @classmethod
-    def process_LANGUAGE_CODE(cls, language_code, data):
+    def process_LANGUAGE_CODE(self, language_code, data):
         # Dirty hack to fix non included default
         language = translation.get_language_info('en' if language_code == 'en-us' else language_code)
         if not settings.JS_CONTEXT or 'LANGUAGE_NAME' in settings.JS_CONTEXT \
@@ -202,8 +212,7 @@ class ContextSerializer(object):
             data['LANGUAGE_NAME_LOCAL'] = language['name_local']
         return language_code
 
-    @classmethod
-    def handle_user(cls, data, request):
+    def handle_user(self, data):
         '''Insert user informations in data'''
         # Default to unauthenticated anonymous user
         data['user'] = {
@@ -214,7 +223,7 @@ class ContextSerializer(object):
             'permissions': tuple(),
         }
         if 'django.contrib.sessions.middleware.SessionMiddleware' in settings.MIDDLEWARE_CLASSES:
-            user = request.user
+            user = self.request.user
             data['user']['is_authenticated'] = user.is_authenticated()
             if hasattr(user, 'username'):
                 data['user']['username'] = user.username
