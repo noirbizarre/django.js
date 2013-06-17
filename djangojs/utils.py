@@ -164,7 +164,13 @@ class LazyJsonEncoder(DjangoJSONEncoder):
 
 class ContextSerializer(object):
     '''
-    Serialize the context from requests.
+    Serialize context and user from requests.
+
+    Inherits from this class and set your :ref:`settings.JS_CONTEXT_PROCESSOR <js-context-processor>`
+    to customize the serialization.
+
+    To add a custom variable serialization handler,
+    add a method named ``process_VARNAME(self, value, data)``.
     '''
 
     def __init__(self, request):
@@ -199,9 +205,14 @@ class ContextSerializer(object):
         return json.dumps(self.as_dict(), cls=LazyJsonEncoder)
 
     def process_LANGUAGES(self, languages, data):
+        '''Serialize LANGUAGES as a localized dictionnary.'''
         return dict((code, _(name)) for code, name in languages)
 
     def process_LANGUAGE_CODE(self, language_code, data):
+        '''
+        Fix language code when set to non included dedfault `en`
+        and add the extra variables ``LANGUAGE_NAME`` and ``LANGUAGE_NAME_LOCAL``.
+        '''
         # Dirty hack to fix non included default
         language = translation.get_language_info('en' if language_code == 'en-us' else language_code)
         if not settings.JS_CONTEXT or 'LANGUAGE_NAME' in settings.JS_CONTEXT \
@@ -213,7 +224,11 @@ class ContextSerializer(object):
         return language_code
 
     def handle_user(self, data):
-        '''Insert user informations in data'''
+        '''
+        Insert user informations in data
+
+        Override it to add extra user attributes.
+        '''
         # Default to unauthenticated anonymous user
         data['user'] = {
             'username': '',

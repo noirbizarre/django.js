@@ -82,6 +82,7 @@ It supports the following keyword parameters (in this order if you want to omit 
 ``jquery``  ``false``  Load the jQuery library
 ``i18n``    ``true``  Load the javascript i18n catalog
 ``csrf``    ``true``  Patch jQuery.ajax() fot Django CSRF
+``init``    ``true``  Initialize Django.js on load
 =========== ========= ======================================
 
 

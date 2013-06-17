@@ -5,9 +5,9 @@ Current
 -------
 
 - Allow features to be disabled with:
-  - ``settings.JS_URLS_ENABLED``
-  - ``settings.JS_USER_ENABLED``
-  - ``settings.JS_CONTEXT_ENABLED``
+   - ``settings.JS_URLS_ENABLED``
+   - ``settings.JS_USER_ENABLED``
+   - ``settings.JS_CONTEXT_ENABLED``
 - Added context black and white lists (``settings.JS_CONTEXT`` and ``settings.JS_CONTEXT_EXCLUDE``)
 - Allow context serialization customization by inheritance with ``settings.JS_CONTEXT_PROCESSOR``
 

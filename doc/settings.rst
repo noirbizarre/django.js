@@ -1,8 +1,14 @@
 Settings
 ========
 
-You can tune a little Django.js behaviour using settings.
+You can tune Django.js behaviour using settings.
 Django.js provide the following optionnal settings:
+
+Libraries versions
+~~~~~~~~~~~~~~~~~~
+
+You can specify some libraries versions used by Django.js.
+
 
 ``JQUERY_VERSION``
 ------------------
@@ -20,67 +26,137 @@ Django.js provide the following versions:
 - 2.0.2
 
 
+URLs handling
+~~~~~~~~~~~~~
+
+Theses settings allow you to customize or disable Django.js URLs handling.
+
+``JS_URLS_ENABLED``
+-------------------
+
+**Default:** ``True``
+
+You can disable Django.js URLs handling by setting it to ``False``
+
+
 ``JS_URLS``
 -----------
 
-Serialized URLs names whitelist. If this setting is specified, only named URLs listed in will be serialized.
+**Default:** ``None``
 
-- Default value: ``None``
-- Expected: a list of URLs names to include only
+Serialized URLs names whitelist. If this setting is specified, only named URLs listed in will be serialized.
 
 
 ``JS_URLS_EXCLUDE``
 ------------------------------
 
-Serialized URLs names blacklist. It this setting is specified, named URLs listed in will not be serialized.
+**Default:** ``None``
 
-- Default value: ``None``
-- Expected: a list of URLs names to exclude
+Serialized URLs names blacklist. It this setting is specified, named URLs listed in will not be serialized.
 
 
 ``JS_URLS_NAMESPACES``
 ----------------------
 
-Serialized namespaces whitelist. If this setting is specified, only URLs from namespaces listed in will be serialized.
+**Default:** ``None``
 
-- Default value: ``None``
-- Expected: a list of URL namespaces to include only
+Serialized namespaces whitelist. If this setting is specified, only URLs from namespaces listed in will be serialized.
 
 
 ``JS_URLS_NAMESPACES_EXCLUDE``
 ------------------------------
 
-Serialized namespaces blacklist. It this setting is specified, URLs from namespaces listed in will not be serialized.
+**Default:** ``None``
 
-- Default value: ``None``
-- Expected: a list of URL namespaces to exclude
+Serialized namespaces blacklist.
+If this setting is specified, URLs from namespaces listed in will not be serialized.
 
 
 ``JS_URLS_UNNAMED``
 -------------------
 
+**Default:** ``False``
+
 Serialize unnamed URLs. If this setting is set to ``True``,
 unnamed URLs will be serialized (only for function based views).
 
-- Default value: ``False``
 
+Context handling
+~~~~~~~~~~~~~~~~
+
+Theses settings allow you to customize or disable Django.js context handling.
+
+``JS_CONTEXT_ENABLED``
+----------------------
+
+**default:** ``True``
+
+You can disable Django.js context handling by setting it to ``False``
+
+
+``JS_CONTEXT``
+--------------
+
+**default:** ``None``
+
+Serialized context variables names whitelist.
+If this setting is specified, only context variables listed in will be serialized.
+
+.. note:: ``LANGUAGE_NAME`` and ``LANGUAGE_NAME_LOCAL`` requires ``LANGUAGE_CODE`` to be also included.
+
+
+``JS_CONTEXT_EXCLUDE``
+----------------------
+
+**Default:** ``None``
+
+Serialized context variables names blacklist.
+If this setting is specified, context variables names listed in will not be serialized.
+
+.. note:: Excluding ``LANGUAGE_CODE`` also exclude ``LANGUAGE_NAME`` and ``LANGUAGE_NAME_LOCAL``.
+
+
+.. _js-context-processor:
+
+``JS_CONTEXT_PROCESSOR``
+------------------------
+
+**Default:** ``djangojs.utils.ContextSerializer``
+
+Change this value if you want to specify a custom context serializer class.
+The custom class must inherits from :class:`ContextSerializer <djangojs.utils.ContextSerializer>`
+
+
+User handling
+~~~~~~~~~~~~~
+
+``JS_USER_ENABLED``
+----------------------
+
+**default:** ``True``
+
+You can disable Django.js user handling by setting it to ``False``
+
+
+Localization and internationalization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``JS_I18N_APPS``
 ----------------
 
-Serialized translations whitelist. If specified, only apps listed in will appear in the javascript translation catalog.
+**Default:** ``None``
 
-- Default value: ``None``
-- Expected: a restricted application list to include in the javascript translation catalog
+Serialized translations whitelist.
+If specified, only apps listed in will appear in the javascript translation catalog.
 
 
 ``JS_I18N_APPS_EXCLUDE``
 ------------------------
 
-Serialized translations blacklist. If specified, apps listed in will not appear in the javascript translation catalog.
+**Default:** ``None``
 
-- Default value: ``None``
-- Expected: an application list to exclude from the javascript translation catalog
+Serialized translations blacklist.
+If specified, apps listed in will not appear in the javascript translation catalog.
 
 
 Usage exemple
@@ -101,3 +177,9 @@ You could have, in your ``settings.py``:
     )
     # Only include my apps' translations
     JS_I18N_APPS = ('myapp', 'myapp.other')
+
+    # Disable user serialization
+    JS_USER_ENABLED = False
+
+    # Custom Context serializer
+    JS_CONTEXT_PROCESSOR = 'my.custom.ContextProcessor'

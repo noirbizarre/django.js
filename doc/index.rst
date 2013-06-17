@@ -65,6 +65,7 @@ Documentation
     integration
     settings
     api
+    contribute
     changelog
 
 
