@@ -192,7 +192,7 @@ class ContextSerializer(object):
                     if hasattr(self, handler_name):
                         handler = getattr(self, handler_name)
                         data[key] = handler(value, data)
-                    elif isinstance(value, SERIALZABLE_TYPES):
+                    elif isinstance(value, SERIALIZABLE_TYPES):
                         data[key] = value
         if settings.JS_USER_ENABLED:
             self.handle_user(data)
