@@ -43,7 +43,7 @@ RE_ESCAPE = re.compile(r'([^\\]?)\\')  # Recognize escape characters
 RE_START_END = re.compile(r'[\$\^]')  # Recognize start and end charaters
 
 
-SERIALZABLE_TYPES = six.string_types + six.integer_types + (six.text_type, tuple, list, dict, bool, set)
+SERIALIZABLE_TYPES = six.string_types + six.integer_types + (six.text_type, tuple, list, dict, bool, set)
 
 
 def class_from_string(name):
