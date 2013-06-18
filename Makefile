@@ -2,6 +2,7 @@ BASEDIR=$(CURDIR)
 DOCDIR=$(BASEDIR)/doc
 DISTDIR=$(BASEDIR)/dist
 PACKAGE='djangojs'
+suite=$(or $(subst :, ,$(tests)), $(PACKAGE))
 
 help:
 	@echo 'Makefile for Django.js                                               '
@@ -23,7 +24,7 @@ serve:
 test:
 	@echo 'Running test suite'
 	@./minify.sh
-	@python manage.py test djangojs
+	@python manage.py test $(suite)
 
 doc:
 	@echo 'Generating documentation'
