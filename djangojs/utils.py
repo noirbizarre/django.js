@@ -71,9 +71,12 @@ def urls_as_json():
 def _get_urls(module, prefix='', namespace=None):
     urls = {}
     if isinstance(module, (six.text_type, six.string_types)):
-        __import__(module)
-        root_urls = sys.modules[module]
-        patterns = root_urls.urlpatterns
+        try:
+            __import__(module)
+            root_urls = sys.modules[module]
+            patterns = root_urls.urlpatterns
+        except ImportError:  # die silently
+            patterns = tuple()
     elif isinstance(module, (list, tuple)):
         patterns = module
     elif isinstance(module, types.ModuleType):
