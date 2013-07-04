@@ -54,3 +54,9 @@ API
 .. automodule:: djangojs.context_processors
     :members:
     :show-inheritance:
+
+
+:mod:`djangojs.contrib` -- Contributed compatibility modules
+------------------------------------------------------------
+
+.. automodule:: djangojs.contrib
