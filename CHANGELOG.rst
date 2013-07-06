@@ -11,6 +11,7 @@ Current
 - Added context black and white lists (``settings.JS_CONTEXT`` and ``settings.JS_CONTEXT_EXCLUDE``)
 - Allow context serialization customization by inheritance with ``settings.JS_CONTEXT_PROCESSOR``
 - Do not fail on import when parsing URLs (Fix `issue #7 <https://github.com/noirbizarre/django.js/issues/7>`_ thanks to Wasil Sergejczyk)
+- Treat starred non-capturing groups and starred characters as optionnals (Fix `issue #22 <https://github.com/noirbizarre/django.js/issues/22>`_)
 
 
 
