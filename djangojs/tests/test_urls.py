@@ -37,6 +37,11 @@ class UrlsTestMixin(object):
         self.assertIn('test_named_multi', self.result)
         self.assertEqual(self.result['test_named_multi'], '/test/named/<str>/<num>')
 
+    def test_url_non_capturing_starred_groups(self):
+        '''It should serialize an URL with a non-capturing starred group'''
+        self.assertIn('test_named_nested', self.result)
+        self.assertEqual(self.result['test_named_nested'], '/test/named/<test>')
+
     def test_unnamed_url(self):
         '''It should not serialize unnamed URLs by default'''
         self.assertNotIn('', self.result)

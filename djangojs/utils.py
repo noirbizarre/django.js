@@ -37,8 +37,8 @@ __all__ = (
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))")  # Pattern for recongnizing named parameters in urls
 RE_ARG = re.compile(r"(\(.*?\))")  # Pattern for recognizing unnamed url parameters
-RE_OPT = re.compile(r"(?:\w|/)\?")  # Pattern for recognizing optionnal character
-RE_OPT_GRP = re.compile(r"\(\?\:.*\)\?")  # Pattern for recognizing optionnal group
+RE_OPT = re.compile(r"(?:\w|/)(?:\?|\*)")  # Pattern for recognizing optionnal character
+RE_OPT_GRP = re.compile(r"\(\?\:.*\)(?:\?|\*)")  # Pattern for recognizing optionnal group
 RE_ESCAPE = re.compile(r'([^\\]?)\\')  # Recognize escape characters
 RE_START_END = re.compile(r'[\$\^]')  # Recognize start and end charaters
 
