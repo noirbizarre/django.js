@@ -17,13 +17,15 @@ Specify the jQuery version to use. If not specififed, default to last version.
 
 Django.js provide the following versions:
 
-- 1.8.3
-- 1.9.0
-- 1.9.1
-- 1.10.1
-- 2.0.0
-- 2.0.1
+- 2.0.3
 - 2.0.2
+- 2.0.1
+- 2.0.0
+- 1.10.2
+- 1.10.1
+- 1.9.1
+- 1.9.0
+- 1.8.3
 
 
 URLs handling
