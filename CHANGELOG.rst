@@ -13,6 +13,7 @@ Current
 - Do not fail on import when parsing URLs (Fix `issue #7 <https://github.com/noirbizarre/django.js/issues/7>`_ thanks to Wasil Sergejczyk)
 - Treat starred non-capturing groups and starred characters as optionnals (Fix `issue #22 <https://github.com/noirbizarre/django.js/issues/22>`_)
 - Upgraded to jQuery 2.0.3 (and added 1.10.2)
+- Upgraded to QUnit 1.12.0
 
 
 
