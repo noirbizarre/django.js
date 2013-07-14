@@ -76,3 +76,16 @@ API
 ------------------------------------------------------------
 
 .. automodule:: djangojs.contrib
+
+
+:mod:`djangojs.contrib.social_auth` -- `django_social_auth`_ support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This module provide support for `django_social_auth`_.
+
+.. automodule:: djangojs.contrib.social_auth
+    :members:
+    :show-inheritance:
+
+
+.. _django_social_auth: https://github.com/omab/django-social-auth
