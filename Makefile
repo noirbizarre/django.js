@@ -13,6 +13,7 @@ help:
 	@echo '   make pep8             Run the PEP8 report                         '
 	@echo '   make doc              Generate the documentation                  '
 	@echo '   make dist             Generate a distributable package            '
+	@echo '   make minify           Minify Django.js with yuglify                '
 	@echo '   make release          Bump a version and publish it on PyPI       '
 	@echo '   make clean            Remove all temporary and generated artifacts'
 	@echo '                                                                     '
@@ -24,7 +25,6 @@ serve:
 
 test:
 	@echo 'Running test suite'
-	@./minify.sh
 	@python manage.py test $(suite)
 
 pep8:
@@ -41,9 +41,11 @@ dist:
 	@python setup.py sdist
 	@echo 'Done'
 
-release:
-	@echo 'Bumping version and publishing it'
+minify:
 	@./minify.sh
+
+release: minify
+	@echo 'Bumping version and publishing it'
 	@./release.sh
 	@echo 'Done'
 

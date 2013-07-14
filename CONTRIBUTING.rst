@@ -38,7 +38,7 @@ There are some rules to follow:
 
 A Makefile is provided to simplify the common tasks:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ make
     Makefile for Django.js
@@ -46,8 +46,10 @@ A Makefile is provided to simplify the common tasks:
     Usage:
        make serve            Run the test server
        make test             Run the test suite
+       make pep8             Run the PEP8 report
        make doc              Generate the documentation
        make dist             Generate a distributable package
+       make minify           Minify Django.js with yuglify
        make release          Bump a version and publish it on PyPI
        make clean            Remove all temporary and generated artifacts
 
@@ -56,7 +58,7 @@ To ensure everything is fine before submission, use ``tox``.
 It will run the test suite on all the supported Python version
 and ensure the documentation is generating.
 
-.. code-block:: bash
+.. code-block:: console
 
     $ pip install tox
     $ tox
@@ -67,14 +69,18 @@ and ensure the documentation is generating.
 You can run the javascript test suite in the browser (http://localhost:8000).
 Javascript tests are run in the test suite too, but it runs on the minified version of the javascript libary.
 
-You can either minify it manually by running the provided script or use the Makefile ``test`` task that minify the javascript before running the tests:
+You can either minify it manually by running the provided script
 
-.. code-block:: bash
+.. code-block:: console
 
     $ ./minify.sh
     $ python manage.py test djangojs
-    # or
-    $ make test
+
+or use the Makefile ``minify`` task that minify the javascript:
+
+.. code-block:: console
+
+    $ make minify test
 
 .. note::
 
