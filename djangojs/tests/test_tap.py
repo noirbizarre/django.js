@@ -54,7 +54,10 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_source(self):
         '''Should parse a NOT OK assertion with message and source'''
-        line = 'not ok 298 - reset should not modify test status, source: at http://localhost:8000/static/js/test/libs/qunit.js:435'
+        line = (
+            'not ok 298 - reset should not modify test status, '
+            'source: at http://localhost:8000/static/js/test/libs/qunit.js:435'
+        )
 
         assertion = TapAssertion.parse(line)
 
@@ -84,7 +87,11 @@ class TapAssertionTest(unittest.TestCase):
 
     def test_parse_not_ok_with_all(self):
         '''Should parse a NOT OK assertion with all extras'''
-        line = "not ok 42 - reset should not modify test status, expected: 'something', got: 'something else', source: at http://localhost:8000/static/js/test/libs/qunit.js:435"
+        line = (
+            "not ok 42 - reset should not modify test status, "
+            "expected: 'something', got: 'something else', "
+            "source: at http://localhost:8000/static/js/test/libs/qunit.js:435"
+        )
 
         assertion = TapAssertion.parse(line)
 

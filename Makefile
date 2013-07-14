@@ -28,7 +28,7 @@ test:
 	@python manage.py test $(suite)
 
 pep8:
-	@pep8 $(PACKAGE) --max-line-length=120 --ignore=E128,E122,E125 || exit 0
+	@pep8 $(PACKAGE) --max-line-length=120 --ignore=E128,E122,E125 && echo 'PEP8: OK'
 
 doc:
 	@echo 'Generating documentation'
