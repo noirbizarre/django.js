@@ -76,7 +76,7 @@ Running the localize command:
 
     $ python manage.py js localize -l fr
 
-will extract all localizable string from your ``.js`` files as usual and add those in your ``.hbs`` files.
+will extract all localizable strings from your ``.js`` files as usual and add those in your ``.hbs`` files.
 
 .. code-block:: console
 
@@ -148,7 +148,7 @@ specifying the target directory for `Bower`_ downloads.
 ``launcher``
 ------------
 
-The ``launcher`` command get the full path to a Django.js PhantomJS runner
+The ``launcher`` command returns the full path to a Django.js PhantomJS runner
 (usefull if you need to execute it manually).
 
 .. code-block:: console

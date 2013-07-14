@@ -178,7 +178,7 @@ dirname
     is the application relative path to search into
 
 pattern
-    is a expressions to extract localizable strings (cane be a list of regular expressions).
+    is a expressions to extract localizable strings (can be a list of regular expressions).
 
 
 **Exemple:**
