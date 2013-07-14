@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Current
--------
+0.8.0 (2013-07-14)
+------------------
 
 - Allow features to be disabled with:
    - ``settings.JS_URLS_ENABLED``
