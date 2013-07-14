@@ -16,4 +16,4 @@ matrix:
 install:
   - pip install $DJANGO pep8 --use-mirrors
 # command to run tests
-script: make test pep8
+script: make test pep8 doc
