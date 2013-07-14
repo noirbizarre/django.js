@@ -41,7 +41,7 @@ class LocalizeParser(Subparser):
         parser.add_argument('--no-obsolete', action='store_true', help="Remove obsolete message strings"),
 
     def handle(self, args):
-        from django.core.management.commands.makemessages import make_messages
+        from django.core.management.commands.makemessages import make_messages, handle_extensions
         from django.db import models
         from djangojs.conf import settings
 
@@ -56,6 +56,8 @@ class LocalizeParser(Subparser):
             ignore_patterns += ['CVS', '.*', '*~']
         ignore_patterns = list(set(ignore_patterns))
 
+        extensions = handle_extensions(args.extensions)
+
         try:
             apps = [models.get_app(app) for app in args.apps]
         except (ImproperlyConfigured, ImportError) as e:
@@ -67,7 +69,7 @@ class LocalizeParser(Subparser):
 
             catalogs = [self.build_catalog(root, ext, regexp) for ext, root, regexp in settings.JS_I18N_PATTERNS]
 
-            make_messages(args.locale, 'djangojs', args.verbosity, args.all, args.extensions,
+            make_messages(args.locale, b'djangojs', args.verbosity, args.all, extensions,
                           args.symlinks, ignore_patterns, args.no_wrap, args.no_location,
                           args.no_obsolete, self.stdout)
 
@@ -82,8 +84,10 @@ class LocalizeParser(Subparser):
                 for dirname in [''] + dirnames:
                     glob_pattern = os.path.join(root, dirname, '*.{}'.format(extension))
                     for filename in iglob(glob_pattern):
+                        content = open(filename, 'r').read()
                         for regexp in regexps:
-                            messages = re.findall(regexp, open(filename, 'r').read())
-                            messages_js = ''.join(['gettext(\'%s\');\n' % msg for msg in messages])
-                            output.write(messages_js)
+                            for match in re.finditer(regexp, content):
+                                line_no = content.count('\n', 0, match.start()) + 1
+                                output.write('// Translators: {}:{}\n'.format(filename, line_no))
+                                output.write('gettext(\'{}\');\n'.format(match.group(1)))
         return catalog
