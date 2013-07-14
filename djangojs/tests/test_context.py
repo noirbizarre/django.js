@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.utils import unittest
 import json
 
+from django import VERSION as DJANGO_VERSION
 from django.conf import global_settings
 from django.contrib.auth.management import create_permissions
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.management import update_contenttypes
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.urlresolvers import reverse
 from django.db.models import get_app
+from django.middleware.locale import LocaleMiddleware
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
 from django.utils import translation
-from django.middleware.locale import LocaleMiddleware
-from django.contrib.sessions.middleware import SessionMiddleware
-from django import VERSION as DJANGO_VERSION
+from django.utils import unittest
 
 from djangojs.conf import settings
 from djangojs.utils import class_from_string

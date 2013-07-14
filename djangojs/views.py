@@ -12,7 +12,8 @@ from django.http import HttpResponse
 from django.views.generic import View, TemplateView
 
 from djangojs.conf import settings
-from djangojs.utils import urls_as_dict, urls_as_json, StorageGlobber, LazyJsonEncoder, class_from_string
+from djangojs.urls_serializer import urls_as_dict, urls_as_json
+from djangojs.utils import StorageGlobber, LazyJsonEncoder, class_from_string
 
 logger = logging.getLogger(__name__)
 

@@ -8,6 +8,14 @@ API
     :members:
 
 
+:mod:`djangojs.context_serializer` -- Context serialization handling
+--------------------------------------------------------------------
+
+.. automodule:: djangojs.context_serializer
+    :members:
+    :show-inheritance:
+
+
 :mod:`djangojs.views` -- Javascript views helpers
 -------------------------------------------------
 
@@ -20,6 +28,14 @@ API
 ------------------------------------------------------
 
 .. automodule:: djangojs.runners
+    :members:
+    :show-inheritance:
+
+
+:mod:`djangojs.urls_serializer` -- URLs serialization handling
+--------------------------------------------------------------
+
+.. automodule:: djangojs.urls_serializer
     :members:
     :show-inheritance:
 

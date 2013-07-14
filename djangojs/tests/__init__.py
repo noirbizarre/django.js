@@ -10,7 +10,7 @@ from .test_tap import *
 from .test_urls import *
 # pylint: enable=W0401
 
-from djangojs.utils import ContextSerializer
+from djangojs.context_serializer import ContextSerializer
 
 
 def custom_processor(_):

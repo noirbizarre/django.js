@@ -22,7 +22,7 @@ DEFAULTS = {
     'JS_URLS_UNNAMED': False,
     'JS_CONTEXT': None,
     'JS_CONTEXT_EXCLUDE': None,
-    'JS_CONTEXT_PROCESSOR': 'djangojs.utils.ContextSerializer',
+    'JS_CONTEXT_PROCESSOR': 'djangojs.context_serializer.ContextSerializer',
     'JS_I18N_APPS': None,
     'JS_I18N_APPS_EXCLUDE': None,
     'JS_I18N_PATTERNS': tuple(),

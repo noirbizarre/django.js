@@ -175,14 +175,14 @@ class UrlsTestMixin(object):
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 
     def get_result(self):
-        from djangojs.utils import urls_as_dict
+        from djangojs.urls_serializer import urls_as_dict
         return urls_as_dict()
 
 
 class UrlsAsJsonTest(UrlsTestMixin, TestCase):
 
     def get_result(self):
-        from djangojs.utils import urls_as_json
+        from djangojs.urls_serializer import urls_as_json
         return json.loads(urls_as_json())
 
 
