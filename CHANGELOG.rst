@@ -15,6 +15,7 @@ Current
 - Upgraded to jQuery 2.0.3 (and added 1.10.2)
 - Upgraded to QUnit 1.12.0
 - Added ``js`` management command.
+- Extracted URLs handling and context handling into their own modules
 
 
 
