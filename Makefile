@@ -14,7 +14,6 @@ help:
 	@echo '   make doc              Generate the documentation                  '
 	@echo '   make dist             Generate a distributable package            '
 	@echo '   make minify           Minify Django.js with yuglify                '
-	@echo '   make release          Bump a version and publish it on PyPI       '
 	@echo '   make clean            Remove all temporary and generated artifacts'
 	@echo '                                                                     '
 
@@ -43,11 +42,6 @@ dist:
 
 minify:
 	@./minify.sh
-
-release: minify
-	@echo 'Bumping version and publishing it'
-	@./release.sh
-	@echo 'Done'
 
 clean:
 	rm -fr $(DISTDIR)
