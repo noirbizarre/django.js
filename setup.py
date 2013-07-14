@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
+import sys
+
 from setuptools import setup, find_packages
 
 
@@ -31,6 +33,10 @@ long_description = '\n'.join((
     ''
 ))
 
+install_requires = ['django']
+if sys.version_info[0:2] < (2, 7):
+    install_requires += ['argparse']
+
 setup(
     name='django.js',
     version=__import__('djangojs').__version__,
@@ -42,7 +48,7 @@ setup(
     author_email='noirbizarre+django@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['django'],
+    install_requires=install_requires,
     license='LGPL',
     use_2to3=True,
     classifiers=[

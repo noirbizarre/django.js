@@ -25,6 +25,7 @@ DEFAULTS = {
     'JS_CONTEXT_PROCESSOR': 'djangojs.utils.ContextSerializer',
     'JS_I18N_APPS': None,
     'JS_I18N_APPS_EXCLUDE': None,
+    'JS_I18N_PATTERNS': tuple(),
     'JQUERY_VERSION': JQUERY_DEFAULT_VERSION,
 }
 

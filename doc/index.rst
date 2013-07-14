@@ -28,13 +28,13 @@ Installation
 
 You can install Django.js with pip:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ pip install django.js
 
 or with easy_install:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ easy_install django.js
 
@@ -63,6 +63,7 @@ Documentation
     requirejs
     test
     integration
+    command
     settings
     api
     contribute

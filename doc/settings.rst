@@ -161,6 +161,35 @@ Serialized translations blacklist.
 If specified, apps listed in will not appear in the javascript translation catalog.
 
 
+.. _settings-i18n-patterns:
+
+``JS_I18N_PATTERNS``
+--------------------
+
+**Default:** ``tuple()``
+
+Custom patterns for localization using the :ref:`localize management command <command-localize>`.
+Each entry should be a tuple ``(extension, dirname, pattern)`` where:
+
+extension
+    is an file extension to match
+
+dirname
+    is the application relative path to search into
+
+pattern
+    is a expressions to extract localizable strings (cane be a list of regular expressions).
+
+
+**Exemple:**
+
+.. code-block:: python
+
+    JS_I18N_PATTERNS = (
+        ('hbs', 'static/templates', r'{{#trans}}(.*?){{/trans}}'),
+    )
+
+
 Usage exemple
 -------------
 

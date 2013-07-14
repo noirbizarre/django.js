@@ -37,6 +37,11 @@ __all__ = (
     'AbsoluteFileStorage',
 )
 
+LAUNCHERS = {
+    'jasmine': join(dirname(__file__), 'phantomjs', 'jasmine-runner.js'),
+    'qunit': join(dirname(__file__), 'phantomjs', 'qunit-runner.js')
+}
+
 
 def parse_verbosity():
     verbosity = 1
@@ -268,7 +273,7 @@ class JasmineSuite(object):
     A mixin that runs a jasmine test suite with PhantomJs.
     '''
     title = 'Jasmine test suite'
-    phantomjs_runner = join(dirname(__file__), 'phantomjs', 'jasmine-runner.js')
+    phantomjs_runner = LAUNCHERS['jasmine']
     template_name = 'djangojs/jasmine-runner.html'
 
     def test(self):
@@ -280,7 +285,7 @@ class QUnitSuite(object):
     A mixin that runs a QUnit test suite with PhantomJs.
     '''
     title = 'QUnit test suite'
-    phantomjs_runner = join(dirname(__file__), 'phantomjs', 'qunit-runner.js')
+    phantomjs_runner = LAUNCHERS['qunit']
     template_name = 'djangojs/qunit-runner.html'
 
     def test(self):
