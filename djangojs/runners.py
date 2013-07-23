@@ -28,6 +28,7 @@ from django.utils.unittest import TestCase
 LINE_SIZE = 70
 
 __all__ = (
+    'PhantomJsRunner',
     'JsTestCase',
     'JsFileTestCase',
     'JsTemplateTestCase',
