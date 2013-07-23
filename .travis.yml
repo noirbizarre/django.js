@@ -19,4 +19,4 @@ install:
 script:
   - make coverage pep8
 after_success:
-  - coveralls --c coverage.rc
+  - coveralls -c coverage.rc
