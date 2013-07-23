@@ -15,5 +15,8 @@ matrix:
             env: DJANGO='django>=1.4,<1.5'
 install:
   - pip install $DJANGO pep8 --use-mirrors
-# command to run tests
-script: make test pep8
+  - pip install coveralls --use-mirrors
+script:
+  - make coverage pep8
+after_success:
+  - coveralls

@@ -1,0 +1,6 @@
+[run]
+source = djangojs
+branch = True
+omit =
+    */fake/*
+

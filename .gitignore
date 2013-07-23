@@ -19,3 +19,4 @@ doc/_build
 /reports
 /venv
 .tox
+.coverage
