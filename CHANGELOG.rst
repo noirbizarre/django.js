@@ -5,6 +5,7 @@ Current
 -------
 
 - Fixed management command with Django < 1.5 (fix `issue #23 <https://github.com/noirbizarre/django.js/issues/23>`_ thanks to Wasil Sergejczyk)
+- Fixed Django CMS handling (fix `issue #25 <https://github.com/noirbizarre/django.js/issues/25>`_ thanks to Wasil Sergejczyk)
 
 
 0.8.0 (2013-07-14)
