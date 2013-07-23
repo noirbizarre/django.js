@@ -46,11 +46,12 @@ A Makefile is provided to simplify the common tasks:
     Usage:
        make serve            Run the test server
        make test             Run the test suite
+       make coverage         Run a caoverage report from the test suite
        make pep8             Run the PEP8 report
+       make pylint           Run the pylint report
        make doc              Generate the documentation
        make dist             Generate a distributable package
        make minify           Minify Django.js with yuglify
-       make release          Bump a version and publish it on PyPI
        make clean            Remove all temporary and generated artifacts
 
 
