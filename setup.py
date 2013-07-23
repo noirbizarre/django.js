@@ -11,6 +11,9 @@ PYPI_RST_FILTERS = (
     (r'\.\.\s? code-block::\s*(\w|\+)+',  '::'),
     # Remove travis ci badge
     (r'.*travis-ci\.org/.*', ''),
+    # Remove pypip.in badges
+    (r'.*pypip\.in/.*', ''),
+    (r'.*crate\.io/.*', ''),
 )
 
 
