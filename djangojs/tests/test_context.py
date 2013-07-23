@@ -234,7 +234,7 @@ class ContextTestMixin(object):
     def test_context_whitelist(self):
         '''Should only include context variable from settings.JS_CONTEXT if set'''
         result = self.process_request()
-        self.assertEqual(len(result.keys()), 2 + 1)  #: User is always in context
+        self.assertEqual(len(result.keys()), 2 + 1)  # User is always in context
         self.assertIn('STATIC_URL', result)
         self.assertIn('LANGUAGE_CODE', result)
 

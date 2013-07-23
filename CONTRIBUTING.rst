@@ -65,6 +65,12 @@ and ensure the documentation is generating.
     $ pip install tox
     $ tox
 
+You also need to ensure your code is PEP8 compliant (following the project rules: see ``pep8.rc`` file):
+
+.. code-block:: console
+
+    $ make pep8
+
 
 **Don't forget client-side code and tests.**
 

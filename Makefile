@@ -37,7 +37,8 @@ coverage:
 	@coverage report --rcfile=coverage.rc
 
 pep8:
-	@pep8 $(PACKAGE) --max-line-length=120 --ignore=E128,E122,E125 && echo 'PEP8: OK'
+	@pep8 $(PACKAGE) --config=pep8.rc
+	@echo 'PEP8: OK'
 
 pylint:
 	@pylint --rcfile=pylint.rc $(PACKAGE)
@@ -47,9 +48,8 @@ doc:
 	@cd $(DOCDIR) && make html
 	@echo 'Done'
 
-dist:
+dist: minify
 	@echo 'Generating a distributable python package'
-	@./minify.sh
 	@python setup.py sdist
 	@echo 'Done'
 
