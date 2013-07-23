@@ -50,6 +50,7 @@ A Makefile is provided to simplify the common tasks:
        make pep8             Run the PEP8 report
        make pylint           Run the pylint report
        make doc              Generate the documentation
+       make minify           Minify all JS files with yuglify
        make dist             Generate a distributable package
        make minify           Minify Django.js with yuglify
        make clean            Remove all temporary and generated artifacts
@@ -70,14 +71,7 @@ and ensure the documentation is generating.
 You can run the javascript test suite in the browser (http://localhost:8000).
 Javascript tests are run in the test suite too, but it runs on the minified version of the javascript libary.
 
-You can either minify it manually by running the provided script
-
-.. code-block:: console
-
-    $ ./minify.sh
-    $ python manage.py test djangojs
-
-or use the Makefile ``minify`` task that minify the javascript:
+You can use the Makefile ``minify`` task that minify the javascript:
 
 .. code-block:: console
 

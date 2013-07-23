@@ -14,6 +14,7 @@ help:
 	@echo '   make pep8             Run the PEP8 report                         '
 	@echo '   make pylint           Run the pylint report                       '
 	@echo '   make doc              Generate the documentation                  '
+	@echo '   make minify           Minify all JS files with yuglify            '
 	@echo '   make dist             Generate a distributable package            '
 	@echo '   make minify           Minify Django.js with yuglify               '
 	@echo '   make clean            Remove all temporary and generated artifacts'
@@ -53,7 +54,8 @@ dist:
 	@echo 'Done'
 
 minify:
-	@./minify.sh
+	@echo 'Minifying javascript'
+	@yuglify djangojs/static/js/djangojs/django.js
 
 clean:
 	rm -fr $(DISTDIR)
