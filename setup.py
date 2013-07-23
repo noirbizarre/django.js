@@ -14,6 +14,7 @@ PYPI_RST_FILTERS = (
     # Remove pypip.in badges
     (r'.*pypip\.in/.*', ''),
     (r'.*crate\.io/.*', ''),
+    (r'.*coveralls\.io/.*', ''),
 )
 
 

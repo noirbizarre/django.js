@@ -2,5 +2,11 @@
 source = djangojs
 branch = True
 omit =
-    */fake/*
+    djangojs/models.py
+    djangojs/settings.py
+    djangojs/test_urls.py
+    djangojs/wsgi.py
+    djangojs/fake/*
+    djangojs/management/*
+    djangojs/tests/*
 

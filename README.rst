@@ -4,6 +4,8 @@ Django.js
 
 .. image:: https://secure.travis-ci.org/noirbizarre/django.js.png
     :target: http://travis-ci.org/noirbizarre/django.js
+.. image:: https://coveralls.io/repos/noirbizarre/django.js/badge.png?branch=master
+    :target: https://coveralls.io/r/noirbizarre/django.js
 .. image:: https://pypip.in/v/django.js/badge.png
     :target: https://crate.io/packages/django.js
 .. image:: https://pypip.in/d/django.js/badge.png

@@ -30,7 +30,10 @@ test:
 
 coverage:
 	@echo 'Running test suite with coverage'
+	@coverage erase
 	@coverage run --rcfile=coverage.rc manage.py test $(suite)
+	@echo
+	@coverage report --rcfile=coverage.rc
 
 pep8:
 	@pep8 $(PACKAGE) --max-line-length=120 --ignore=E128,E122,E125 && echo 'PEP8: OK'
