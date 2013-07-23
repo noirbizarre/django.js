@@ -35,6 +35,11 @@ There are some rules to follow:
 - your code should be mostly PEP8 compatible with a 120 characters line length
 - your contribution should support both Python 2 and 3 (use ``tox`` to test)
 
+You need to install some dependencies to hack on Django.js:
+
+.. code-block:: console
+
+    $ pip install -r requirements/develop.pip
 
 A Makefile is provided to simplify the common tasks:
 
