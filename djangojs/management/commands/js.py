@@ -6,7 +6,11 @@ import argparse
 import logging
 import sys
 
-from django.core.management.base import BaseCommand, handle_default_options, OutputWrapper
+from django.core.management.base import BaseCommand, handle_default_options
+try:
+    from django.core.management.base import OutputWrapper
+except:
+    pass
 
 from djangojs.management.commands.js_localize import LocalizeParser
 from djangojs.management.commands.js_launcher import LauncherParser
@@ -43,7 +47,11 @@ class Command(BaseCommand):
             self.execute(args)
         except Exception as e:
             # self.stderr is not guaranteed to be set here
-            stderr = getattr(self, 'stderr', OutputWrapper(sys.stderr, self.style.ERROR))
+            try:
+                fallback_stderr = OutputWrapper(sys.stderr, self.style.ERROR)
+            except:
+                fallback_stderr = self.stdout
+            stderr = getattr(self, 'stderr', fallback_stderr)
             if args.traceback:
                 stderr.write(traceback.format_exc())
             else:
