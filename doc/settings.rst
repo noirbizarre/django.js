@@ -74,6 +74,23 @@ Serialized namespaces blacklist.
 If this setting is specified, URLs from namespaces listed in will not be serialized.
 
 
+``JS_URLS_APPS``
+----------------------
+
+**Default:** ``None``
+
+Serialized applications whitelist. If this setting is specified, only URLs with views belonging to modules listed in will be serialized.
+
+
+``JS_URLS_APPS_EXCLUDE``
+------------------------------
+
+**Default:** ``None``
+
+Serialized applications blacklist.
+If this setting is specified, URLs with views belonging to modules listed in will not be serialized.
+
+
 ``JS_URLS_UNNAMED``
 -------------------
 
@@ -205,6 +222,10 @@ You could have, in your ``settings.py``:
     # Only include admin namespace
     JS_URLS_NAMESPACES = (
         'admin',
+    )
+    # Exclude views belonging to django.contrib.admindocs application
+    JS_URLS_APPS_EXCLUDE = (
+        'django.contrib.admindocs',
     )
     # Only include my apps' translations
     JS_I18N_APPS = ('myapp', 'myapp.other')
