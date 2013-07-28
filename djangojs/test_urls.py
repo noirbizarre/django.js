@@ -7,6 +7,8 @@ from django.views.generic.edit import BaseFormView
 
 from djangojs.views import JasmineView, QUnitView
 
+from django.contrib import admin
+admin.autodiscover()
 
 def unnamed(request, **kwargs):
     return None
@@ -91,4 +93,7 @@ urlpatterns = patterns('',
     url(r'^qunit/$', QUnitTestView.as_view(), name='djangojs_qunit_tests'),
 
     url(r'^test/', include(test_patterns)),
+
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
 )

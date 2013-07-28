@@ -165,6 +165,24 @@ class UrlsTestMixin(object):
         self.assertNotIn('ns1:fake', self.result)
         self.assertIn('ns2:nested:fake', self.result)
 
+    @override_settings(JS_URLS_APPS=['djangojs', 'django.contrib.admin', 'django.contrib.admindocs'])
+    def test_urls_apps_whitelist(self):
+        '''Should only include apps listed in JS_URLS_APPS'''
+        self.result = self.get_result()  # To take override_settings in account
+        self.assertIn('django-admindocs-docroot', self.result)
+        self.assertIn('django_js_urls', self.result)
+        self.assertIn('admin:password_change', self.result)
+        self.assertNotIn('djangojs_tests', self.result)
+
+    @override_settings(JS_URLS_APPS_EXCLUDE=['djangojs', 'django.contrib.admin', 'django.contrib.admindocs'])
+    def test_urls_apps_blacklist(self):
+        '''Should exclude apps listed in JS_URLS_APPS_EXCLUDE'''
+        self.result = self.get_result()  # To take override_settings in account
+        self.assertIn('djangojs_tests', self.result)
+        self.assertNotIn('django-admindocs-docroot', self.result)
+        self.assertNotIn('django_js_urls', self.result)
+        self.assertNotIn('admin:password_change', self.result)
+
     @override_settings(JS_URLS_ENABLED=False)
     def test_urls_disabled(self):
         '''Should be empty if settings.JS_URLS_ENABLED is False'''
