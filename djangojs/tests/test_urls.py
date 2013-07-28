@@ -1,5 +1,6 @@
 import json
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -11,6 +12,7 @@ class UrlsTestMixin(object):
 
     def setUp(self):
         self.result = self.get_result()
+        cache.clear()
 
     def test_simple_url(self):
         '''It should serialize a simple URL without parameters'''

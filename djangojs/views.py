@@ -9,11 +9,14 @@ import logging
 import re
 
 from django.http import HttpResponse
+from django.utils.cache import patch_vary_headers
+from django.views.decorators.cache import cache_page
 from django.views.generic import View, TemplateView
 
 from djangojs.conf import settings
 from djangojs.urls_serializer import urls_as_dict, urls_as_json
 from djangojs.utils import StorageGlobber, LazyJsonEncoder, class_from_string
+
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +40,21 @@ JSON_MIMETYPE = 'application/json'
 JAVASCRIPT_MIMETYPE = 'application/javascript'
 
 
-class JsInitView(TemplateView):
+class CacheMixin(object):
+    '''Apply a JS_CACHE_DURATION to the view'''
+    def dispatch(self, *args, **kwargs):
+        cache = cache_page(60 * settings.JS_CACHE_DURATION)
+        return cache(super(CacheMixin, self).dispatch)(*args, **kwargs)
+
+
+class UserCacheMixin(CacheMixin):
+    def dispatch(self, *args, **kwargs):
+        response = super(UserCacheMixin, self).dispatch(*args, **kwargs)
+        patch_vary_headers(response, ('Cookie',))
+        return response
+
+
+class JsInitView(UserCacheMixin, TemplateView):
     '''
     Render a javascript file containing the URLs mapping and the context as JSON.
     '''
@@ -67,7 +84,7 @@ class JsonView(View):
         )
 
 
-class UrlsJsonView(JsonView):
+class UrlsJsonView(CacheMixin, JsonView):
     '''
     Render the URLs as a JSON object.
     '''
@@ -75,7 +92,7 @@ class UrlsJsonView(JsonView):
         return urls_as_dict()
 
 
-class ContextJsonView(JsonView):
+class ContextJsonView(UserCacheMixin, JsonView):
     '''
     Render the context as a JSON object.
     '''

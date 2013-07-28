@@ -190,6 +190,17 @@ pattern
     )
 
 
+Cache management
+~~~~~~~~~~~~~~~~
+
+``JS_CACHE_DURATION``
+---------------------
+
+**Default**: ``24 * 60`` (24 hours)
+
+Django.js urls and context cache duration in minutes.
+
+
 Usage exemple
 -------------
 
