@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import os
 import re
-import sys
 
 from glob import iglob
 
@@ -80,7 +79,7 @@ class LocalizeParser(Subparser):
         catalog = os.path.join(root, '{}_catalog.js'.format(extension))
         regexps = regexp if isinstance(regexp, (list, tuple)) else [regexp]
         with open(catalog, 'wb') as output:
-            for _, dirnames, filenames in os.walk(root):
+            for _, dirnames, _ in os.walk(root):
                 for dirname in [''] + dirnames:
                     glob_pattern = os.path.join(root, dirname, '*.{}'.format(extension))
                     for filename in iglob(glob_pattern):
