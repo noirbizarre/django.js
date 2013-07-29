@@ -41,7 +41,7 @@ pep8:
 	@echo 'PEP8: OK'
 
 pylint:
-	@pylint --rcfile=pylint.rc $(PACKAGE)
+	@pylint --reports=n --rcfile=pylint.rc $(PACKAGE)
 
 doc:
 	@echo 'Generating documentation'
