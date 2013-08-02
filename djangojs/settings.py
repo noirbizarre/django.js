@@ -9,6 +9,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
+PROJECT_ROOT = abspath(join(dirname(__file__), '..'))
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -177,11 +179,12 @@ if 'jenkins' in sys.argv:
         'django_jenkins.tasks.django_tests',
         'django_jenkins.tasks.run_pep8',
         # 'django_jenkins.tasks.run_sloccount',
-        'django_jenkins.tasks.run_jslint',
+        'django_jenkins.tasks.run_jshint',
         #'django_jenkins.tasks.run_csslint',
         #'django_jenkins.tasks.with_local_celery',
     )
-    PYLINT_RCFILE = abspath(join(dirname(__file__), '..', 'pylint.rc'))
+    PYLINT_RCFILE = join(PROJECT_ROOT, 'pylint.rc')
+    PEP8_RCFILE = join(PROJECT_ROOT, 'pep8.rc')
 
 if DEBUG:
     try:
