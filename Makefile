@@ -16,7 +16,6 @@ help:
 	@echo '   make doc              Generate the documentation                  '
 	@echo '   make minify           Minify all JS files with yuglify            '
 	@echo '   make dist             Generate a distributable package            '
-	@echo '   make minify           Minify Django.js with yuglify               '
 	@echo '   make clean            Remove all temporary and generated artifacts'
 	@echo '                                                                     '
 

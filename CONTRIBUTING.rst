@@ -57,7 +57,6 @@ A Makefile is provided to simplify the common tasks:
        make doc              Generate the documentation
        make minify           Minify all JS files with yuglify
        make dist             Generate a distributable package
-       make minify           Minify Django.js with yuglify
        make clean            Remove all temporary and generated artifacts
 
 
