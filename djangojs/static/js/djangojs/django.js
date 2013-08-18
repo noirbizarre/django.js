@@ -19,8 +19,12 @@
          */
         initialize: function() {
             this.urls = window.DJANGO_JS_URLS;
-            this.context = window.DJANGO_JS_CONTEXT;
-            this.user = window.DJANGO_JS_CONTEXT.user;
+            this.set_context(window.DJANGO_JS_CONTEXT);
+        },
+
+        set_context: function(context) {
+            this.context = context;
+            this.user = context.user;
             if (this.user) {
                 /**
                  * Equivalent to ``User.has_perm`` function.
@@ -29,6 +33,16 @@
                     return this.permissions.indexOf(permission) > -1;
                 };
             }
+        },
+
+        /**
+         * Reload context and user
+         */
+        reload: function(callback) {
+            $.get(this.url('django_js_context'), function(context) {
+                Django.set_context(context);
+                callback();
+            });
         },
 
         /**
