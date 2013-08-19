@@ -18,7 +18,8 @@
   ],
   "version": "0.8.1.dev",
   "main": [
-    "djangojs/static/js/djangojs/django.js"
+    "djangojs/static/js/djangojs/django.js",
+    "djangojs/static/js/djangojs/django.min.js"
   ],
   "dependencies": {
     "jquery": ">=1.8"
