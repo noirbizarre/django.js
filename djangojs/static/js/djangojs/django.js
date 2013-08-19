@@ -17,9 +17,22 @@
         /**
          * Initialize required attributes
          */
-        initialize: function() {
-            this.urls = window.DJANGO_JS_URLS;
-            this.set_context(window.DJANGO_JS_CONTEXT);
+        initialize: function(params) {
+            params = params || {};
+            if (typeof params.urls === 'string' || params.urls instanceof String) {
+                $.get(params.urls, function(urls) {
+                    Django.urls = urls;
+                });
+            } else {
+                this.urls = params.urls || window.DJANGO_JS_URLS;
+            }
+            if (typeof params.context === 'string' || params.context instanceof String) {
+                $.get(params.context, function(context) {
+                    Django.set_context(context);
+                });
+            } else {
+                this.set_context(params.context || window.DJANGO_JS_CONTEXT);
+            }
         },
 
         set_context: function(context) {
@@ -41,7 +54,9 @@
         reload: function(callback) {
             $.get(this.url('django_js_context'), function(context) {
                 Django.set_context(context);
-                callback();
+                if (callback instanceof Function) {
+                    callback();
+                }
             });
         },
 

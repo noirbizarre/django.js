@@ -10,6 +10,90 @@ describe("Django.js", function() {
         expect(Django).toBeDefined();
     });
 
+    describe('Initialization', function() {
+        var backup_context, backup_urls;
+
+        beforeEach(function() {
+            backup_context = window.DJANGO_JS_CONTEXT;
+            backup_urls = window.DJANGO_JS_URLS;
+        });
+
+        afterEach(function() {
+            window.DJANGO_JS_CONTEXT = backup_context;
+            window.DJANGO_JS_URLS = backup_urls;
+            Django.initialize();
+        });
+
+        it('can be initialized without parameter from global vars content', function() {
+            Django.initialize();
+            expect(Django.context).toEqual(window.DJANGO_JS_CONTEXT);
+            expect(Django.urls).toEqual(window.DJANGO_JS_URLS);
+        });
+
+        describe('can be initialized with an optionnal object parameter', function() {
+            it('with an "urls" attribute containing json', function() {
+                var urls = {'my-url': '/my-url'};
+
+                Django.initialize({urls: urls});
+
+                expect(Django.urls).toEqual(urls);
+                expect(Django.context).toEqual(window.DJANGO_JS_CONTEXT);
+            });
+
+            it('with a "context" attribute containing json', function() {
+                var context = {'fake': true};
+
+                Django.initialize({context: context});
+
+                expect(Django.context).toEqual(context);
+                expect(Django.urls).toEqual(window.DJANGO_JS_URLS);
+            });
+
+            it('with an "urls" attribute containing a remote url', function() {
+                var urls = {'my-url': '/my-url'};
+                spyOn($, "ajax").andCallFake(function(params) {
+                    expect(params.url).toEqual('http://somewhere');
+                    params.success(urls);
+                });
+
+                Django.initialize({urls: 'http://somewhere'});
+
+                expect(Django.urls).toEqual(urls);
+                expect(Django.context).toEqual(window.DJANGO_JS_CONTEXT);
+            });
+
+            it('with a "context" attribute containing a remote url', function() {
+                var context = {'fake': true};
+                spyOn($, "ajax").andCallFake(function(params) {
+                    expect(params.url).toEqual('http://somewhere');
+                    params.success(context);
+                });
+
+                Django.initialize({context: 'http://somewhere'});
+
+                expect(Django.context).toEqual(context);
+                expect(Django.urls).toEqual(window.DJANGO_JS_URLS);
+            });
+
+            it('with any combination of both json and a remote url', function() {
+                var urls = {'my-url': '/my-url'},
+                    context = {'fake': true};
+
+                spyOn($, "ajax").andCallFake(function(params) {
+                    expect(params.url).toEqual('http://somewhere');
+                    params.success(urls);
+                });
+
+                Django.initialize({urls: 'http://somewhere', context: context});
+
+                expect(Django.urls).toEqual(urls);
+                expect(Django.context).toEqual(context);
+            });
+
+        });
+
+    })
+
     describe('Context', function() {
         it('have a context attribute', function() {
             expect(Django.context).toBeDefined();
