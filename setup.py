@@ -55,6 +55,7 @@ setup(
     install_requires=install_requires,
     license='LGPL',
     use_2to3=True,
+    keywords='django javascript test url reverse helpers',
     classifiers=[
         "Framework :: Django",
         "Development Status :: 4 - Beta",
