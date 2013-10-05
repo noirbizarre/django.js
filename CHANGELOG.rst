@@ -7,6 +7,9 @@ Current
 - Fixed management command with Django < 1.5 (fix `issue #23 <https://github.com/noirbizarre/django.js/issues/23>`_ thanks to Wasil Sergejczyk)
 - Fixed Django CMS handling (fix `issue #25 <https://github.com/noirbizarre/django.js/issues/25>`_ thanks to Wasil Sergejczyk)
 - Cache Django.js views and added ``settings.JS_CACHE_DURATION``
+- Allow customizable Django.js initialization
+- Allow manual reload of context and URLs
+- Published Django.js on bower (thanks to Wasil Sergejczyk for the initial bower.json file)
 
 
 0.8.0 (2013-07-14)
