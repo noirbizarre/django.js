@@ -138,7 +138,6 @@ class ContextTestMixin(object):
         self.assertIn('LANGUAGES', result)
         languages = result['LANGUAGES']
         self.assertTrue(isinstance(languages, dict))
-        self.assertTrue(isinstance(languages['fr'], six.text_type))
         self.assertEqual(languages['fr'], 'Français')
 
     def test_any_custom_context_processor(self):
