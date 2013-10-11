@@ -6,7 +6,6 @@ import logging
 
 from django.template.context import RequestContext
 from django.utils import translation, six
-from django.utils.translation import ugettext_lazy as _
 
 from djangojs.conf import settings
 from djangojs.utils import LazyJsonEncoder
@@ -65,7 +64,7 @@ class ContextSerializer(object):
 
     def process_LANGUAGES(self, languages, data):
         '''Serialize LANGUAGES as a localized dictionnary.'''
-        return dict((code, _(name)) for code, name in languages)
+        return dict(languages)
 
     def process_LANGUAGE_CODE(self, language_code, data):
         '''

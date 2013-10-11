@@ -10,6 +10,7 @@ Current
 - Allow customizable Django.js initialization
 - Allow manual reload of context and URLs
 - Published Django.js on bower (thanks to Wasil Sergejczyk for the initial bower.json file)
+- Do not automatically translate languages name in context
 
 
 0.8.0 (2013-07-14)

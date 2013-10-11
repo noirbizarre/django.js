@@ -14,6 +14,7 @@ from django.middleware.locale import LocaleMiddleware
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
+from django.utils import six
 from django.utils import translation
 from django.utils import unittest
 
@@ -130,16 +131,15 @@ class ContextTestMixin(object):
         for code, name in settings.LANGUAGES:
             self.assertEqual(languages[code], name)
 
-    @override_settings(LANGUAGE_CODE='en-us')
-    def test_languages_localized(self):
-        '''LANGUAGES should be localized'''
+    @override_settings(LANGUAGE_CODE='en-us', LANGUAGES=[('fr', translation.ugettext_lazy('French'))])
+    def test_ugettext_lazy(self):
+        '''Serialization should not fail on lazy translations'''
         result = self.process_request(headers={'HTTP_ACCEPT_LANGUAGE': 'fr'})
         self.assertIn('LANGUAGES', result)
         languages = result['LANGUAGES']
         self.assertTrue(isinstance(languages, dict))
-        translation.activate('fr')
-        for code, name in settings.LANGUAGES:
-            self.assertEqual(languages[code], translation.ugettext_lazy(name))
+        self.assertTrue(isinstance(languages['fr'], six.text_type))
+        self.assertEqual(languages['fr'], 'Français')
 
     def test_any_custom_context_processor(self):
         '''Any custom context processor should be in context'''
