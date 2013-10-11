@@ -3,7 +3,7 @@ file = djangojs/__init__.py
 vcs = git
 commit = true
 tag = true
-tests = false
+tests = python manage.py test djangojs
 publish = python setup.py sdist register upload
 clean =
     python setup.py clean
