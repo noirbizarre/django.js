@@ -16,7 +16,7 @@
       "url": "http://www.gnu.org/licenses/lgpl-3.0.txt"
     }
   ],
-  "version": "0.8.1.dev",
+  "version": "0.8.1",
   "main": [
     "djangojs/static/js/djangojs/django.js",
     "djangojs/static/js/djangojs/django.min.js"
