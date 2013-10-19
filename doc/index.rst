@@ -52,6 +52,12 @@ Add ``djangojs.urls`` to your root ``URL_CONF``:
     )
 
 
+.. note::
+
+    Be sure to set the `settings.ALLOWED_HOSTS`_ properly (especially on Django 1.5+).
+    If not, you will have HTTP 500 errors.
+
+
 Documentation
 =============
 
@@ -77,3 +83,5 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. _settings.ALLOWED_HOSTS: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
