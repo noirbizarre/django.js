@@ -23,7 +23,7 @@ You can call the ``Django.url()`` method with:
 
 .. code-block:: javascript
 
-    Django.url('my-view' [arg1, arg2]);
+    Django.url('my-view', [arg1, arg2]);
 
 - an url name and an object with named arguments
 
