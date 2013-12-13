@@ -8,7 +8,7 @@ import sys
 import types
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
+from django.core.urlresolvers import RegexURLPattern, RegexURLResolver, get_script_prefix
 from django.utils import six
 
 from djangojs.conf import settings
@@ -52,6 +52,9 @@ def urls_as_json():
 
 def _get_urls_for_pattern(pattern, prefix='', namespace=None):
     urls = {}
+
+    if prefix is '':
+        prefix = get_script_prefix()
 
     if issubclass(pattern.__class__, RegexURLPattern):
         if settings.JS_URLS_UNNAMED:
@@ -99,7 +102,7 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
                     full_url = full_url.replace(el, "<>")  # replace by a empty parameter name
             # Unescape charaters
             full_url = RE_ESCAPE.sub(r'\1', full_url)
-            urls[pattern_name] = "/" + full_url
+            urls[pattern_name] = full_url
     elif (CMS_APP_RESOLVER) and (issubclass(pattern.__class__, AppRegexURLResolver)):  # hack for django-cms
         for p in pattern.url_patterns:
             urls.update(_get_urls_for_pattern(p, prefix=prefix, namespace=namespace))
