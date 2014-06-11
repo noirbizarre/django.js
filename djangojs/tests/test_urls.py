@@ -173,11 +173,12 @@ class UrlsTestMixin(object):
         self.result = self.get_result()  # To take override_settings in account
         self.assertEqual(len(self.result.keys()), 0)
 
-    @override_settings(SCRIPT_NAME="/force_script")
     def test_force_script_name(self):
+        from django.core.urlresolvers import set_script_prefix, clear_script_prefix
+        set_script_prefix("/force_script")
         self.result = self.get_result()  # To take override_settings in account
-        import ipdb; ipdb.set_trace()
         self.assertEqual(self.result['django_js_urls'], '/force_script/djangojs/urls')
+        clear_script_prefix()
 
 
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
