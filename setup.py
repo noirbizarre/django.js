@@ -25,7 +25,7 @@ def rst(filename):
      - code-block directive
      - travis ci build badge
     '''
-    content = open(filename).read()
+    content = open(filename, encoding="utf-8").read()
     for regex, replacement in PYPI_RST_FILTERS:
         content = re.sub(regex, replacement, content)
     return content
