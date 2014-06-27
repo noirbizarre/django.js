@@ -80,7 +80,7 @@ class JsonView(View):
         data = self.get_context_data(**kwargs)
         return HttpResponse(
             json.dumps(data, cls=LazyJsonEncoder),
-            mimetype=JSON_MIMETYPE
+            content_type=JSON_MIMETYPE
         )
 
 
