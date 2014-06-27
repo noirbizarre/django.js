@@ -9,6 +9,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
+TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
+
 PROJECT_ROOT = abspath(join(dirname(__file__), '..'))
 
 ADMINS = (
