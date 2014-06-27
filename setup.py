@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import re
 import sys
+import codecs
 
 from setuptools import setup, find_packages
 
@@ -25,7 +26,7 @@ def rst(filename):
      - code-block directive
      - travis ci build badge
     '''
-    content = open(filename).read()
+    content = codecs.open(filename, encoding='utf-8').read()
     for regex, replacement in PYPI_RST_FILTERS:
         content = re.sub(regex, replacement, content)
     return content
