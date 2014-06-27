@@ -185,6 +185,7 @@ class UrlsTestMixin(object):
 
         self.assertEqual(self.result['django_js_urls'], '/force_script/djangojs/urls')
 
+
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 
     def get_result(self):
