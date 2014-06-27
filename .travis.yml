@@ -4,19 +4,26 @@ python:
   - 2.7
   - 3.2
   - 3.3
+  - 3.4
+  - "pypy"
 env:
     - DJANGO='django>=1.4,<1.5'
     - DJANGO='django>=1.5,<1.6'
-    - DJANGO='django>=1.6'
+    - DJANGO='django>=1.6<1.7'
+    - DJANGO='https://www.djangoproject.com/download/1.7c1/tarball/'
 matrix:
     exclude:
         -   python: 3.2
             env: DJANGO='django>=1.4,<1.5'
         -   python: 3.3
             env: DJANGO='django>=1.4,<1.5'
+        -   python: 3.4
+            env: DJANGO='django>=1.4,<1.5'
+    allow_failures:
+      - env: DJANGO='https://www.djangoproject.com/download/1.7c1/tarball/'
 install:
-  - pip install $DJANGO --use-mirrors
-  - pip install -r requirements/travis.pip --use-mirrors
+  - pip install $DJANGO
+  - pip install -r requirements/travis.pip
 script:
   - make coverage pep8
 after_success:
