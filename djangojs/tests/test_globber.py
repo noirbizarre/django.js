@@ -4,11 +4,10 @@ from djangojs.utils import StorageGlobber
 
 from os.path import normpath
 
-class StorageGlobberTest(TestCase):
 
+class StorageGlobberTest(TestCase):
     def test_no_js_file(self):
         '''Should handle empty js file list'''
-        # view = JsTestView()
         self.assertEqual(StorageGlobber.glob(), [])
 
     def test_single_js_file(self):
