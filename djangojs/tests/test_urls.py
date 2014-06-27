@@ -173,6 +173,17 @@ class UrlsTestMixin(object):
         self.result = self.get_result()  # To take override_settings in account
         self.assertEqual(len(self.result.keys()), 0)
 
+    @override_settings(JS_CACHE_DURATION=0)
+    def test_force_script_name(self):
+        from django.core.urlresolvers import set_script_prefix, _prefixes
+
+        try:
+            set_script_prefix("/force_script")
+            self.result = self.get_result()  # To take override_settings in account
+        finally:
+            del _prefixes.value
+
+        self.assertEqual(self.result['django_js_urls'], '/force_script/djangojs/urls')
 
 class UrlsAsDictTest(UrlsTestMixin, TestCase):
 
@@ -200,3 +211,16 @@ class UrlsJsonViewTest(UrlsTestMixin, TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertEqual(self.response['Content-Type'], 'application/json')
         self.assertIsNotNone(self.result)
+
+    @override_settings(JS_CACHE_DURATION=0)
+    def test_force_script_name(self):
+        from django.core.urlresolvers import set_script_prefix, _prefixes
+        try:
+            url = reverse('django_js_urls')
+            set_script_prefix("/force_script")
+            response = self.client.get(url)
+        finally:
+            del _prefixes.value
+
+        result = json.loads(response.content.decode())
+        self.assertEqual(result['django_js_urls'], '/force_script/djangojs/urls')
