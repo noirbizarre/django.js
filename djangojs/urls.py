@@ -19,6 +19,8 @@ def js_info_dict():
             continue
         if settings.JS_I18N_APPS_EXCLUDE and app in settings.JS_I18N_APPS_EXCLUDE:
             continue
+        if app not in sys.modules:
+            __import__(app)
         module = sys.modules[app]
         for path in module.__path__:
             if isdir(join(path, 'locale')):
