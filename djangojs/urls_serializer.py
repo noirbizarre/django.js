@@ -39,8 +39,18 @@ def urls_as_dict():
     '''
     Get the URLs mapping as a dictionnary
     '''
-    module = settings.ROOT_URLCONF
-    return _get_urls(module) if settings.JS_URLS_ENABLED else {}
+    module = settings.JS_URL_CONFS
+    urls = {}
+    if settings.JS_URLS_ENABLED:
+        if isinstance(module, (six.text_type, six.string_types)):
+            _get_urls(module)
+        else:
+            for item in module:
+                urls = dict(urls.items() + _get_urls(item).items())
+    else:
+        return {}
+
+    return urls
 
 
 def urls_as_json():
