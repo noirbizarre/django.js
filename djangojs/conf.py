@@ -17,6 +17,7 @@ DEFAULTS = {
     'JS_USER_ENABLED': True,
     'JS_URLS': None,
     'JS_URLS_EXCLUDE': None,
+    'JS_URL_CONFS': _settings.ROOT_URLCONF,
     'JS_URLS_NAMESPACES': None,
     'JS_URLS_NAMESPACES_EXCLUDE': None,
     'JS_URLS_UNNAMED': False,
