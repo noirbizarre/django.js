@@ -1,13 +1,13 @@
 Changelog
 =========
 
-Current
--------
-
-- Nothing yet
-
-0.8.1 (2013-10-19)
+0.8.1-django18-rc1
 ------------------
+
+- Make django.js compatible for django >= 1.8
+
+0.8.1-django18-rc1 (2015-12-14)
+-------------------------------
 
 - Fixed management command with Django < 1.5 (fix `issue #23 <https://github.com/noirbizarre/django.js/issues/23>`_ thanks to Wasil Sergejczyk)
 - Fixed Django CMS handling (fix `issue #25 <https://github.com/noirbizarre/django.js/issues/25>`_ thanks to Wasil Sergejczyk)

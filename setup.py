@@ -43,7 +43,7 @@ if sys.version_info[0:2] < (2, 7):
     install_requires += ['argparse']
 
 setup(
-    name='django.js',
+    name='novadjango.js',
     version=__import__('djangojs').__version__,
     description=__import__('djangojs').__description__,
     long_description=long_description,
