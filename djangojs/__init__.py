@@ -3,7 +3,7 @@
 Django.js provide better integration of javascript into Django.
 '''
 
-__version__ = '0.8.1-django18-rc1'
+__version__ = '0.8.2-django18-rc2'
 __description__ = "Django JS Tools"
 
 #: Packaged jQuery version

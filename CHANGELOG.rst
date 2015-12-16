@@ -1,12 +1,12 @@
 Changelog
 =========
 
-0.8.1-django18-rc1
+0.8.2-django18-rc2
 ------------------
 
 - Make django.js compatible for django >= 1.8
 
-0.8.1-django18-rc1 (2015-12-14)
+0.8.2-django18-rc2 (2015-12-16)
 -------------------------------
 
 - Fixed management command with Django < 1.5 (fix `issue #23 <https://github.com/noirbizarre/django.js/issues/23>`_ thanks to Wasil Sergejczyk)
