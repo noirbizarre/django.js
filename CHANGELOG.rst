@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.8.3.novapost
---------------
+0.8.2.novapost (2016-01-04)
+---------------------------
 
 - Make django.js compatible for django >= 1.8
 
