@@ -19,6 +19,8 @@ DEFAULTS = {
     'JS_URLS_EXCLUDE': None,
     'JS_URLS_NAMESPACES': None,
     'JS_URLS_NAMESPACES_EXCLUDE': None,
+    'JS_URLS_APPS': None,
+    'JS_URLS_APPS_EXCLUDE': None,
     'JS_URLS_UNNAMED': False,
     'JS_CONTEXT': None,
     'JS_CONTEXT_EXCLUDE': None,

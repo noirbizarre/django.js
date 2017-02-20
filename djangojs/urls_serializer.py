@@ -57,8 +57,21 @@ def _get_urls_for_pattern(pattern, prefix='', namespace=None):
         prefix = get_script_prefix()
 
     if issubclass(pattern.__class__, RegexURLPattern):
+        mod_name, obj_name = pattern.callback.__module__, pattern.callback.__name__
+        # check for apps first
+        if settings.JS_URLS_APPS and mod_name:
+            mod_name_present = False
+            for app in settings.JS_URLS_APPS:
+                if mod_name[:len(app)] == app:
+                    mod_name_present = True
+                    break
+            if not mod_name_present:
+                return urls
+        if settings.JS_URLS_APPS_EXCLUDE and mod_name:
+            for app in settings.JS_URLS_APPS_EXCLUDE:
+                if mod_name[:len(app)] == app:
+                    return urls
         if settings.JS_URLS_UNNAMED:
-            mod_name, obj_name = pattern.callback.__module__, pattern.callback.__name__
             try:
                 module = __import__(mod_name, fromlist=[obj_name])
                 obj = getattr(module, obj_name)
