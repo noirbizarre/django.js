@@ -6,9 +6,9 @@ Django.js
     :target: http://travis-ci.org/noirbizarre/django.js
 .. image:: https://coveralls.io/repos/noirbizarre/django.js/badge.png?branch=master
     :target: https://coveralls.io/r/noirbizarre/django.js
-.. image:: https://pypip.in/v/django.js/badge.png
+.. image:: https://img.shields.io/pypi/v/django.js.svg
     :target: https://crate.io/packages/django.js
-.. image:: https://pypip.in/d/django.js/badge.png
+.. image:: https://img.shields.io/pypi/dm/django.js.svg
     :target: https://crate.io/packages/django.js
 
 Django.js provides tools for JavaScript development with Django.
